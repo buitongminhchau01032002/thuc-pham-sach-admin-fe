@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
+    filterFns,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
@@ -15,6 +16,9 @@ import Pagination from '../../../components/Table/Pagination';
 import Table from '../../../components/Table';
 import useModal from '../../../hooks/useModal';
 import DeleteDialog from '../../../components/DeleteDialog';
+import TopBar from './TopBar';
+import searchFilterFn from '../../../utils/searchFilterFn';
+import rangeFilterFn from '../../../utils/rangeFilterFn';
 
 function StatusCell({ getValue }) {
     return (
@@ -85,6 +89,7 @@ const columns = [
         header: (props) => <HeaderCell tableProps={props}>Tên</HeaderCell>,
         cell: NameAndImageCell,
         size: 'full',
+        filterFn: searchFilterFn,
     },
     {
         id: 'type',
@@ -92,7 +97,13 @@ const columns = [
         header: (props) => <HeaderCell tableProps={props}>Danh mục</HeaderCell>,
         size: 160,
         enableSorting: false,
-        filterFn: 'arrIncludesSome',
+        filterFn: (...param) => {
+            const value = param[2];
+            if (value.length === 0) {
+                return true;
+            }
+            return filterFns.arrIncludesSome(...param);
+        },
     },
     {
         accessorKey: 'quantity',
@@ -103,6 +114,7 @@ const columns = [
         ),
         cell: ({ getValue }) => <p className="text-right">{getValue()}</p>,
         size: 100,
+        filterFn: rangeFilterFn,
     },
     {
         accessorKey: 'saledQuantity',
@@ -113,6 +125,7 @@ const columns = [
         ),
         cell: ({ getValue }) => <p className="text-right">{getValue()}</p>,
         size: 120,
+        filterFn: rangeFilterFn,
     },
     {
         accessorKey: 'price',
@@ -123,10 +136,7 @@ const columns = [
         ),
         cell: ({ getValue }) => <p className="text-right">{getValue()}</p>,
         size: 120,
-        filterFn: (row, columnId, filterValue) => {
-            if (filterValue.max && filterValue.max < row.getValue(columnId)) return false;
-            return true;
-        },
+        filterFn: rangeFilterFn,
     },
 
     {
@@ -139,6 +149,10 @@ const columns = [
         cell: StatusCell,
         size: 120,
         enableSorting: false,
+        filterFn: (row, columnId, value) => {
+            const statusValue = row.getValue(columnId);
+            return value[statusValue];
+        },
     },
     {
         id: 'action',
@@ -176,17 +190,44 @@ function ProductList() {
     const [products, setProducts] = useState([]);
 
     const [columnFilters, setColumnFilters] = useState([
-        // {
-        //     id: 'type',
-        //     value: ['Giay thoi trang'],
-        // },
-        // {
-        //     id: 'price',
-        //     value: {
-        //         max: 120000,
-        //     },
-        // },
+        {
+            id: 'name',
+            value: '',
+        },
+        {
+            id: 'price',
+            value: {
+                min: '',
+                max: '',
+            },
+        },
+        {
+            id: 'type',
+            value: [],
+        },
+        {
+            id: 'quantity',
+            value: {
+                min: '',
+                max: '',
+            },
+        },
+        {
+            id: 'saledQuantity',
+            value: {
+                min: '',
+                max: '',
+            },
+        },
+        {
+            id: 'status',
+            value: {
+                active: true,
+                inactive: true,
+            },
+        },
     ]);
+    console.log(columnFilters);
 
     useEffect(() => {
         getProducts();
@@ -258,8 +299,8 @@ function ProductList() {
     }
 
     return (
-        <div className="container">
-            {/* LIST */}
+        <div className="container space-y-4">
+            <TopBar filters={columnFilters} setFilters={setColumnFilters} />
             <div>
                 <Table table={table} notFoundMessage="Không có sản phẩm" />
                 <Pagination table={table} />
