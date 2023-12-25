@@ -57,6 +57,9 @@ export default function StatisticProfit() {
     }, []);
 
     const data = useMemo(() => {
+        if (!rangeDateValue.startDate || !rangeDateValue.endDate) {
+            return {};
+        }
         let startDate = moment(rangeDateValue.startDate);
         let endDate = moment(rangeDateValue.endDate);
         let dates = [];
@@ -105,8 +108,6 @@ export default function StatisticProfit() {
             ],
         };
     }, [orders, imports, rangeDateValue.startDate, rangeDateValue.endDate]);
-
-    console.log(data);
 
     return (
         <div className="container flex flex-col">

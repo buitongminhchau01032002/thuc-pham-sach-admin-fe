@@ -220,6 +220,13 @@ const publicRoutes = [
 
     // Statistics
     {
+        path: '/statistic/product',
+        component: StatisticProduct,
+        props: {
+            heading: 'Thống kê sản phẩm',
+        },
+    },
+    {
         path: '/statistic/profit',
         component: StatisticProfit,
         props: {
