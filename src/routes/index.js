@@ -3,10 +3,6 @@ import FullLayout from '../layouts/FullLayout';
 
 // Pages
 import Home from '../pages/Home';
-import Accounts from '../pages/Account';
-import AddAccount from '../pages/AddAccount';
-import DetailAccount from '../pages/DetailAccount';
-import UpdateAccount from '../pages/UpdateAccount';
 import ProductTypeList from '../pages/ProductType/ProductTypeList';
 import Login from '../pages/Login';
 import ProductList from '../pages/Product/ProductList';
@@ -32,6 +28,10 @@ import AddRole from '../pages/Role/AddRole';
 import RoleList from '../pages/Role/RoleList';
 import UpdateRole from '../pages/Role/UpdateRole';
 import RoleDetail from '../pages/Role/RoleDetail';
+import AccountList from '../pages/Account/AccountList';
+import AddAccount from '../pages/Account/AddAccount';
+import UpdateAccount from '../pages/Account/UpdateAccount';
+import AccountDetail from '../pages/Account/AccountDetail';
 
 // Public routes
 const publicRoutes = [
@@ -179,12 +179,13 @@ const publicRoutes = [
             heading: 'Chỉnh sửa khách hàng',
         },
     },
+
     // Account
     {
         path: '/account',
-        component: Accounts,
+        component: AccountList,
         props: {
-            heading: 'Tài khoản',
+            heading: 'Danh sách tài khoản',
         },
     },
     {
@@ -203,18 +204,9 @@ const publicRoutes = [
     },
     {
         path: '/account/detail/:id',
-        component: DetailAccount,
+        component: AccountDetail,
         props: {
             heading: 'Chi tiết tài khoản',
-        },
-    },
-
-    // Account
-    {
-        path: '/account',
-        component: Accounts,
-        props: {
-            heading: 'Tài khoản',
         },
     },
 

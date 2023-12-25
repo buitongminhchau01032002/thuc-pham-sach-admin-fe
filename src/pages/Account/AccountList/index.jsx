@@ -54,13 +54,20 @@ const columns = [
         size: 100,
     },
     {
-        accessorKey: 'name',
-        header: (props) => <HeaderCell tableProps={props}>Tên</HeaderCell>,
+        accessorKey: 'username',
+        header: (props) => <HeaderCell tableProps={props}>Tên tài khoản</HeaderCell>,
         size: 300,
     },
     {
-        accessorKey: 'description',
-        header: (props) => <HeaderCell tableProps={props}>Mô tả</HeaderCell>,
+        accessorKey: 'name',
+        header: (props) => <HeaderCell tableProps={props}>Họ tên</HeaderCell>,
+        size: 'full',
+    },
+
+    {
+        id: 'account',
+        accessorFn: (i) => i?.role?.name,
+        header: (props) => <HeaderCell tableProps={props}>Chức vụ</HeaderCell>,
         size: 'full',
     },
     {
@@ -71,41 +78,41 @@ const columns = [
     },
 ];
 
-function RoleList() {
-    const [roles, setRoles] = useState([]);
+function AccountList() {
+    const [accounts, setAccounts] = useState([]);
     const navigate = useNavigate();
     const [openDeleteDialog, closeDeleteDialog] = useModal({
         modal: DeleteDialog,
         meta: {
-            onDelete: deleteRole,
+            onDelete: deleteAccount,
         },
     });
 
     useEffect(() => {
-        getRoles();
+        getAccounts();
     }, []);
 
-    function getRoles() {
-        fetch('http://localhost:5000/api/role')
+    function getAccounts() {
+        fetch('http://localhost:5000/api/account')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
-                    setRoles(resJson.roles);
+                    setAccounts(resJson.accounts);
                 } else {
-                    setRoles([]);
+                    setAccounts([]);
                 }
             });
     }
 
-    function deleteRole(id) {
-        fetch('http://localhost:5000/api/role/' + id, {
+    function deleteAccount(id) {
+        fetch('http://localhost:5000/api/account/' + id, {
             method: 'DELETE',
         })
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson) {
-                    toast.success('Xóa chức vụ thành công!');
-                    getRoles();
+                    toast.success('Xóa tài khoản thành công!');
+                    getAccounts();
                 } else {
                     showErorrNoti();
                 }
@@ -119,7 +126,7 @@ function RoleList() {
     }
 
     const table = useReactTable({
-        data: roles,
+        data: accounts,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -127,10 +134,10 @@ function RoleList() {
         getPaginationRowModel: getPaginationRowModel(),
         meta: {
             onRowClick: (row) => {
-                navigate('/role/detail/' + row.getValue('id'));
+                navigate('/account/detail/' + row.getValue('id'));
             },
             onEditButtonClick: (row) => {
-                navigate('/role/update/' + row.getValue('id'));
+                navigate('/account/update/' + row.getValue('id'));
             },
             onDeleteButtonClick: (row) => {
                 openDeleteDialog({ deleteId: row.getValue('id') });
@@ -142,11 +149,11 @@ function RoleList() {
         <div className="container">
             {/* LIST */}
             <div>
-                <Table table={table} notFoundMessage="Không có chức vụ" />
+                <Table table={table} notFoundMessage="Không có tài khoản" />
                 <Pagination table={table} />
             </div>
         </div>
     );
 }
 
-export default RoleList;
+export default AccountList;
