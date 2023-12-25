@@ -1,14 +1,9 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Listbox, Popover } from '@headlessui/react';
+import { Popover } from '@headlessui/react';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { useEffect } from 'react';
-
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import moment from 'moment';
-
-import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import {
     getCoreRowModel,
     getFilteredRowModel,
@@ -16,9 +11,8 @@ import {
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table';
-import { accountSelector } from '../../../redux/selectors';
-import HeaderCell from '../../../components/Table/HeaderCell';
 import DeleteDialog from '../../../components/DeleteDialog';
+import HeaderCell from '../../../components/Table/HeaderCell';
 import useModal from '../../../hooks/useModal';
 import Table from '../../../components/Table';
 import Pagination from '../../../components/Table/Pagination';
@@ -62,19 +56,12 @@ const columns = [
     {
         accessorKey: 'name',
         header: (props) => <HeaderCell tableProps={props}>Tên</HeaderCell>,
-        size: 'full',
+        size: 300,
     },
     {
-        accessorKey: 'createdAt',
-        header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
-                Ngày tạo
-            </HeaderCell>
-        ),
-        cell: ({ getValue }) => (
-            <p className="text-center">{moment(getValue()).format('HH:mm:ss DD/MM/YYYY ')}</p>
-        ),
-        size: 300,
+        accessorKey: 'description',
+        header: (props) => <HeaderCell tableProps={props}>Mô tả</HeaderCell>,
+        size: 'full',
     },
     {
         id: 'action',
@@ -84,67 +71,41 @@ const columns = [
     },
 ];
 
-function ProductTypeList() {
-    const [productTypes, setProductTypes] = useState([]);
+function RoleList() {
+    const [roles, setRoles] = useState([]);
     const navigate = useNavigate();
-    const account = useSelector(accountSelector);
-    // function isHiddenItem(functionName) {
-    //     if (!account) {
-    //         return true;
-    //     }
-    //     if (!functionName) {
-    //         return false;
-    //     }
-    //     const findResult = account?.functions?.find((_func) => _func?.name === functionName);
-    //     if (findResult) {
-    //         return false;
-    //     }
-    //     return true;
-    // }
     const [openDeleteDialog, closeDeleteDialog] = useModal({
         modal: DeleteDialog,
         meta: {
-            onDelete: deleteProductType,
+            onDelete: deleteRole,
         },
     });
-    const [columnFilters, setColumnFilters] = useState([
-        // {
-        //     id: 'type',
-        //     value: ['Giay thoi trang'],
-        // },
-        // {
-        //     id: 'price',
-        //     value: {
-        //         max: 120000,
-        //     },
-        // },
-    ]);
 
     useEffect(() => {
-        getProductTypes();
+        getRoles();
     }, []);
 
-    function getProductTypes() {
-        fetch('http://localhost:5000/api/product-type')
+    function getRoles() {
+        fetch('http://localhost:5000/api/role')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
-                    setProductTypes(resJson.productTypes);
+                    setRoles(resJson.roles);
                 } else {
-                    setProductTypes([]);
+                    setRoles([]);
                 }
             });
     }
 
-    function deleteProductType(id) {
-        fetch('http://localhost:5000/api/product-type/' + id, {
+    function deleteRole(id) {
+        fetch('http://localhost:5000/api/role/' + id, {
             method: 'DELETE',
         })
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson) {
-                    toast.success('Xóa loại sản phẩm thành công!');
-                    getProductTypes();
+                    toast.success('Xóa chức vụ thành công!');
+                    getRoles();
                 } else {
                     showErorrNoti();
                 }
@@ -158,18 +119,15 @@ function ProductTypeList() {
     }
 
     const table = useReactTable({
-        data: productTypes,
+        data: roles,
         columns,
-        state: {
-            columnFilters,
-        },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         meta: {
             onEditButtonClick: (row) => {
-                navigate('/product-type/update/' + row.getValue('id'));
+                navigate('/role/update/' + row.getValue('id'));
             },
             onDeleteButtonClick: (row) => {
                 openDeleteDialog({ deleteId: row.getValue('id') });
@@ -181,15 +139,11 @@ function ProductTypeList() {
         <div className="container">
             {/* LIST */}
             <div>
-                <Table
-                    table={table}
-                    notFoundMessage="Không có loại sản phẩm"
-                    rowClickable={false}
-                />
+                <Table table={table} notFoundMessage="Không có chức vụ" />
                 <Pagination table={table} />
             </div>
         </div>
     );
 }
 
-export default ProductTypeList;
+export default RoleList;

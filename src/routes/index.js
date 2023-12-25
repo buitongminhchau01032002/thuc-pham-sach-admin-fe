@@ -9,10 +9,6 @@ import DetailAccount from '../pages/DetailAccount';
 import UpdateAccount from '../pages/UpdateAccount';
 import ProductTypeList from '../pages/ProductType/ProductTypeList';
 import Login from '../pages/Login';
-import Roles from '../pages/Roles';
-import AddRole from '../pages/AddRole';
-import UpdateRole from '../pages/UpdateRole';
-import DetailRole from '../pages/DetailRole';
 import ProductList from '../pages/Product/ProductList';
 import ProductDetail from '../pages/Product/ProductDetail';
 import AddProduct from '../pages/Product/AddProduct';
@@ -32,6 +28,10 @@ import ImportDetail from '../pages/Import/ImportDetail';
 import AddImport from '../pages/Import/AddImport';
 import StatisticProduct from '../pages/Statistic/StatisticProduct';
 import StatisticProfit from '../pages/Statistic/StatisticProfit';
+import AddRole from '../pages/Role/AddRole';
+import RoleList from '../pages/Role/RoleList';
+import UpdateRole from '../pages/Role/UpdateRole';
+import RoleDetail from '../pages/Role/RoleDetail';
 
 // Public routes
 const publicRoutes = [
@@ -234,13 +234,12 @@ const publicRoutes = [
         },
     },
 
-    // *****
-
+    // ROLE
     {
         path: '/role',
-        component: Roles,
+        component: RoleList,
         props: {
-            heading: 'Quy định',
+            heading: 'Danh sách chức vụ',
         },
     },
     {
@@ -252,7 +251,7 @@ const publicRoutes = [
     },
     {
         path: '/role/detail/:id',
-        component: DetailRole,
+        component: RoleDetail,
         props: {
             heading: 'Chi tiết chức vụ',
         },
@@ -262,13 +261,6 @@ const publicRoutes = [
         component: UpdateRole,
         props: {
             heading: 'Sửa chức vụ',
-        },
-    },
-    {
-        path: '/roles/detail/:id',
-        component: DetailRole,
-        props: {
-            heading: 'Chi tiết chức vụ',
         },
     },
 
