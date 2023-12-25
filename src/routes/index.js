@@ -8,7 +8,6 @@ import AddAccount from '../pages/AddAccount';
 import DetailAccount from '../pages/DetailAccount';
 import UpdateAccount from '../pages/UpdateAccount';
 import ProductTypeList from '../pages/ProductType/ProductTypeList';
-import Statistic from '../pages/Statistic';
 import Login from '../pages/Login';
 import Roles from '../pages/Roles';
 import AddRole from '../pages/AddRole';
@@ -31,6 +30,8 @@ import UpdateCustomer from '../pages/Customer/UpdateCustomer';
 import ImportList from '../pages/Import/ImportList';
 import ImportDetail from '../pages/Import/ImportDetail';
 import AddImport from '../pages/Import/AddImport';
+import StatisticProduct from '../pages/Statistic/StatisticProduct';
+import StatisticProfit from '../pages/Statistic/StatisticProfit';
 
 // Public routes
 const publicRoutes = [
@@ -63,13 +64,6 @@ const publicRoutes = [
         component: OrderDetail,
         props: {
             heading: 'Chi tiết hoá đơn',
-        },
-    },
-    {
-        path: 'order/statistic',
-        component: Statistic,
-        props: {
-            heading: 'Thống kê',
         },
     },
 
@@ -212,6 +206,24 @@ const publicRoutes = [
         component: DetailAccount,
         props: {
             heading: 'Chi tiết tài khoản',
+        },
+    },
+
+    // Account
+    {
+        path: '/account',
+        component: Accounts,
+        props: {
+            heading: 'Tài khoản',
+        },
+    },
+
+    // Statistics
+    {
+        path: '/statistic/profit',
+        component: StatisticProfit,
+        props: {
+            heading: 'Thống kê doanh số',
         },
     },
 

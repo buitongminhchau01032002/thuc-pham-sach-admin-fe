@@ -43,7 +43,10 @@ function Statistic() {
 
     function isDateBetween(createdAt, startDate, endDate) {
         const createdAtFormated = moment(createdAt).format('YYYY-MM-DD');
-        if (moment(startDate) <= moment(createdAtFormated) && moment(endDate) >= moment(createdAtFormated)) {
+        if (
+            moment(startDate) <= moment(createdAtFormated) &&
+            moment(endDate) >= moment(createdAtFormated)
+        ) {
             return true;
         }
         return false;
@@ -114,7 +117,9 @@ function Statistic() {
                 <div className="flex space-x-4">
                     {/* tite + reload btn */}
                     <div className="flex items-center">
-                        <label className="text-2xl font-bold text-slate-800">Thống kê hóa đơn</label>
+                        <label className="text-2xl font-bold text-slate-800">
+                            Thống kê hóa đơn
+                        </label>
                         <button
                             type="button"
                             className="ml-3 text-gray-800 hover:underline"
@@ -183,18 +188,33 @@ function Statistic() {
                         <thead className="w-full rounded bg-blue-500 text-white">
                             <tr className="flex h-11 w-full">
                                 <th className="flex w-16 items-center justify-end px-2">Mã</th>
-                                <th className="flex flex-[2] items-center justify-start px-4">Tên khách hàng</th>
-                                <th className="flex w-60 items-center justify-start px-2">Số điện thoại</th>
-                                <th className="flex w-44 items-center justify-end px-2">Tổng tiền (VNĐ)</th>
+                                <th className="flex flex-[2] items-center justify-start px-4">
+                                    Tên khách hàng
+                                </th>
+                                <th className="flex w-60 items-center justify-start px-2">
+                                    Số điện thoại
+                                </th>
+                                <th className="flex w-44 items-center justify-end px-2">
+                                    Tổng tiền (VNĐ)
+                                </th>
                                 <th className="flex w-56 items-center justify-end px-2">Ngày</th>
                                 <th className="flex w-[140px] items-center justify-center px-2"></th>
                             </tr>
                         </thead>
 
-                        <tbody className="flex h-[50vh] w-full flex-col" style={{ overflowY: 'overlay' }}>
+                        <tbody
+                            className="flex h-[50vh] w-full flex-col"
+                            style={{ overflowY: 'overlay' }}
+                        >
                             {orders
                                 ?.filter((order) => {
-                                    if (isDateBetween(order.createdAt, value.startDate, value.endDate)) {
+                                    if (
+                                        isDateBetween(
+                                            order.createdAt,
+                                            value.startDate,
+                                            value.endDate
+                                        )
+                                    ) {
                                         return true;
                                     }
                                     return false;
@@ -206,7 +226,9 @@ function Statistic() {
                                         className="flex min-h-[56px] cursor-pointer border-b border-slate-200 hover:bg-slate-100"
                                         onClick={() => linkToDetail(order.id)}
                                     >
-                                        <td className="flex w-16 items-center justify-end px-2 py-2">{order.id}</td>
+                                        <td className="flex w-16 items-center justify-end px-2 py-2">
+                                            {order.id}
+                                        </td>
                                         <td className="flex flex-[2] items-center justify-start px-4 py-2">
                                             {order.customer?.name}
                                         </td>
@@ -258,7 +280,9 @@ function Statistic() {
             >
                 <div className="">
                     <div className="min-w-[160px] max-w-[400px] rounded-lg bg-white p-6">
-                        <div className="text-clr-text-dark font-bold">Bạn có chắc chắn muốn xoá không?</div>
+                        <div className="text-clr-text-dark font-bold">
+                            Bạn có chắc chắn muốn xoá không?
+                        </div>
                         <p className="mt-4">Lưu ý: Bạn không thể không phục lại sau khi xoá!</p>
                         <div className="mt-4 flex">
                             <button
@@ -270,7 +294,10 @@ function Statistic() {
                             >
                                 Quay lại
                             </button>
-                            <button className="btn btn-md btn-red" onClick={() => deleteOrder(deletingOrderId)}>
+                            <button
+                                className="btn btn-md btn-red"
+                                onClick={() => deleteOrder(deletingOrderId)}
+                            >
                                 Xoá
                             </button>
                         </div>

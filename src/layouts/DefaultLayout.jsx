@@ -6,7 +6,7 @@ function DefaultLayout({ heading, children }) {
         <div className="flex h-screen">
             <Sidebar></Sidebar>
 
-            <div className="flex h-screen flex-1 flex-col">
+            <div className="flex h-screen flex-1 flex-col overflow-x-hidden">
                 <Header>{heading}</Header>
                 <main className="flex-1 overflow-y-auto py-5">{children}</main>
             </div>

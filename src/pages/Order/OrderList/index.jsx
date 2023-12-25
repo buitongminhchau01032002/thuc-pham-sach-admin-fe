@@ -91,7 +91,7 @@ const columns = [
             </HeaderCell>
         ),
         cell: ({ getValue }) => (
-            <p className="text-center">{moment(getValue()).format('HH:MM DD/MM/YYYY')}</p>
+            <p className="text-center">{moment(getValue()).format('HH:mm DD/MM/YYYY')}</p>
         ),
         size: 200,
     },

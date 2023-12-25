@@ -15,6 +15,27 @@ const groupMenus = [
     {
         main: {
             iconClassname: 'fa-solid fa-clipboard',
+            text: 'Thống kê',
+            link: '/statistic',
+        },
+        children: [
+            {
+                iconClassname: 'fa-solid fa-list',
+                text: 'Sản phẩm',
+                link: '/product',
+                functionName: '...',
+            },
+            {
+                iconClassname: 'fa-solid fa-list',
+                text: 'Doanh số',
+                link: '/profit',
+                functionName: '...',
+            },
+        ],
+    },
+    {
+        main: {
+            iconClassname: 'fa-solid fa-clipboard',
             text: 'Hoá đơn',
             link: '/order',
         },
