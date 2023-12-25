@@ -17,6 +17,7 @@ import clsx from 'clsx';
 import PriceFormat from '../../../components/PriceFormat';
 import ReactToPrint from 'react-to-print';
 import HeaderCell from '../../../components/Table/HeaderCell';
+import useIsHasPermission from '../../../hooks/useIsHasPermission';
 
 function NameAndImageCell({ row, getValue }) {
     const image = row.getValue('image');
@@ -85,6 +86,7 @@ function OrderDetail() {
     const [loadingDeliveryStatus, setLoadingDeliveryStatus] = useState(false);
     const [loadingPaymentStatus, setLoadingPaymentStatus] = useState(false);
     const componentRef = useRef();
+    const isHasPermission = useIsHasPermission();
     useEffect(() => {
         getOrder();
     }, []);
@@ -229,7 +231,11 @@ function OrderDetail() {
                         </div>
                     </div>
 
-                    <div className="mt-2 mb-4 space-y-3">
+                    <div
+                        className={clsx('mt-2 mb-4 space-y-3', {
+                            'pointer-events-none': !isHasPermission('order/update'),
+                        })}
+                    >
                         <div className="space-y-2">
                             <p className="text-gray-700">Trạng thái giao hàng: </p>
                             <div className="relative flex space-x-3">

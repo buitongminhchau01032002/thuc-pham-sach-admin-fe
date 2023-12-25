@@ -20,19 +20,22 @@ import Pagination from '../../../components/Table/Pagination';
 import HeaderCell from '../../../components/Table/HeaderCell';
 import useModal from '../../../hooks/useModal';
 import DeleteDialog from '../../../components/DeleteDialog';
+import ShowWithFunc from '../../../components/ShowWithFunc';
 
 function ActionCell({ table, row }) {
     return (
         <div className="flex justify-end">
-            <button
-                className="btn btn-red px-3 py-1"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    table.options.meta?.onDeleteButtonClick(row);
-                }}
-            >
-                Xoá
-            </button>
+            <ShowWithFunc func="import/delete">
+                <button
+                    className="btn btn-red px-3 py-1"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        table.options.meta?.onDeleteButtonClick(row);
+                    }}
+                >
+                    Xoá
+                </button>
+            </ShowWithFunc>
         </div>
     );
 }

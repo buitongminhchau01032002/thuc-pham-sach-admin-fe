@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import clsx from 'clsx';
 import TimeNow from '../../../components/TimeNow';
 import 'react-toastify/dist/ReactToastify.css';
+import ShowWithFunc from '../../../components/ShowWithFunc';
 
 function AccountDetail() {
     const { id } = useParams();
@@ -55,12 +56,14 @@ function AccountDetail() {
                         </span>
                         <span>Hủy</span>
                     </Link>
-                    <Link to={'/account/update/' + id} className="btn btn-blue btn-md">
-                        <span className="pr-2">
-                            <i className="fa-solid fa-circle-plus"></i>
-                        </span>
-                        <span>Chỉnh sửa</span>
-                    </Link>
+                    <ShowWithFunc func="account/update">
+                        <Link to={'/account/update/' + id} className="btn btn-blue btn-md">
+                            <span className="pr-2">
+                                <i className="fa-solid fa-circle-plus"></i>
+                            </span>
+                            <span>Chỉnh sửa</span>
+                        </Link>
+                    </ShowWithFunc>
                 </div>
             </div>
         </div>

@@ -19,6 +19,7 @@ import Table from '../../../components/Table';
 import range from '../../../utils/range';
 import useModal from '../../../hooks/useModal';
 import DeleteDialog from '../../../components/DeleteDialog';
+import ShowWithFunc from '../../../components/ShowWithFunc';
 
 function ProductDetail() {
     // const account = useSelector(accountSelector);
@@ -145,12 +146,14 @@ function ProductDetail() {
                     </span>
                     <span>Quay lại</span>
                 </Link>
-                <Link to={'/product/update/' + id} className="btn btn-yellow btn-md">
-                    <span className="pr-2">
-                        <i className="fa-solid fa-circle-plus"></i>
-                    </span>
-                    <span>Chỉnh sửa</span>
-                </Link>
+                <ShowWithFunc func="product/update">
+                    <Link to={'/product/update/' + id} className="btn btn-yellow btn-md">
+                        <span className="pr-2">
+                            <i className="fa-solid fa-circle-plus"></i>
+                        </span>
+                        <span>Chỉnh sửa</span>
+                    </Link>
+                </ShowWithFunc>
             </div>
         </div>
     );

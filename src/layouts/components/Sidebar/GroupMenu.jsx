@@ -18,14 +18,13 @@ function GroupMenu({ groupMenu }) {
     const account = useSelector(accountSelector);
 
     function isHiddenItem(functionName) {
-        return false;
         if (!account) {
             return true;
         }
         if (!functionName) {
             return false;
         }
-        const findResult = account?.functions?.find((_func) => _func?.name === functionName);
+        const findResult = account?.role?.functions?.find((_func) => _func === functionName);
         if (findResult) {
             return false;
         }
@@ -33,7 +32,6 @@ function GroupMenu({ groupMenu }) {
     }
 
     function isHiddenParent() {
-        return false;
         if (!groupMenu.children) {
             return isHiddenItem(groupMenu.main?.functionName);
         } else {

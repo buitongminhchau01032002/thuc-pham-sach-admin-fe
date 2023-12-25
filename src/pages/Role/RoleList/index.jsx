@@ -16,28 +16,33 @@ import HeaderCell from '../../../components/Table/HeaderCell';
 import useModal from '../../../hooks/useModal';
 import Table from '../../../components/Table';
 import Pagination from '../../../components/Table/Pagination';
+import ShowWithFunc from '../../../components/ShowWithFunc';
 
 function ActionCell({ table, row }) {
     return (
         <div className="flex justify-center">
-            <button
-                className="btn btn-yellow px-3 py-1"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    table.options.meta?.onEditButtonClick(row);
-                }}
-            >
-                Sửa
-            </button>
-            <button
-                className="btn btn-red px-3 py-1"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    table.options.meta?.onDeleteButtonClick(row);
-                }}
-            >
-                Xoá
-            </button>
+            <ShowWithFunc func="role/update">
+                <button
+                    className="btn btn-yellow px-3 py-1"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        table.options.meta?.onEditButtonClick(row);
+                    }}
+                >
+                    Sửa
+                </button>
+            </ShowWithFunc>
+            <ShowWithFunc func="role/delete">
+                <button
+                    className="btn btn-red px-3 py-1"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        table.options.meta?.onDeleteButtonClick(row);
+                    }}
+                >
+                    Xoá
+                </button>
+            </ShowWithFunc>
         </div>
     );
 }

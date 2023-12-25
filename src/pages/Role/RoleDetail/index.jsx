@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import clsx from 'clsx';
+import ShowWithFunc from '../../../components/ShowWithFunc';
 
 function FunctionGroup({ func, selectedFunctionIds }) {
     function isCheck(subFuncId) {
@@ -128,12 +129,14 @@ function RoleDetail() {
                             <span className="">Hủy</span>
                         </Link>
 
-                        <Link to={'/role/update/' + id} className="btn btn-blue btn-md">
-                            <span className="pr-1">
-                                <i className="fa-solid fa-circle-plus"></i>
-                            </span>
-                            <span className="">Chỉnh sửa</span>
-                        </Link>
+                        <ShowWithFunc func="role/update">
+                            <Link to={'/role/update/' + id} className="btn btn-blue btn-md">
+                                <span className="pr-1">
+                                    <i className="fa-solid fa-circle-plus"></i>
+                                </span>
+                                <span className="">Chỉnh sửa</span>
+                            </Link>
+                        </ShowWithFunc>
                     </div>
                 </div>
             </div>

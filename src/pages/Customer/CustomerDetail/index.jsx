@@ -6,24 +6,11 @@ import moment from 'moment';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import { accountSelector } from '../../../redux/selectors';
+import ShowWithFunc from '../../../components/ShowWithFunc';
 
 function CustomerDetail() {
     const { id } = useParams();
     const [customer, setCustomer] = useState({});
-    const account = useSelector(accountSelector);
-    function isHiddenItem(functionName) {
-        if (!account) {
-            return true;
-        }
-        if (!functionName) {
-            return false;
-        }
-        const findResult = account?.functions?.find((_func) => _func?.name === functionName);
-        if (findResult) {
-            return false;
-        }
-        return true;
-    }
     useEffect(() => {
         callApi();
     }, []);
@@ -115,17 +102,17 @@ function CustomerDetail() {
                     </div>
 
                     <div className="float-right flex basis-1 flex-col">
-                        <Link
-                            to={'/customer/update/' + customer.id}
-                            className={clsx('btn btn-md btn-green', {
-                                hidden: isHiddenItem('customer/update'),
-                            })}
-                        >
-                            <span className="pr-2">
-                                <i className="fa fa-share" aria-hidden="true"></i>
-                            </span>
-                            <span>Chỉnh sửa</span>
-                        </Link>
+                        <ShowWithFunc func="customer/update">
+                            <Link
+                                to={'/customer/update/' + customer.id}
+                                className="btn btn-md btn-green"
+                            >
+                                <span className="pr-2">
+                                    <i className="fa fa-share" aria-hidden="true"></i>
+                                </span>
+                                <span>Chỉnh sửa</span>
+                            </Link>
+                        </ShowWithFunc>
                     </div>
                 </div>
             </div>

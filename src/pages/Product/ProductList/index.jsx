@@ -19,6 +19,7 @@ import DeleteDialog from '../../../components/DeleteDialog';
 import TopBar from './TopBar';
 import searchFilterFn from '../../../utils/searchFilterFn';
 import rangeFilterFn from '../../../utils/rangeFilterFn';
+import ShowWithFunc from '../../../components/ShowWithFunc';
 
 function StatusCell({ getValue }) {
     return (
@@ -51,24 +52,28 @@ function NameAndImageCell({ row, getValue }) {
 function ActionCell({ table, row }) {
     return (
         <div className="flex justify-end">
-            <button
-                className="btn btn-yellow px-3 py-1"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    table.options.meta?.onEditButtonClick(row);
-                }}
-            >
-                Sửa
-            </button>
-            <button
-                className="btn btn-red px-3 py-1"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    table.options.meta?.onDeleteButtonClick(row);
-                }}
-            >
-                Xoá
-            </button>
+            <ShowWithFunc func="product/update">
+                <button
+                    className="btn btn-yellow px-3 py-1"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        table.options.meta?.onEditButtonClick(row);
+                    }}
+                >
+                    Sửa
+                </button>
+            </ShowWithFunc>
+            <ShowWithFunc func="product/delete">
+                <button
+                    className="btn btn-red px-3 py-1"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        table.options.meta?.onDeleteButtonClick(row);
+                    }}
+                >
+                    Xoá
+                </button>
+            </ShowWithFunc>
         </div>
     );
 }
@@ -227,7 +232,6 @@ function ProductList() {
             },
         },
     ]);
-    console.log(columnFilters);
 
     useEffect(() => {
         getProducts();

@@ -16,6 +16,7 @@ import DeleteDialog from '../../../components/DeleteDialog';
 import HeaderCell from '../../../components/Table/HeaderCell';
 import Table from '../../../components/Table';
 import Pagination from '../../../components/Table/Pagination';
+import ShowWithFunc from '../../../components/ShowWithFunc';
 
 function NameAndImageCell({ row, getValue }) {
     const avatar = row.getValue('avatar');
@@ -33,24 +34,28 @@ function NameAndImageCell({ row, getValue }) {
 function ActionCell({ table, row }) {
     return (
         <div className="flex justify-end">
-            <button
-                className="btn btn-yellow px-3 py-1"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    table.options.meta?.onEditButtonClick(row);
-                }}
-            >
-                Sửa
-            </button>
-            <button
-                className="btn btn-red px-3 py-1"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    table.options.meta?.onDeleteButtonClick(row);
-                }}
-            >
-                Xoá
-            </button>
+            <ShowWithFunc func='customer/update'>
+                <button
+                    className="btn btn-yellow px-3 py-1"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        table.options.meta?.onEditButtonClick(row);
+                    }}
+                >
+                    Sửa
+                </button>
+            </ShowWithFunc>
+            <ShowWithFunc func='customer/delete'>
+                <button
+                    className="btn btn-red px-3 py-1"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        table.options.meta?.onDeleteButtonClick(row);
+                    }}
+                >
+                    Xoá
+                </button>
+            </ShowWithFunc>
         </div>
     );
 }
