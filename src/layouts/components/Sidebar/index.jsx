@@ -1,7 +1,5 @@
 import GroupMenu from './GroupMenu';
-import { useDispatch, useSelector } from 'react-redux';
-import { accountActions } from '../../../redux/slices/accountSlide';
-import { accountSelector } from '../../../redux/selectors';
+import { Scrollbars } from 'react-custom-scrollbars';
 import { toast } from 'react-toastify';
 
 const groupMenus = [
@@ -11,27 +9,6 @@ const groupMenus = [
             text: 'Trang chủ',
             link: '/',
         },
-    },
-    {
-        main: {
-            iconClassname: 'fa-solid fa-clipboard',
-            text: 'Thống kê',
-            link: '/statistic',
-        },
-        children: [
-            {
-                iconClassname: 'fa-solid fa-list',
-                text: 'Sản phẩm',
-                link: '/product',
-                functionName: '...',
-            },
-            {
-                iconClassname: 'fa-solid fa-list',
-                text: 'Doanh số',
-                link: '/profit',
-                functionName: '...',
-            },
-        ],
     },
     {
         main: {
@@ -52,15 +29,8 @@ const groupMenus = [
                 link: '/add',
                 functionName: 'order/create',
             },
-            {
-                iconClassname: 'fa-solid fa-table',
-                text: 'Thống kê',
-                link: '/statistic',
-                functionName: 'order/statistc',
-            },
         ],
     },
-
     {
         main: {
             iconClassname: 'fa-solid fa-box-open',
@@ -147,7 +117,27 @@ const groupMenus = [
             },
         ],
     },
-
+    {
+        main: {
+            iconClassname: 'fa-solid fa-clipboard',
+            text: 'Thống kê',
+            link: '/statistic',
+        },
+        children: [
+            {
+                iconClassname: 'fa-solid fa-list',
+                text: 'Sản phẩm',
+                link: '/product',
+                functionName: '...',
+            },
+            {
+                iconClassname: 'fa-solid fa-list',
+                text: 'Doanh số',
+                link: '/profit',
+                functionName: '...',
+            },
+        ],
+    },
     {
         main: {
             iconClassname: ' fa-solid fa-user',
@@ -169,7 +159,6 @@ const groupMenus = [
             },
         ],
     },
-
     {
         main: {
             iconClassname: 'fa-solid fa-clipboard',
@@ -194,25 +183,31 @@ const groupMenus = [
 ];
 
 function Sidebar() {
-    const dispatch = useDispatch();
-    const account = useSelector(accountSelector);
-    const showLogoutNoti = () => toast.info('Đã đăng xuất!');
-
     return (
-        <div className="flex h-full min-w-[240px] flex-col bg-blue-500">
-            <header className="mb-8 flex h-16 w-full select-none flex-col items-center justify-center text-white">
+        <div className="h-full min-w-[240px] bg-blue-500">
+            <header className="flex h-20 w-full flex-col items-center justify-center border-b border-white/40 text-white">
                 <div className="text-lg font-extrabold">QUẢN LÝ</div>
                 <div className="font-bold">CỬA HÀNG CÂY XANH</div>
             </header>
 
-            <ul
-                className="flex flex-1 select-none flex-col space-y-0.5 p-2 "
-                style={{ overflowY: 'overlay' }}
-            >
-                {groupMenus.map((groupMenu, index) => (
-                    <GroupMenu key={index} groupMenu={groupMenu} />
-                ))}
-            </ul>
+            <div className="">
+                <Scrollbars
+                    autoHide
+                    autoHideTimeout={4000}
+                    autoHeight
+                    autoHideDuration={200}
+                    autoHeightMin={`calc(100vh - 80px)`}
+                >
+                    <ul
+                        className="flex h-full flex-col space-y-0.5 p-2"
+                        style={{ overflowY: 'overlay' }}
+                    >
+                        {groupMenus.map((groupMenu, index) => (
+                            <GroupMenu key={index} groupMenu={groupMenu} />
+                        ))}
+                    </ul>
+                </Scrollbars>
+            </div>
         </div>
     );
 }
