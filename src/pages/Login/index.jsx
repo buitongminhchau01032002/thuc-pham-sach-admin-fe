@@ -17,16 +17,19 @@ function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [validateOnChange, setValidateOnChange] = useState(false);
     const showSuccessNoti = () => toast.success('Đăng nhập thành công!');
     const showErorrNoti = () => toast.error('Đăng nhập không thành công!');
 
-    const bacsicForm = useFormik({
+    const form = useFormik({
         initialValues: {
             username: '',
             password: '',
         },
         validationSchema,
         onSubmit: handleFormsubmit,
+        validateOnBlur: false,
+        validateOnChange: validateOnChange,
     });
     function handleFormsubmit(values) {
         setLoading(true);
@@ -41,25 +44,28 @@ function Login() {
             .then((resJson) => {
                 if (resJson.success) {
                     console.log(resJson.account);
-                    setLoading(false);
                     showSuccessNoti();
                     dispatch(accountActions.login(resJson.account));
                     navigate('/');
                 } else {
-                    setLoading(false);
                     showErorrNoti();
                 }
             })
             .catch(() => {
-                setLoading(false);
                 showErorrNoti();
+            })
+            .finally(() => {
+                setLoading(false);
             });
     }
     return (
         <div>
             <section className="bg-gray-200 ">
                 <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
-                    <a href="#" className="mb-6 flex items-center text-2xl font-semibold text-green-600 ">
+                    <a
+                        href="#"
+                        className="mb-6 flex items-center text-2xl font-semibold text-green-600 "
+                    >
                         <img
                             className="mr-2 h-8 w-8"
                             src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
@@ -69,10 +75,20 @@ function Login() {
                     </a>
                     <div className=" w-[448px] rounded-lg bg-white shadow">
                         <div className="space-y-4 p-8">
-                            <h1 className="text-center text-2xl font-semibold text-gray-900">Đăng nhập</h1>
-                            <form onSubmit={bacsicForm.handleSubmit}>
+                            <h1 className="text-center text-2xl font-semibold text-gray-900">
+                                Đăng nhập
+                            </h1>
+                            <form
+                                onSubmit={(e) => {
+                                    setValidateOnChange(true);
+                                    form.handleSubmit(e);
+                                }}
+                            >
                                 <div className="mb-2">
-                                    <label htmlFor="username" className="mb-1 block font-medium text-gray-900 ">
+                                    <label
+                                        htmlFor="username"
+                                        className="mb-1 block font-medium text-gray-900 "
+                                    >
                                         Tài khoản
                                     </label>
                                     <input
@@ -80,50 +96,53 @@ function Login() {
                                         name="username"
                                         id="username"
                                         className={clsx('text-input w-full py-2', {
-                                            invalid: bacsicForm.touched.username && bacsicForm.errors.username,
+                                            invalid: form.errors.username,
                                         })}
-                                        onChange={bacsicForm.handleChange}
-                                        onBlur={bacsicForm.handleBlur}
-                                        value={bacsicForm.values.username}
+                                        onChange={form.handleChange}
+                                        onBlur={form.handleBlur}
+                                        value={form.values.username}
                                         placeholder="Tên tài khoản"
                                     />
                                     <span
                                         className={clsx('text-sm text-red-500 opacity-0', {
-                                            'opacity-100': bacsicForm.touched.username && bacsicForm.errors.username,
+                                            'opacity-100': form.errors.username,
                                         })}
                                     >
-                                        {bacsicForm.errors.username || 'No message'}
+                                        {form.errors.username || 'No message'}
                                     </span>
                                 </div>
                                 <div className="mb-2">
-                                    <label htmlFor="password" className="mb-1 block font-medium text-gray-900 ">
+                                    <label
+                                        htmlFor="password"
+                                        className="mb-1 block font-medium text-gray-900 "
+                                    >
                                         Mật khẩu
                                     </label>
                                     <input
                                         type="password"
                                         name="password"
                                         id="password"
-                                        onChange={bacsicForm.handleChange}
-                                        onBlur={bacsicForm.handleBlur}
-                                        value={bacsicForm.values.password}
+                                        onChange={form.handleChange}
+                                        onBlur={form.handleBlur}
+                                        value={form.values.password}
                                         placeholder="Mật khẩu của bạn"
                                         className={clsx('text-input w-full py-2', {
-                                            invalid: bacsicForm.touched.password && bacsicForm.errors.password,
+                                            invalid: form.errors.password,
                                         })}
                                     />
                                     <span
                                         className={clsx('text-sm text-red-500 opacity-0', {
-                                            'opacity-100': bacsicForm.touched.password && bacsicForm.errors.password,
+                                            'opacity-100': form.errors.password,
                                         })}
                                     >
-                                        {bacsicForm.errors.password || 'No message'}
+                                        {form.errors.password || 'No message'}
                                     </span>
                                 </div>
 
                                 <button
                                     type="submit"
                                     className="btn btn-blue btn-md mt-4 w-full"
-                                    disabled={!bacsicForm.dirty || loading}
+                                    disabled={loading}
                                 >
                                     {!loading ? (
                                         <span>Đăng nhập</span>

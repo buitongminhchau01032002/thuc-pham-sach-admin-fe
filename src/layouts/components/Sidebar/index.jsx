@@ -213,22 +213,6 @@ function Sidebar() {
                     <GroupMenu key={index} groupMenu={groupMenu} />
                 ))}
             </ul>
-
-            <div className="w-full border-t border-white p-3 text-white">
-                <div className="mb-2">
-                    <p className="font-bold">{account?.name}</p>
-                    <p className="text-sm">{account?.role?.name}</p>
-                </div>
-                <button
-                    className="btn btn-md w-full border border-white hover:bg-blue-400"
-                    onClick={() => {
-                        dispatch(accountActions.logout());
-                        showLogoutNoti();
-                    }}
-                >
-                    Đăng xuất
-                </button>
-            </div>
         </div>
     );
 }
