@@ -97,7 +97,7 @@ export default function StatisticProduct() {
                 },
             ],
         };
-    }, [orderDetails, rangeDateValue.startDate, rangeDateValue.endDate]);
+    }, [importDetails, rangeDateValue.startDate, rangeDateValue.endDate]);
 
     const dataOrder = useMemo(() => {
         if (!rangeDateValue.startDate || !rangeDateValue.endDate) {
