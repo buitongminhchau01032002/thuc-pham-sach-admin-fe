@@ -235,7 +235,7 @@ function AddProduct() {
                                 </span>
                             </div>
                         </div>
-                        {/* SIZE */}
+                        {/* STATUS */}
                         <div>
                             <label className="label !cursor-default">Trạng thái</label>
                             <div className="flex items-center space-x-5">

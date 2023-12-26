@@ -197,7 +197,7 @@ function AddAccount() {
                 </div>
 
                 <div className="mt-6 flex items-center justify-end border-t pt-6">
-                    <Link to={'/product-type'} className="btn btn-red btn-md">
+                    <Link to={'/account'} className="btn btn-red btn-md">
                         <span className="pr-2">
                             <i className="fa-solid fa-circle-xmark"></i>
                         </span>

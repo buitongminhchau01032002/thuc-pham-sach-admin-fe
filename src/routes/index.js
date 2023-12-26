@@ -32,6 +32,10 @@ import AccountList from '../pages/Account/AccountList';
 import AddAccount from '../pages/Account/AddAccount';
 import UpdateAccount from '../pages/Account/UpdateAccount';
 import AccountDetail from '../pages/Account/AccountDetail';
+import CouponList from '../pages/Coupon/CouponList';
+import AddCoupon from '../pages/Coupon/AddCoupon';
+import UpdateCoupon from '../pages/Coupon/UpdateCoupon';
+import CouponDetail from '../pages/Coupon/CouponDetail';
 
 // Public routes
 const publicRoutes = [
@@ -255,6 +259,36 @@ const publicRoutes = [
             heading: 'Sửa chức vụ',
         },
     },
+
+    // Coupon
+    {
+        path: '/coupon',
+        component: CouponList,
+        props: {
+            heading: 'Danh sách phiếu giảm giá',
+        },
+    },
+    {
+        path: '/coupon/add',
+        component: AddCoupon,
+        props: {
+            heading: 'Thêm phiếu giảm giá',
+        },
+    },
+    {
+        path: '/coupon/update/:id',
+        component: UpdateCoupon,
+        props: {
+            heading: 'Chỉnh sửa phiếu giảm giá',
+        },
+    },
+    // {
+    //     path: '/coupon/detail/:id',
+    //     component: CouponDetail,
+    //     props: {
+    //         heading: 'Chi tiết phiếu giảm giá',
+    //     },
+    // },
 
     {
         path: '/login',
