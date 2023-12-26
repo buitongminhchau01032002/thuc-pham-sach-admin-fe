@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { toast } from 'react-toastify';
 import {
+    filterFns,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
@@ -17,6 +18,8 @@ import useModal from '../../../hooks/useModal';
 import Table from '../../../components/Table';
 import Pagination from '../../../components/Table/Pagination';
 import ShowWithFunc from '../../../components/ShowWithFunc';
+import TopBar from './TopBar';
+import searchFilterFn from '../../../utils/searchFilterFn';
 
 function ActionCell({ table, row }) {
     return (
@@ -62,18 +65,27 @@ const columns = [
         accessorKey: 'username',
         header: (props) => <HeaderCell tableProps={props}>Tên tài khoản</HeaderCell>,
         size: 300,
+        filterFn: filterFns.includesString,
     },
     {
         accessorKey: 'name',
         header: (props) => <HeaderCell tableProps={props}>Họ tên</HeaderCell>,
         size: 'full',
+        filterFn: searchFilterFn,
     },
 
     {
-        id: 'account',
+        id: 'role',
         accessorFn: (i) => i?.role?.name,
         header: (props) => <HeaderCell tableProps={props}>Chức vụ</HeaderCell>,
         size: 'full',
+        filterFn: (...param) => {
+            const value = param[2];
+            if (value.length === 0) {
+                return true;
+            }
+            return filterFns.arrIncludesSome(...param);
+        },
     },
     {
         id: 'action',
@@ -85,6 +97,20 @@ const columns = [
 
 function AccountList() {
     const [accounts, setAccounts] = useState([]);
+    const [columnFilters, setColumnFilters] = useState([
+        {
+            id: 'name',
+            value: '',
+        },
+        {
+            id: 'username',
+            value: '',
+        },
+        {
+            id: 'role',
+            value: [],
+        },
+    ]);
     const navigate = useNavigate();
     const [openDeleteDialog, closeDeleteDialog] = useModal({
         modal: DeleteDialog,
@@ -133,6 +159,9 @@ function AccountList() {
     const table = useReactTable({
         data: accounts,
         columns,
+        state: {
+            columnFilters,
+        },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -151,7 +180,9 @@ function AccountList() {
     });
 
     return (
-        <div className="container">
+        <div className="container space-y-4">
+            <TopBar filters={columnFilters} setFilters={setColumnFilters} />
+
             {/* LIST */}
             <div>
                 <Table table={table} notFoundMessage="Không có tài khoản" />
