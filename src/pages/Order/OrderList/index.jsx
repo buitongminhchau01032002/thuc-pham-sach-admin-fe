@@ -222,7 +222,6 @@ function OrderList() {
             },
         },
     ]);
-    console.log(columnFilters);
 
     useEffect(() => {
         getOrders();

@@ -21,6 +21,8 @@ import HeaderCell from '../../../components/Table/HeaderCell';
 import useModal from '../../../hooks/useModal';
 import DeleteDialog from '../../../components/DeleteDialog';
 import ShowWithFunc from '../../../components/ShowWithFunc';
+import TopBar from './TopBar';
+import rangeFilterFn from '../../../utils/rangeFilterFn';
 
 function ActionCell({ table, row }) {
     return (
@@ -62,6 +64,23 @@ const columns = [
             <p className="text-center">{moment(getValue()).format('HH:MM DD/MM/YYYY')}</p>
         ),
         size: 300,
+        filterFn: (row, columnId, filterValue) => {
+            if (!filterValue.startDate || !filterValue.endDate) {
+                return true;
+            }
+            const createdAt = moment(
+                moment(new Date(row.getValue(columnId))).format('DD/MM/YYYY'),
+                'DD/MM/YYYY'
+            );
+            console.log(row.getValue(columnId), createdAt.format('DD/MM/YYYY'));
+            if (moment(filterValue.startDate).isAfter(createdAt)) {
+                return false;
+            }
+            if (moment(filterValue.endDate).isBefore(createdAt)) {
+                return false;
+            }
+            return true;
+        },
     },
     {
         accessorKey: 'totalPrice',
@@ -76,6 +95,7 @@ const columns = [
             </p>
         ),
         size: 'full',
+        filterFn: rangeFilterFn,
     },
 
     {
@@ -89,6 +109,22 @@ const columns = [
 function ImportList() {
     const [imports, setImports] = useState([]);
     const navigate = useNavigate();
+    const [columnFilters, setColumnFilters] = useState([
+        {
+            id: 'createdAt',
+            value: {
+                startDate: null,
+                endDate: null,
+            },
+        },
+        {
+            id: 'totalPrice',
+            value: {
+                min: '',
+                max: '',
+            },
+        },
+    ]);
 
     useEffect(() => {
         getImports();
@@ -143,7 +179,7 @@ function ImportList() {
         data: imports,
         columns,
         state: {
-            // columnFilters,
+            columnFilters,
             // columnVisibility: { images: false },
         },
         getCoreRowModel: getCoreRowModel(),
@@ -164,7 +200,8 @@ function ImportList() {
     });
 
     return (
-        <div className="container max-w-[800px]">
+        <div className="container max-w-[900px] space-y-4">
+            <TopBar filters={columnFilters} setFilters={setColumnFilters} />
             <div>
                 <Table table={table} notFoundMessage="Không có phiếu nhập" />
                 <Pagination table={table} />
