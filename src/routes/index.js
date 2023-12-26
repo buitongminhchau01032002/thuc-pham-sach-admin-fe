@@ -125,14 +125,14 @@ const publicRoutes = [
         path: '/product-type',
         component: ProductTypeList,
         props: {
-            heading: 'Danh sách loại cây',
+            heading: 'Danh sách loại sản phẩm',
         },
     },
     {
         path: '/product-type/add',
         component: AddProductType,
         props: {
-            heading: 'Thêm mới loại sản phẩm',
+            heading: 'Thêm loại sản phẩm',
         },
     },
     {

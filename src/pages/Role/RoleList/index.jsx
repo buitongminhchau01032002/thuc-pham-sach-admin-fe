@@ -17,6 +17,8 @@ import useModal from '../../../hooks/useModal';
 import Table from '../../../components/Table';
 import Pagination from '../../../components/Table/Pagination';
 import ShowWithFunc from '../../../components/ShowWithFunc';
+import searchFilterFn from '../../../utils/searchFilterFn';
+import TopBar from './TopBar';
 
 function ActionCell({ table, row }) {
     return (
@@ -62,10 +64,12 @@ const columns = [
         accessorKey: 'name',
         header: (props) => <HeaderCell tableProps={props}>Tên</HeaderCell>,
         size: 300,
+        filterFn: searchFilterFn,
     },
     {
         accessorKey: 'description',
         header: (props) => <HeaderCell tableProps={props}>Mô tả</HeaderCell>,
+        filterFn: searchFilterFn,
         size: 'full',
     },
     {
@@ -78,6 +82,11 @@ const columns = [
 
 function RoleList() {
     const [roles, setRoles] = useState([]);
+    const [columnFilters, setColumnFilters] = useState([
+        { id: 'name', value: '' },
+        { id: 'description', value: '' },
+    ]);
+
     const navigate = useNavigate();
     const [openDeleteDialog, closeDeleteDialog] = useModal({
         modal: DeleteDialog,
@@ -126,6 +135,9 @@ function RoleList() {
     const table = useReactTable({
         data: roles,
         columns,
+        state: {
+            columnFilters,
+        },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -144,8 +156,8 @@ function RoleList() {
     });
 
     return (
-        <div className="container">
-            {/* LIST */}
+        <div className="container space-y-4">
+            <TopBar filters={columnFilters} setFilters={setColumnFilters} />
             <div>
                 <Table table={table} notFoundMessage="Không có chức vụ" />
                 <Pagination table={table} />

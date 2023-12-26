@@ -23,6 +23,8 @@ import useModal from '../../../hooks/useModal';
 import Table from '../../../components/Table';
 import Pagination from '../../../components/Table/Pagination';
 import ShowWithFunc from '../../../components/ShowWithFunc';
+import TopBar from './TopBar';
+import searchFilterFn from '../../../utils/searchFilterFn';
 
 function ActionCell({ table, row }) {
     return (
@@ -68,6 +70,7 @@ const columns = [
         accessorKey: 'name',
         header: (props) => <HeaderCell tableProps={props}>Tên</HeaderCell>,
         size: 'full',
+        filterFn: searchFilterFn,
     },
     {
         accessorKey: 'createdAt',
@@ -98,7 +101,7 @@ function ProductTypeList() {
             onDelete: deleteProductType,
         },
     });
-    const [columnFilters, setColumnFilters] = useState([]);
+    const [columnFilters, setColumnFilters] = useState([{ id: 'name', value: '' }]);
 
     useEffect(() => {
         getProductTypes();
@@ -158,8 +161,8 @@ function ProductTypeList() {
     });
 
     return (
-        <div className="container">
-            {/* LIST */}
+        <div className="container max-w-[900px] space-y-4">
+            <TopBar filters={columnFilters} setFilters={setColumnFilters} />
             <div>
                 <Table
                     table={table}
