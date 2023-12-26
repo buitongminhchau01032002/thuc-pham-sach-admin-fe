@@ -9,6 +9,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { accountSelector } from '../../../redux/selectors';
 import {
+    filterFns,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
@@ -21,6 +22,8 @@ import HeaderCell from '../../../components/Table/HeaderCell';
 import useModal from '../../../hooks/useModal';
 import DeleteDialog from '../../../components/DeleteDialog';
 import ShowWithFunc from '../../../components/ShowWithFunc';
+import TopBar from './TopBar';
+import rangeFilterFn from '../../../utils/rangeFilterFn';
 
 function DeliveryStatusCell({ getValue }) {
     return (
@@ -96,6 +99,23 @@ const columns = [
         cell: ({ getValue }) => (
             <p className="text-center">{moment(getValue()).format('HH:mm DD/MM/YYYY')}</p>
         ),
+        filterFn: (row, columnId, filterValue) => {
+            if (!filterValue.startDate || !filterValue.endDate) {
+                return true;
+            }
+            const createdAt = moment(
+                moment(new Date(row.getValue(columnId))).format('DD/MM/YYYY'),
+                'DD/MM/YYYY'
+            );
+            console.log(row.getValue(columnId), createdAt.format('DD/MM/YYYY'));
+            if (moment(filterValue.startDate).isAfter(createdAt)) {
+                return false;
+            }
+            if (moment(filterValue.endDate).isBefore(createdAt)) {
+                return false;
+            }
+            return true;
+        },
         size: 200,
     },
     {
@@ -106,6 +126,7 @@ const columns = [
             </HeaderCell>
         ),
         cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        filterFn: filterFns.includesString,
         size: 'full',
     },
     {
@@ -120,6 +141,7 @@ const columns = [
                 <PriceFormat>{getValue()}</PriceFormat>
             </p>
         ),
+        filterFn: rangeFilterFn,
         size: 150,
     },
 
@@ -133,6 +155,10 @@ const columns = [
         cell: DeliveryStatusCell,
         size: 150,
         enableSorting: false,
+        filterFn: (row, columnId, value) => {
+            const statusValue = row.getValue(columnId);
+            return value[statusValue];
+        },
     },
     {
         accessorKey: 'paymentStatus',
@@ -144,6 +170,10 @@ const columns = [
         cell: PaymentStatusCell,
         size: 150,
         enableSorting: false,
+        filterFn: (row, columnId, value) => {
+            const statusValue = row.getValue(columnId);
+            return value[statusValue];
+        },
     },
     {
         id: 'action',
@@ -157,25 +187,42 @@ function OrderList() {
     const [orders, setOrders] = useState([]);
     const navigate = useNavigate();
 
-    // function checkDateInFilter(order) {
-    //     if (dateFilter === 'all') {
-    //         return true;
-    //     }
-    //     if (
-    //         dateFilter === 'yesterday' &&
-    //         moment().subtract(1, 'days').format('YYYY-MM-DD') ==
-    //             moment(order.createdAt).format('YYYY-MM-DD')
-    //     ) {
-    //         return true;
-    //     }
-    //     if (
-    //         dateFilter === 'today' &&
-    //         moment().format('YYYY-MM-DD') == moment(order.createdAt).format('YYYY-MM-DD')
-    //     ) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
+    const [columnFilters, setColumnFilters] = useState([
+        {
+            id: 'phone',
+            value: '',
+        },
+        {
+            id: 'createdAt',
+            value: {
+                startDate: null,
+                endDate: null,
+            },
+        },
+        {
+            id: 'totalPrice',
+            value: {
+                min: '',
+                max: '',
+            },
+        },
+        {
+            id: 'deliveryStatus',
+            value: {
+                delivered: true,
+                pending: true,
+                aborted: true,
+            },
+        },
+        {
+            id: 'paymentStatus',
+            value: {
+                paid: true,
+                unpaid: true,
+            },
+        },
+    ]);
+    console.log(columnFilters);
 
     useEffect(() => {
         getOrders();
@@ -230,8 +277,7 @@ function OrderList() {
         data: orders,
         columns,
         state: {
-            // columnFilters,
-            // columnVisibility: { images: false },
+            columnFilters,
         },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -251,7 +297,8 @@ function OrderList() {
     });
 
     return (
-        <div className="container">
+        <div className="container space-y-4">
+            <TopBar filters={columnFilters} setFilters={setColumnFilters} />
             <div>
                 <Table table={table} notFoundMessage="Không có hoá đơn" />
                 <Pagination table={table} />

@@ -172,25 +172,7 @@ const columns = [
 ];
 
 function ProductList() {
-    // const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-    // const [deletingProductId, setDeletingProductId] = useState(null);
-    // const [products, setProducts] = useState([]);
-    // const [filters, setFilters] = useState({});
     const navigate = useNavigate();
-    // const account = useSelector(accountSelector);
-    // function isHiddenItem(functionName) {
-    //     if (!account) {
-    //         return true;
-    //     }
-    //     if (!functionName) {
-    //         return false;
-    //     }
-    //     const findResult = account?.functions?.find((_func) => _func?.name === functionName);
-    //     if (findResult) {
-    //         return false;
-    //     }
-    //     return true;
-    // }
 
     const [products, setProducts] = useState([]);
 
