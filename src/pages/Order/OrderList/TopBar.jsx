@@ -33,7 +33,7 @@ export default function TopBar({ filters, setFilters }) {
             </div>
             <div className="space-y-2">
                 <div className="flex space-x-4">
-                    <div className="w-[400px]">
+                    <div className="w-[300px]">
                         <label className="label !mb-0 cursor-default text-sm">Số điện thoại</label>
                         <input
                             className="text-input"
@@ -69,7 +69,7 @@ export default function TopBar({ filters, setFilters }) {
                             showShortcuts={true}
                         />
                     </div>
-                    <div className="w-[400px]">
+                    <div className="w-[300px]">
                         <label className="label !mb-0 cursor-default text-sm">Giá</label>
                         <div className="flex items-center space-x-1">
                             <input
@@ -93,6 +93,38 @@ export default function TopBar({ filters, setFilters }) {
                                 onChange={(e) =>
                                     setFilters(
                                         setFilterValueHandler('totalPrice', (prev) => ({
+                                            ...prev,
+                                            max: e.target.value,
+                                        }))
+                                    )
+                                }
+                            />
+                        </div>
+                    </div>
+                    <div className="w-[300px]">
+                        <label className="label !mb-0 cursor-default text-sm">Thành tiền</label>
+                        <div className="flex items-center space-x-1">
+                            <input
+                                className="text-input"
+                                placeholder="Từ"
+                                value={getFilterValue('intoMoney', filters)?.min || ''}
+                                onChange={(e) =>
+                                    setFilters(
+                                        setFilterValueHandler('intoMoney', (prev) => ({
+                                            ...prev,
+                                            min: e.target.value,
+                                        }))
+                                    )
+                                }
+                            />
+                            <div>-</div>
+                            <input
+                                className="text-input"
+                                placeholder="Đến"
+                                value={getFilterValue('intoMoney', filters)?.max || ''}
+                                onChange={(e) =>
+                                    setFilters(
+                                        setFilterValueHandler('intoMoney', (prev) => ({
                                             ...prev,
                                             max: e.target.value,
                                         }))

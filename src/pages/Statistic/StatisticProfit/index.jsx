@@ -77,14 +77,14 @@ export default function StatisticProfit() {
         const orderMoneySets = dates.map((date) =>
             orders
                 .filter((i) => moment(i.createdAt).format('DD/MM/YYYY') === date)
-                .reduce((prev, curr) => prev + curr.totalPrice, 0)
+                .reduce((prev, curr) => prev + curr.intoMoney, 0)
         );
 
         return {
             labels: dates,
             summary: {
-                importMoney: importMoneySets.reduce((prev, curr) => prev + curr),
-                orderMoney: orderMoneySets.reduce((prev, curr) => prev + curr),
+                importMoney: importMoneySets.reduce((prev, curr) => prev + curr, 0),
+                orderMoney: orderMoneySets.reduce((prev, curr) => prev + curr, 0),
             },
             datasets: [
                 {

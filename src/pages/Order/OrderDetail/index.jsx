@@ -199,35 +199,81 @@ function OrderDetail() {
                                 </div>
                             </div>
                         )}
+                        {order?.coupon && (
+                            <div>
+                                <p className="text-gray-700">Mã giảm giá: </p>
+                                <div className="rounded border border-green-600 px-4 py-2">
+                                    <p className="font-medium text-gray-700">
+                                        {order.coupon.description}
+                                    </p>
+                                    <div className="flex space-x-6">
+                                        <p className="text-gray-600">
+                                            {'Mã: ' + order.coupon.name}
+                                        </p>
+                                        <div className="space-x-1">
+                                            <span className="text-gray-600">Giảm:</span>
+                                            <span className="font-bold text-green-600">
+                                                {order.coupon.discountPercent + '%'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    <div className="mt-3 space-y-3 border-b pb-3">
-                        <div>
-                            <span className="text-gray-700">Tổng tiền: </span>
-                            <span className="text-xl font-semibold text-blue-600">
-                                <span>
-                                    <PriceFormat>{order?.totalPrice}</PriceFormat>
+                    <div className="mt-3 flex space-x-6 border-b pb-3">
+                        <div className="space-y-3 ">
+                            <div>
+                                <span className="text-gray-700">Tổng giá: </span>
+                                <span className="text-xl font-semibold text-blue-600">
+                                    <span>
+                                        <PriceFormat>{order?.totalPrice}</PriceFormat>
+                                    </span>
+                                    <span> VNĐ</span>
                                 </span>
-                                <span> VNĐ</span>
-                            </span>
+                            </div>
+                            <div>
+                                <span className="text-gray-700">Giảm giá: </span>
+                                <span className="text-xl font-bold text-green-600">
+                                    <span>
+                                        <PriceFormat>
+                                            {order?.totalPrice - order?.intoMoney}
+                                        </PriceFormat>
+                                    </span>
+                                    <span> VNĐ</span>
+                                </span>
+                            </div>
+                            <div>
+                                <span className="text-gray-700">Thành tiền: </span>
+                                <span className="text-xl font-bold text-blue-600">
+                                    <span>
+                                        <PriceFormat>{order?.intoMoney}</PriceFormat>
+                                    </span>
+                                    <span> VNĐ</span>
+                                </span>
+                            </div>
                         </div>
-                        <div>
-                            <span className="text-gray-700">Tiền nhận: </span>
-                            <span className="text-xl font-semibold text-orange-400">
-                                <span>
-                                    <PriceFormat>{order?.receivedMoney}</PriceFormat>
+                        <div className="border-l"></div>
+                        <div className="space-y-3">
+                            <div>
+                                <span className="text-gray-700">Tiền nhận: </span>
+                                <span className="text-xl font-semibold text-orange-400">
+                                    <span>
+                                        <PriceFormat>{order?.receivedMoney}</PriceFormat>
+                                    </span>
+                                    <span> VNĐ</span>
                                 </span>
-                                <span> VNĐ</span>
-                            </span>
-                        </div>
-                        <div className="">
-                            <span className="text-gray-700">Tiền thừa: </span>
-                            <span className="text-xl font-semibold text-blue-500">
-                                <span>
-                                    <PriceFormat>{order?.exchangeMoney}</PriceFormat>
+                            </div>
+                            <div className="">
+                                <span className="text-gray-700">Tiền thừa: </span>
+                                <span className="text-xl font-semibold text-blue-500">
+                                    <span>
+                                        <PriceFormat>{order?.exchangeMoney}</PriceFormat>
+                                    </span>
+                                    <span> VNĐ</span>
                                 </span>
-                                <span> VNĐ</span>
-                            </span>
+                            </div>
                         </div>
                     </div>
 

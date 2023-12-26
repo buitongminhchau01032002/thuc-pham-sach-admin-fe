@@ -146,6 +146,22 @@ const columns = [
     },
 
     {
+        accessorKey: 'intoMoney',
+        header: (props) => (
+            <HeaderCell align="right" tableProps={props}>
+                Thành tiền
+            </HeaderCell>
+        ),
+        cell: ({ getValue }) => (
+            <p className="text-right">
+                <PriceFormat>{getValue()}</PriceFormat>
+            </p>
+        ),
+        filterFn: rangeFilterFn,
+        size: 150,
+    },
+
+    {
         accessorKey: 'deliveryStatus',
         header: (props) => (
             <HeaderCell align="center" tableProps={props}>
@@ -201,6 +217,13 @@ function OrderList() {
         },
         {
             id: 'totalPrice',
+            value: {
+                min: '',
+                max: '',
+            },
+        },
+        {
+            id: 'intoMoney',
             value: {
                 min: '',
                 max: '',

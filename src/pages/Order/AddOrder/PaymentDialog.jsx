@@ -10,7 +10,7 @@ import {
 } from '@tanstack/react-table';
 import { toast } from 'react-toastify';
 import HeaderCell from '../../../components/Table/HeaderCell';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PriceFormat from '../../../components/PriceFormat';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -248,9 +248,17 @@ function DeliveryGroup({ isDelivered, setIsDelivered, setIsValid, setValue, info
     );
 }
 
-function PaymentGroup({ isDelivered, isPaid, setIsPaid, setIsValid, totalMoney, setValue }) {
+function PaymentGroup({
+    isDelivered,
+    isPaid,
+    setIsPaid,
+    setIsValid,
+    totalPrice,
+    intoMoney,
+    setValue,
+}) {
     const [receivedMoney, setReceivedMoney] = useState(0);
-    const exchangeMoney = receivedMoney - totalMoney;
+    const exchangeMoney = receivedMoney - intoMoney;
 
     useEffect(() => {
         setValue(receivedMoney);
@@ -301,32 +309,67 @@ function PaymentGroup({ isDelivered, isPaid, setIsPaid, setIsValid, totalMoney, 
             </div>
 
             {isPaid && (
-                <div className="mt-4">
-                    <div className="flex items-center">
-                        <label className="mr-2" htmlFor="price">
-                            Tiền nhận:
-                        </label>
-                        <PriceInput
-                            id="order-payment-received-money"
-                            value={receivedMoney}
-                            onChange={(e) => setReceivedMoney(e.target.value)}
-                            className="w-56"
-                            placeholder="Tiền nhận"
-                        />
-                    </div>
-
-                    <div className="mt-1">
-                        <span>Tiền thừa: </span>
-                        <span
-                            className={clsx('text-xl font-semibold text-blue-600', {
-                                'text-red-600': exchangeMoney < 0,
-                            })}
-                        >
-                            <span>
-                                <PriceFormat>{exchangeMoney}</PriceFormat>
+                <div className="mt-4 flex space-x-6">
+                    <div className="space-y-1">
+                        <p className="">
+                            <span>Tổng giá: </span>
+                            <span className="text-xl font-semibold text-blue-600">
+                                <span>
+                                    <PriceFormat>{totalPrice}</PriceFormat>
+                                </span>
+                                <span> VNĐ</span>
                             </span>
-                            <span> VNĐ</span>
-                        </span>
+                        </p>
+
+                        <p className="">
+                            <span>Giảm giá: </span>
+                            <span className="text-xl font-semibold text-green-600">
+                                <span>
+                                    <PriceFormat>{totalPrice - intoMoney}</PriceFormat>
+                                </span>
+                                <span> VNĐ</span>
+                            </span>
+                        </p>
+
+                        <p className="">
+                            <span>Thành tiền: </span>
+                            <span className="text-xl font-bold text-blue-600">
+                                <span>
+                                    <PriceFormat>{intoMoney}</PriceFormat>
+                                </span>
+                                <span> VNĐ</span>
+                            </span>
+                        </p>
+                    </div>
+                    <div className="border-l"></div>
+
+                    <div className="space-y-1">
+                        <div className="flex items-center">
+                            <label className="mr-2" htmlFor="price">
+                                Tiền nhận:
+                            </label>
+                            <PriceInput
+                                id="order-payment-received-money"
+                                value={receivedMoney}
+                                onChange={(e) => setReceivedMoney(e.target.value)}
+                                className="w-56"
+                                placeholder="Tiền nhận"
+                            />
+                        </div>
+
+                        <div className="">
+                            <span>Tiền thừa: </span>
+                            <span
+                                className={clsx('text-xl font-semibold text-blue-600', {
+                                    'text-red-600': exchangeMoney < 0,
+                                })}
+                            >
+                                <span>
+                                    <PriceFormat>{exchangeMoney}</PriceFormat>
+                                </span>
+                                <span> VNĐ</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
             )}
@@ -334,7 +377,66 @@ function PaymentGroup({ isDelivered, isPaid, setIsPaid, setIsValid, totalMoney, 
     );
 }
 
-function InfoGroup({ totalMoney, setValue, setIsValid, customers, infoValue }) {
+function CouponGroup({ infoValue, setValue, coupons }) {
+    const [couponName, setCouponName] = useState('');
+    useEffect(() => {
+        const coupon = coupons.find((c) => c.name === couponName);
+        setValue(coupon || null);
+    }, [couponName]);
+
+    useEffect(() => {
+        setCouponName('');
+    }, [infoValue?.customer]);
+
+    return (
+        infoValue?.customer && (
+            <div className="mb-4 flex space-x-3">
+                <div className="w-[200px]">
+                    <label className="label" htmlFor="coupon">
+                        Mã giảm giá
+                    </label>
+                    <input
+                        type="text"
+                        id="coupon"
+                        className={clsx('text-input')}
+                        value={couponName}
+                        onChange={(e) => setCouponName(e.target.value)}
+                    />
+                </div>
+                {infoValue.coupon && (
+                    <div
+                        className={clsx('flex-1 rounded border px-4 py-2', {
+                            'border-green-600': infoValue.coupon.canUse,
+                            'border-gray-300 bg-gray-100': !infoValue.coupon.canUse,
+                        })}
+                    >
+                        <p className="font-medium text-gray-700">{infoValue.coupon.description}</p>
+                        <div className="flex space-x-3">
+                            <div className="space-x-1">
+                                <span className="text-gray-600">Giảm:</span>
+                                <span className="font-bold text-green-600">
+                                    {infoValue.coupon.discountPercent + '%'}
+                                </span>
+                            </div>
+
+                            {infoValue.coupon.canUse ? (
+                                <div className="rounded bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
+                                    Có thể dùng
+                                </div>
+                            ) : (
+                                <div className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-800">
+                                    Hết lượt dùng
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+            </div>
+        )
+    );
+}
+
+function InfoGroup({ totalPrice, intoMoney, setValue, setIsValid, customers, coupons, infoValue }) {
     const [isValidPhone, setIsValidPhone] = useState(false);
     const [isDelivered, setIsDelivered] = useState(true);
     const [isValidDelivered, setIsValidDelivered] = useState(true);
@@ -369,6 +471,16 @@ function InfoGroup({ totalMoney, setValue, setIsValid, customers, infoValue }) {
                 }
                 customers={customers}
             />
+            <CouponGroup
+                coupons={coupons}
+                infoValue={infoValue}
+                setValue={(coupon) =>
+                    setValue((prev) => ({
+                        ...prev,
+                        coupon,
+                    }))
+                }
+            />
             <DeliveryGroup
                 isDelivered={isDelivered}
                 setIsDelivered={setIsDelivered}
@@ -386,7 +498,8 @@ function InfoGroup({ totalMoney, setValue, setIsValid, customers, infoValue }) {
                 isPaid={isPaid}
                 setIsPaid={setIsPaid}
                 setIsValid={setIsPaidValid}
-                totalMoney={totalMoney}
+                totalPrice={totalPrice}
+                intoMoney={intoMoney}
                 setValue={(receivedMoney) =>
                     setValue((prev) => ({
                         ...prev,
@@ -403,6 +516,7 @@ export default function PaymentDialog({ close, meta }) {
     const order = meta?.order;
     const [customers, setCustomers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [coupons, setCounpons] = useState([]);
     useEffect(() => {
         fetch('http://localhost:5000/api/customer')
             .then((res) => res.json())
@@ -418,6 +532,7 @@ export default function PaymentDialog({ close, meta }) {
                 setCustomers([]);
             });
     }, []);
+
     const dispatch = useDispatch();
     const [isValidInfo, setIsValidInfo] = useState(false);
     const [infoValue, setInfoValue] = useState({
@@ -426,8 +541,40 @@ export default function PaymentDialog({ close, meta }) {
         isPaid: true,
         receivedMoney: 0,
         customer: null,
+        coupon: null,
     });
-    console.log(infoValue);
+
+    useEffect(() => {
+        if (infoValue?.customer) {
+            fetch('http://localhost:5000/api/coupon/get-by-customer/' + infoValue.customer?._id)
+                .then((res) => res.json())
+                .then((resJson) => {
+                    if (resJson.success) {
+                        setCounpons(resJson.coupons);
+                    } else {
+                        setCounpons([]);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setCounpons([]);
+                });
+        }
+        setInfoValue((prev) => ({
+            ...prev,
+            coupon: null,
+        }));
+    }, [infoValue?.customer]);
+
+    const intoMoney = useMemo(() => {
+        if (!infoValue?.coupon) {
+            return order?.totalPrice;
+        }
+        if (!infoValue.coupon?.canUse) {
+            return order?.totalPrice;
+        }
+        return order?.totalPrice - (order?.totalPrice * infoValue.coupon?.discountPercent) / 100;
+    }, [infoValue?.coupon]);
 
     const table = useReactTable({
         data: selectedProducts,
@@ -463,9 +610,9 @@ export default function PaymentDialog({ close, meta }) {
                     ? Number(infoValue.receivedMoney)
                     : order.totalPrice,
                 totalPrice: order.totalPrice,
-                exchangeMoney: infoValue.isPaid
-                    ? Number(infoValue.receivedMoney) - order.totalPrice
-                    : 0,
+                intoMoney: intoMoney,
+                coupon: infoValue.coupon?._id,
+                exchangeMoney: infoValue.isPaid ? Number(infoValue.receivedMoney) - intoMoney : 0,
                 phone: infoValue.phone,
                 address: infoValue.isDelivered ? null : infoValue.address,
             }),
@@ -523,11 +670,13 @@ export default function PaymentDialog({ close, meta }) {
                         {/* CUSTOMER FORM */}
                         <div className="relative">
                             <InfoGroup
-                                totalMoney={order?.totalPrice}
+                                totalPrice={order?.totalPrice}
+                                intoMoney={intoMoney}
                                 setValue={setInfoValue}
                                 setIsValid={setIsValidInfo}
                                 customers={customers}
                                 infoValue={infoValue}
+                                coupons={coupons}
                             />
                             <LoadingForm loading={loading} />
                         </div>
