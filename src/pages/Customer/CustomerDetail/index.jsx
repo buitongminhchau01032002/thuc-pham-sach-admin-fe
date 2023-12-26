@@ -12,10 +12,10 @@ function CustomerDetail() {
     const { id } = useParams();
     const [customer, setCustomer] = useState({});
     useEffect(() => {
-        callApi();
+        getCustomer();
     }, []);
 
-    function callApi() {
+    function getCustomer() {
         fetch('http://localhost:5000/api/customer' + '/' + id)
             .then((res) => res.json())
             .then((resJson) => {
@@ -28,92 +28,51 @@ function CustomerDetail() {
     }
     return (
         <div className="container">
-            <div className="wrapper">
-                <div className="mt-4 flex flex-row">
-                    <div className="mt-[4%] flex basis-1/2 flex-col">
-                        <label className="mb-1 cursor-default text-lg font-semibold">
-                            Mã khách hàng
-                        </label>
-                        <div className="text-input disabled select-none py-[5px]">
-                            {customer.id}
+            <div className="mx-auto mt-5 max-w-[700px] rounded-xl border border-slate-300 p-5">
+                <div className="relative flex pt-10">
+                    <div className="h-[150px] w-[150px] rounded-full border">
+                        <img
+                            className="h-full w-full rounded-full object-cover"
+                            src={customer?.avatar || '/placeholder.png'}
+                        />
+                    </div>
+                    <div className="ml-8 flex-1 space-y-3">
+                        <div className="mb-4 flex flex-col">
+                            <label className="label pointer-events-none">Mã khách hàng:</label>
+                            <p className="font-medium text-blue-600">{customer?.id}</p>
+                        </div>
+                        <div className="mb-4 flex flex-col">
+                            <label className="label pointer-events-none">Số điện thoại:</label>
+                            <p className="font-medium text-blue-600">{customer?.phone}</p>
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label className="label pointer-events-none">Tên khách hàng:</label>
+                            <p className="text-xl font-medium">{customer?.name}</p>
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label className="label pointer-events-none">Địa chỉ *</label>
+                            <p>{customer?.address}</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-2 flex flex-row">
-                    <div className="mt-2 flex basis-1/2 flex-col">
-                        <label
-                            className="mb-1 cursor-default text-lg font-semibold"
-                            htmlFor="phone"
-                            defaultValue={0}
-                        >
-                            Số điện thoại
-                        </label>
-                        <div className="text-input disabled select-none py-[5px]">
-                            {customer.phone}
-                        </div>
-                    </div>
-                </div>
-
-                <div className="mt-2 flex flex-row">
-                    <div className="mt-2 flex basis-1/2 flex-col">
-                        <label className="mb-1 cursor-default text-lg font-semibold" htmlFor="name">
-                            Tên khách hàng
-                        </label>
-                        <div className="text-input disabled select-none py-[5px]">
-                            {customer.name}
-                        </div>
-                    </div>
-                </div>
-
-                <div className="mt-4 flex flex-row">
-                    <div className="mr-2 mt-2 flex basis-1/2 flex-col">
-                        <label className="mb-1 cursor-default text-lg font-semibold" htmlFor="date">
-                            Ngày thêm
-                        </label>
-                        <div className="text-input disabled select-none py-[5px]">
-                            {moment(customer.createdAt).format('(HH:mm:ss)     DD/MM/YYYY')}
-                        </div>
-                    </div>
-                </div>
-
-                <div className="mt-4 flex flex-row">
-                    <div className="mr-2 mt-2 flex w-full flex-col">
-                        <label
-                            className="mb-1 cursor-default text-lg font-semibold"
-                            htmlFor="address"
-                        >
-                            Địa chỉ
-                        </label>
-                        <div className="text-input disabled select-none py-[5px]">
-                            {customer.address}
-                        </div>
-                    </div>
-                </div>
-
-                <div className="float-right mt-8 mr-2 flex flex-row">
-                    <div className="float-left mr-5 flex basis-1 flex-col">
-                        <Link to={'/customer'} className="btn btn-blue btn-md">
-                            <span className="pr-1">
-                                <i className="fa-solid fa-circle-xmark"></i>
+                <div className="mt-6 flex items-center justify-end border-t pt-6">
+                    <Link to={'/customer'} className="btn btn-red btn-md">
+                        <span className="pr-2">
+                            <i className="fa-solid fa-circle-xmark"></i>
+                        </span>
+                        <span>Hủy</span>
+                    </Link>
+                    <ShowWithFunc func="customer/update">
+                        <Link to={'customer/update/' + id} className="btn btn-blue btn-md">
+                            <span className="pr-2">
+                                <i className="fa-solid fa-circle-plus"></i>
                             </span>
-                            <span>Quay lại</span>
+                            <span>Chỉnh sửa</span>
                         </Link>
-                    </div>
-
-                    <div className="float-right flex basis-1 flex-col">
-                        <ShowWithFunc func="customer/update">
-                            <Link
-                                to={'/customer/update/' + customer.id}
-                                className="btn btn-md btn-green"
-                            >
-                                <span className="pr-2">
-                                    <i className="fa fa-share" aria-hidden="true"></i>
-                                </span>
-                                <span>Chỉnh sửa</span>
-                            </Link>
-                        </ShowWithFunc>
-                    </div>
+                    </ShowWithFunc>
                 </div>
             </div>
         </div>
