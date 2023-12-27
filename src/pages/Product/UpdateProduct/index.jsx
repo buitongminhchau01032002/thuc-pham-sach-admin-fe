@@ -76,7 +76,6 @@ function UpdateProduct() {
         updateProduct(values)
             .then(() => {
                 showSuccessNoti();
-                setValidateOnChange(false);
             })
             .catch(() => {
                 showErorrNoti();

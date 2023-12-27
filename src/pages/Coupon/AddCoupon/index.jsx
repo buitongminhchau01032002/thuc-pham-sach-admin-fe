@@ -38,8 +38,6 @@ function AddCoupon() {
         validateOnChange: validateOnChange,
     });
 
-    console.log(form.values);
-
     function handleFormsubmit(values) {
         setLoading(true);
         fetch('http://localhost:5000/api/coupon', {
@@ -58,6 +56,7 @@ function AddCoupon() {
                 if (resJson.success) {
                     showSuccessNoti();
                     form.resetForm();
+                    setValidateOnChange(false);
                 } else {
                     showErorrNoti();
                 }

@@ -68,6 +68,7 @@ function AddCustomer() {
             if (resJson.success) {
                 showSuccessNoti();
                 form.resetForm();
+                setValidateOnChange(false);
                 setImage(null);
             } else if (resJson.message === 'phone already exists') {
                 toast.error('Số điện thoại đã tồn tại');

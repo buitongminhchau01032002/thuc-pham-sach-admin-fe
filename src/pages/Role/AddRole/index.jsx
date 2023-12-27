@@ -135,6 +135,7 @@ function AddRole() {
                 if (resJson.success) {
                     showSuccessNoti();
                     form.resetForm();
+                    setValidateOnChange(false);
                     setSelectedFunctionIds([]);
                 } else {
                     showErorrNoti();

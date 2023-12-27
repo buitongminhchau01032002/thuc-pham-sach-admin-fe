@@ -58,6 +58,7 @@ function AddAccount() {
                 if (resJson.success) {
                     showSuccessNoti();
                     form.resetForm();
+                    setValidateOnChange(false);
                 } else {
                     showErorrNoti();
                 }

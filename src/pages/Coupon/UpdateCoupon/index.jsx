@@ -55,8 +55,6 @@ function UpdateCoupon() {
         validateOnChange: validateOnChange,
     });
 
-    console.log(form.values);
-
     function handleFormsubmit(values) {
         setLoading(true);
         fetch('http://localhost:5000/api/coupon/' + id, {
