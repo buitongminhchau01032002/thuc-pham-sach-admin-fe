@@ -137,7 +137,7 @@ export default function TopBar({ filters, setFilters }) {
                 <div className="flex space-x-4">
                     <div className="w-[400px]">
                         <label className="label !mb-0 cursor-default text-sm">
-                            Trạng giao hàng
+                            Trạng thái giao hàng
                         </label>
                         <div className="flex h-9 items-center space-x-3">
                             <div
@@ -213,7 +213,7 @@ export default function TopBar({ filters, setFilters }) {
                     </div>
                     <div className="w-[400px]">
                         <label className="label !mb-0 cursor-default text-sm">
-                            Trạng giao hàng
+                            Trạng thái thanh toán
                         </label>
                         <div className="flex h-9 items-center space-x-3">
                             <div

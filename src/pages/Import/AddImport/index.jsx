@@ -314,7 +314,7 @@ function AddImport() {
                                                 dispatch(
                                                     importActions.add({
                                                         product,
-                                                        importPrice: product.price,
+                                                        importPrice: product.importPrice,
                                                     })
                                                 )
                                             }

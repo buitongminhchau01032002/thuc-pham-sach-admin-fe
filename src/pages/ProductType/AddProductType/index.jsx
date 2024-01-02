@@ -79,7 +79,6 @@ function AddProductType() {
                             onChange={form.handleChange}
                             value={form.values.name}
                             name="name"
-                            placeholder="Giày thể thao"
                         />
                         <span
                             className={clsx('text-sm text-red-500 opacity-0', {
