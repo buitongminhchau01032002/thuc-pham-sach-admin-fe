@@ -32,12 +32,8 @@ function ProductTypeDetail() {
             <div className="wrapper mx-[10%] rounded-xl  border border-slate-300 p-5">
                 <div className="mt-4 flex flex-row">
                     <div className="mt-[4%] flex w-full flex-col">
-                        <label className="mb-1 cursor-default text-lg font-semibold">
-                            Mã loại sản phẩm
-                        </label>
-                        <div className="text-input disabled select-none py-[5px]">
-                            {productType.id}
-                        </div>
+                        <label className="mb-1 cursor-default text-lg font-semibold">Mã loại sản phẩm</label>
+                        <div className="text-input disabled select-none py-[5px]">{productType.id}</div>
                     </div>
                 </div>
 
@@ -46,9 +42,15 @@ function ProductTypeDetail() {
                         <label className="mb-1 cursor-default text-lg font-semibold" htmlFor="name">
                             Tên loại sản phẩm
                         </label>
-                        <div className="text-input disabled select-none py-[5px]">
-                            {productType.name}
-                        </div>
+                        <div className="text-input disabled select-none py-[5px]">{productType.name}</div>
+                    </div>
+                </div>
+                <div className="mt-4 flex flex-row">
+                    <div className="mt-2 flex w-full flex-col">
+                        <label className="mb-1 cursor-default text-lg font-semibold" htmlFor="name">
+                            Tên loại sản phẩm tiếng Anh
+                        </label>
+                        <div className="text-input disabled select-none py-[5px]">{productType.nameEN}</div>
                     </div>
                 </div>
 
@@ -71,10 +73,7 @@ function ProductTypeDetail() {
                         <span>Quay lại</span>
                     </Link>
                     <ShowWithFunc func="product-type/update">
-                        <Link
-                            to={'/product-type/update/' + productType.id}
-                            className="btn btn-md btn-blue"
-                        >
+                        <Link to={'/product-type/update/' + productType.id} className="btn btn-md btn-blue">
                             <span className="pr-2">
                                 <i className="fa fa-share" aria-hidden="true"></i>
                             </span>

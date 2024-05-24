@@ -73,15 +73,19 @@ const columns = [
         filterFn: searchFilterFn,
     },
     {
+        accessorKey: 'nameEN',
+        header: (props) => <HeaderCell tableProps={props}>Tên tiếng Anh</HeaderCell>,
+        size: 'full',
+        filterFn: searchFilterFn,
+    },
+    {
         accessorKey: 'createdAt',
         header: (props) => (
             <HeaderCell align="center" tableProps={props}>
                 Ngày tạo
             </HeaderCell>
         ),
-        cell: ({ getValue }) => (
-            <p className="text-center">{moment(getValue()).format('HH:mm:ss DD/MM/YYYY ')}</p>
-        ),
+        cell: ({ getValue }) => <p className="text-center">{moment(getValue()).format('HH:mm:ss DD/MM/YYYY ')}</p>,
         size: 300,
     },
     {
@@ -164,11 +168,7 @@ function ProductTypeList() {
         <div className="container max-w-[900px] space-y-4">
             <TopBar filters={columnFilters} setFilters={setColumnFilters} />
             <div>
-                <Table
-                    table={table}
-                    notFoundMessage="Không có loại sản phẩm"
-                    rowClickable={false}
-                />
+                <Table table={table} notFoundMessage="Không có loại sản phẩm" rowClickable={false} />
                 <Pagination table={table} />
             </div>
         </div>

@@ -13,7 +13,9 @@ import LoadingForm from '../../../components/LoadingForm';
 
 const validationSchema = Yup.object({
     name: Yup.string().required('Trường này bắt buộc'),
+    nameEN: Yup.string().required('Trường này bắt buộc'),
     description: Yup.string().required('Trường này bắt buộc'),
+    descriptionEN: Yup.string().required('Trường này bắt buộc'),
     price: Yup.number().required('Trường này bắt buộc').min(1, 'Giá phải lớn hơn 0'),
     importPrice: Yup.number().required('Trường này bắt buộc').min(1, 'Giá phải lớn hơn 0'),
     type: Yup.string().required('Trường này bắt buộc'),
@@ -28,8 +30,10 @@ function AddProduct() {
     const form = useFormik({
         initialValues: {
             name: '',
+            nameEN: '',
             type: '',
             description: '',
+            descriptionEN: '',
             price: '',
             importPrice: '',
             status: 'active',
@@ -128,6 +132,29 @@ function AddProduct() {
                             </span>
                         </div>
 
+                        <div>
+                            <label className="label" htmlFor="name">
+                                Tên sản phẩm tiếng Anh*
+                            </label>
+                            <input
+                                type="text"
+                                id="nameEN"
+                                className={clsx('text-input', {
+                                    invalid: form.errors.nameEN,
+                                })}
+                                onChange={form.handleChange}
+                                value={form.values.nameEN}
+                                name="nameEN"
+                            />
+                            <span
+                                className={clsx('text-sm text-red-500 opacity-0', {
+                                    'opacity-100': form.errors.nameEN,
+                                })}
+                            >
+                                {form.errors.nameEN || 'No message'}
+                            </span>
+                        </div>
+
                         {/* TYPE */}
                         <div>
                             <label className="label" htmlFor="type">
@@ -163,7 +190,7 @@ function AddProduct() {
                     </div>
 
                     {/* DESCRIPTION AND STATUS */}
-                    <div>
+                    <div className="flex gap-2">
                         <div>
                             <label className="label" htmlFor="description">
                                 Mô tả sản phẩm *
@@ -185,6 +212,29 @@ function AddProduct() {
                                 })}
                             >
                                 {form.errors.description || 'No message'}
+                            </span>
+                        </div>
+                        <div>
+                            <label className="label" htmlFor="descriptionEN">
+                                Mô tả sản phẩm tiếng Anh*
+                            </label>
+                            <textarea
+                                type="text"
+                                id="descriptionEN"
+                                className={clsx('text-input !h-auto py-2', {
+                                    invalid: form.errors.descriptionEN,
+                                })}
+                                onChange={form.handleChange}
+                                value={form.values.descriptionEN}
+                                name="descriptionEN"
+                                rows={4}
+                            ></textarea>
+                            <span
+                                className={clsx('text-sm text-red-500 opacity-0', {
+                                    'opacity-100': form.errors.descriptionEN,
+                                })}
+                            >
+                                {form.errors.descriptionEN || 'No message'}
                             </span>
                         </div>
                     </div>
@@ -263,10 +313,7 @@ function AddProduct() {
                                         onChange={form.handleChange}
                                         checked={form.values.status === 'inactive'}
                                     />
-                                    <label
-                                        htmlFor="status-inactive"
-                                        className="cursor-pointer pl-2"
-                                    >
+                                    <label htmlFor="status-inactive" className="cursor-pointer pl-2">
                                         Không bán
                                     </label>
                                 </div>

@@ -8,9 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import LoadingForm from '../../../components/LoadingForm';
 
 const validationSchema = Yup.object({
-    name: Yup.string()
-        .required('Trường này bắt buộc')
-        .max(30, 'Tên loại sản phẩm dài tối đa 30 kí tự'),
+    name: Yup.string().required('Trường này bắt buộc').max(30, 'Tên loại sản phẩm dài tối đa 30 kí tự'),
+    nameEN: Yup.string().required('Trường này bắt buộc').max(30, 'Tên loại sản phẩm dài tối đa 30 kí tự'),
 });
 
 function AddProductType() {
@@ -22,6 +21,7 @@ function AddProductType() {
     const form = useFormik({
         initialValues: {
             name: '',
+            nameEN: '',
         },
         validationSchema,
         onSubmit: handleFormsubmit,
@@ -86,6 +86,28 @@ function AddProductType() {
                             })}
                         >
                             {form.errors.name || 'No message'}
+                        </span>
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="label" htmlFor="nameEN">
+                            Tên loại sản phẩm tiếng Anh
+                        </label>
+                        <input
+                            type="text"
+                            id="nameEN"
+                            className={clsx('text-input w-full py-[5px]', {
+                                invalid: form.errors.nameEN,
+                            })}
+                            onChange={form.handleChange}
+                            value={form.values.nameEN}
+                            name="nameEN"
+                        />
+                        <span
+                            className={clsx('text-sm text-red-500 opacity-0', {
+                                'opacity-100': form.errors.nameEN,
+                            })}
+                        >
+                            {form.errors.nameEN || 'No message'}
                         </span>
                     </div>
                     <LoadingForm loading={loading} />
