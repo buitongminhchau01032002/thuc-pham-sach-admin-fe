@@ -54,8 +54,10 @@ function UpdateProduct() {
     const form = useFormik({
         initialValues: {
             name: product.name || '',
+            nameEN: product.nameEN || '',
             type: product.type?._id || '',
             description: product.description || '',
+            descriptionEN: product.descriptionEN || '',
             price: product.price || 0,
             importPrice: product.importPrice || 0,
             status: product.status || 'active',
@@ -82,6 +84,47 @@ function UpdateProduct() {
             })
             .finally(() => {
                 setLoading(false);
+            });
+    }
+
+    function translateName(word) {
+        fetch('https://google-translate1.p.rapidapi.com/language/translate/v2', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'Accept-Encoding': 'application/gzip',
+                'X-RapidAPI-Key': '83ccc28e74msh0b32be41fb6329cp114163jsndb5342252d3e',
+                'X-RapidAPI-Host': 'google-translate1.p.rapidapi.com',
+            },
+            body: new URLSearchParams({
+                q: word,
+                target: 'en',
+                source: 'vi',
+            }),
+        })
+            .then((res) => res.json())
+            .then((resJson) => {
+                form.setFieldValue('nameEN', resJson?.data?.translations[0]?.translatedText);
+            });
+    }
+    function translateDescription(word) {
+        fetch('https://google-translate1.p.rapidapi.com/language/translate/v2', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'Accept-Encoding': 'application/gzip',
+                'X-RapidAPI-Key': '83ccc28e74msh0b32be41fb6329cp114163jsndb5342252d3e',
+                'X-RapidAPI-Host': 'google-translate1.p.rapidapi.com',
+            },
+            body: new URLSearchParams({
+                q: word,
+                target: 'en',
+                source: 'vi',
+            }),
+        })
+            .then((res) => res.json())
+            .then((resJson) => {
+                form.setFieldValue('descriptionEN', resJson?.data?.translations[0]?.translatedText);
             });
     }
 
@@ -126,7 +169,7 @@ function UpdateProduct() {
 
     return (
         <div className="container">
-            <div className="mb-6 mt-2 flex items-center justify-center space-x-3 rounded bg-blue-50 py-4">
+            <div className="mb-3 flex items-center justify-center space-x-3 rounded bg-blue-50 py-1">
                 <span className="text-lg font-medium text-gray-700">Mã sản phẩm:</span>
                 <span className="text-lg font-bold text-blue-600">{product.id}</span>
             </div>
@@ -160,6 +203,39 @@ function UpdateProduct() {
                                 })}
                             >
                                 {form.errors.name || 'No message'}
+                            </span>
+                        </div>
+                        {/* NAME  ENGLISH*/}
+                        <div>
+                            <div className="flex items-center space-x-3">
+                                <label className="label" htmlFor="nameEN">
+                                    Tên sản phẩm tiếng Anh *
+                                </label>
+
+                                <button
+                                    type="button"
+                                    className="font-semibold text-blue-600 hover:text-blue-700"
+                                    onClick={() => translateName(form.values.name)}
+                                >
+                                    Tự động dịch
+                                </button>
+                            </div>
+                            <input
+                                type="text"
+                                id="nameEN"
+                                className={clsx('text-input', {
+                                    invalid: form.errors.nameEN,
+                                })}
+                                onChange={form.handleChange}
+                                value={form.values.nameEN}
+                                name="nameEN"
+                            />
+                            <span
+                                className={clsx('text-sm text-red-500 opacity-0', {
+                                    'opacity-100': form.errors.nameEN,
+                                })}
+                            >
+                                {form.errors.nameEN || 'No message'}
                             </span>
                         </div>
 
@@ -197,30 +273,62 @@ function UpdateProduct() {
                         />
                     </div>
 
-                    {/* DESCRIPTION */}
-
-                    <div>
-                        <label className="label" htmlFor="description">
-                            Mô tả sản phẩm *
-                        </label>
-                        <textarea
-                            type="text"
-                            id="description"
-                            className={clsx('text-input !h-auto py-2', {
-                                invalid: form.errors.description,
-                            })}
-                            onChange={form.handleChange}
-                            value={form.values.description}
-                            name="description"
-                            rows={4}
-                        ></textarea>
-                        <span
-                            className={clsx('text-sm text-red-500 opacity-0', {
-                                'opacity-100': form.errors.description,
-                            })}
-                        >
-                            {form.errors.description || 'No message'}
-                        </span>
+                    <div className="flex gap-2">
+                        {/* DESCRIPTION */}
+                        <div>
+                            <label className="label" htmlFor="description">
+                                Mô tả sản phẩm *
+                            </label>
+                            <textarea
+                                type="text"
+                                id="description"
+                                className={clsx('text-input !h-auto py-2', {
+                                    invalid: form.errors.description,
+                                })}
+                                onChange={form.handleChange}
+                                value={form.values.description}
+                                name="description"
+                                rows={4}
+                            ></textarea>
+                            <span
+                                className={clsx('text-sm text-red-500 opacity-0', {
+                                    'opacity-100': form.errors.description,
+                                })}
+                            >
+                                {form.errors.description || 'No message'}
+                            </span>
+                        </div>
+                        {/* DESCRIPTION ENG */}
+                        <div>
+                            <label className="label mr-2" htmlFor="descriptionEN">
+                                Mô tả sản phẩm tiếng Anh*
+                            </label>
+                            <button
+                                type="button"
+                                className="font-semibold text-blue-600 hover:text-blue-700"
+                                onClick={() => translateDescription(form.values.description)}
+                            >
+                                Tự động dịch
+                            </button>
+                            <textarea
+                                type="text"
+                                id="descriptionEN"
+                                className={clsx('text-input !h-auto py-2', {
+                                    invalid: form.errors.descriptionEN,
+                                })}
+                                onChange={form.handleChange}
+                                value={form.values.descriptionEN}
+                                name="descriptionEN"
+                                rows={4}
+                            ></textarea>
+                            <span
+                                className={clsx('text-sm text-red-500 opacity-0', {
+                                    'opacity-100': form.errors.descriptionEN,
+                                })}
+                            >
+                                {form.errors.descriptionEN || 'No message'}
+                            </span>
+                        </div>
                     </div>
 
                     {/* IMPORT PRICE, PRICE AND STATUS */}
@@ -297,10 +405,7 @@ function UpdateProduct() {
                                         onChange={form.handleChange}
                                         checked={form.values.status === 'inactive'}
                                     />
-                                    <label
-                                        htmlFor="status-inactive"
-                                        className="cursor-pointer pl-2"
-                                    >
+                                    <label htmlFor="status-inactive" className="cursor-pointer pl-2">
                                         Không bán
                                     </label>
                                 </div>

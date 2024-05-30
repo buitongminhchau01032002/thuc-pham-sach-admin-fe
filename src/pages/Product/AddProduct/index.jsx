@@ -61,7 +61,46 @@ function AddProduct() {
                 setLoading(false);
             });
     }
-
+    function translateName(word) {
+        fetch('https://google-translate1.p.rapidapi.com/language/translate/v2', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'Accept-Encoding': 'application/gzip',
+                'X-RapidAPI-Key': '83ccc28e74msh0b32be41fb6329cp114163jsndb5342252d3e',
+                'X-RapidAPI-Host': 'google-translate1.p.rapidapi.com',
+            },
+            body: new URLSearchParams({
+                q: word,
+                target: 'en',
+                source: 'vi',
+            }),
+        })
+            .then((res) => res.json())
+            .then((resJson) => {
+                form.setFieldValue('nameEN', resJson?.data?.translations[0]?.translatedText);
+            });
+    }
+    function translateDescription(word) {
+        fetch('https://google-translate1.p.rapidapi.com/language/translate/v2', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'Accept-Encoding': 'application/gzip',
+                'X-RapidAPI-Key': '83ccc28e74msh0b32be41fb6329cp114163jsndb5342252d3e',
+                'X-RapidAPI-Host': 'google-translate1.p.rapidapi.com',
+            },
+            body: new URLSearchParams({
+                q: word,
+                target: 'en',
+                source: 'vi',
+            }),
+        })
+            .then((res) => res.json())
+            .then((resJson) => {
+                form.setFieldValue('descriptionEN', resJson?.data?.translations[0]?.translatedText);
+            });
+    }
     async function createProduct(values) {
         let imageUrls = [];
         if (values.images.length > 0) {
@@ -133,9 +172,19 @@ function AddProduct() {
                         </div>
 
                         <div>
-                            <label className="label" htmlFor="name">
-                                Tên sản phẩm tiếng Anh*
-                            </label>
+                            <div className="flex items-center space-x-3">
+                                <label className="label" htmlFor="nameEN">
+                                    Tên sản phẩm tiếng Anh *
+                                </label>
+
+                                <button
+                                    type="button"
+                                    className="font-semibold text-blue-600 hover:text-blue-700"
+                                    onClick={() => translateName(form.values.name)}
+                                >
+                                    Tự động dịch
+                                </button>
+                            </div>
                             <input
                                 type="text"
                                 id="nameEN"
@@ -215,9 +264,16 @@ function AddProduct() {
                             </span>
                         </div>
                         <div>
-                            <label className="label" htmlFor="descriptionEN">
+                            <label className="label mr-2" htmlFor="descriptionEN">
                                 Mô tả sản phẩm tiếng Anh*
                             </label>
+                            <button
+                                type="button"
+                                className="font-semibold text-blue-600 hover:text-blue-700"
+                                onClick={() => translateDescription(form.values.description)}
+                            >
+                                Tự động dịch
+                            </button>
                             <textarea
                                 type="text"
                                 id="descriptionEN"

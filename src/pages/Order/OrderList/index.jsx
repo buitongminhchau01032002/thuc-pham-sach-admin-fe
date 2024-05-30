@@ -35,11 +35,7 @@ function DeliveryStatusCell({ getValue }) {
                     'bg-red-100 text-red-800': getValue() === 'aborted',
                 })}
             >
-                {getValue() === 'delivered'
-                    ? 'Đã giao'
-                    : getValue() === 'pending'
-                    ? 'Đang chờ'
-                    : 'Đã huỷ'}
+                {getValue() === 'delivered' ? 'Đã giao' : getValue() === 'pending' ? 'Đang chờ' : 'Đã huỷ'}
             </div>
         </div>
     );
@@ -96,17 +92,12 @@ const columns = [
                 Ngày lập
             </HeaderCell>
         ),
-        cell: ({ getValue }) => (
-            <p className="text-center">{moment(getValue()).format('HH:mm DD/MM/YYYY')}</p>
-        ),
+        cell: ({ getValue }) => <p className="text-center">{moment(getValue()).format('HH:mm DD/MM/YYYY')}</p>,
         filterFn: (row, columnId, filterValue) => {
             if (!filterValue.startDate || !filterValue.endDate) {
                 return true;
             }
-            const createdAt = moment(
-                moment(new Date(row.getValue(columnId))).format('DD/MM/YYYY'),
-                'DD/MM/YYYY'
-            );
+            const createdAt = moment(moment(new Date(row.getValue(columnId))).format('DD/MM/YYYY'), 'DD/MM/YYYY');
             console.log(row.getValue(columnId), createdAt.format('DD/MM/YYYY'));
             if (moment(filterValue.startDate).isAfter(createdAt)) {
                 return false;
@@ -165,7 +156,7 @@ const columns = [
         accessorKey: 'deliveryStatus',
         header: (props) => (
             <HeaderCell align="center" tableProps={props}>
-                Nhận hàng
+                Trạng thái
             </HeaderCell>
         ),
         cell: DeliveryStatusCell,

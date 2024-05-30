@@ -28,7 +28,26 @@ function AddProductType() {
         validateOnBlur: false,
         validateOnChange: validateOnChange,
     });
-
+    function translateName(word) {
+        fetch('https://google-translate1.p.rapidapi.com/language/translate/v2', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'Accept-Encoding': 'application/gzip',
+                'X-RapidAPI-Key': '83ccc28e74msh0b32be41fb6329cp114163jsndb5342252d3e',
+                'X-RapidAPI-Host': 'google-translate1.p.rapidapi.com',
+            },
+            body: new URLSearchParams({
+                q: word,
+                target: 'en',
+                source: 'vi',
+            }),
+        })
+            .then((res) => res.json())
+            .then((resJson) => {
+                form.setFieldValue('nameEN', resJson?.data?.translations[0]?.translatedText);
+            });
+    }
     function handleFormsubmit(values) {
         setLoading(true);
         fetch('http://localhost:5000/api/product-type', {
@@ -89,9 +108,18 @@ function AddProductType() {
                         </span>
                     </div>
                     <div className="flex flex-col">
-                        <label className="label" htmlFor="nameEN">
-                            Tên loại sản phẩm tiếng Anh
-                        </label>
+                        <div className="flex items-center space-x-3">
+                            <label className="label" htmlFor="nameEN">
+                                Tên loại sản phẩm tiếng Anh
+                            </label>
+                            <button
+                                type="button"
+                                className="font-semibold text-blue-600 hover:text-blue-700"
+                                onClick={() => translateName(form.values.name)}
+                            >
+                                Tự động dịch
+                            </button>
+                        </div>
                         <input
                             type="text"
                             id="nameEN"
