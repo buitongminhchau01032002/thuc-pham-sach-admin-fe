@@ -36,6 +36,7 @@ import CouponList from '../pages/Coupon/CouponList';
 import AddCoupon from '../pages/Coupon/AddCoupon';
 import UpdateCoupon from '../pages/Coupon/UpdateCoupon';
 import CouponDetail from '../pages/Coupon/CouponDetail';
+import ConversationList from '../pages/Chat/ConversationList';
 
 // Public routes
 const publicRoutes = [
@@ -154,6 +155,14 @@ const publicRoutes = [
         },
     },
 
+    // Chat
+    {
+        path: '/chat',
+        component: ConversationList,
+        props: {
+            heading: 'Danh sách hội thoại',
+        },
+    },
     // CUSTOMER
     {
         path: '/customer',

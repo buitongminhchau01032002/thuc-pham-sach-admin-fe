@@ -168,10 +168,10 @@ function UpdateProduct() {
     }
 
     return (
-        <div className="container">
-            <div className="mb-3 flex items-center justify-center space-x-3 rounded bg-blue-50 py-1">
-                <span className="text-lg font-medium text-gray-700">Mã sản phẩm:</span>
-                <span className="text-lg font-bold text-blue-600">{product.id}</span>
+        <div className='container'>
+            <div className='mb-3 flex items-center justify-center space-x-3 rounded bg-blue-50 py-1'>
+                <span className='text-lg font-medium text-gray-700'>Mã sản phẩm:</span>
+                <span className='text-lg font-bold text-blue-600'>{product.id}</span>
             </div>
             <form
                 onSubmit={(e) => {
@@ -179,23 +179,23 @@ function UpdateProduct() {
                     form.handleSubmit(e);
                 }}
             >
-                <div className="relative grid grid-cols-2 gap-x-8 gap-y-1">
+                <div className='relative grid grid-cols-2 gap-x-8 gap-y-1'>
                     {/* NAME AND TYPE */}
-                    <div className="space-y-1">
+                    <div className='space-y-1'>
                         {/* NAME */}
                         <div>
-                            <label className="label" htmlFor="name">
+                            <label className='label' htmlFor='name'>
                                 Tên sản phẩm *
                             </label>
                             <input
-                                type="text"
-                                id="name"
+                                type='text'
+                                id='name'
                                 className={clsx('text-input', {
                                     invalid: form.errors.name,
                                 })}
                                 onChange={form.handleChange}
                                 value={form.values.name}
-                                name="name"
+                                name='name'
                             />
                             <span
                                 className={clsx('text-sm text-red-500 opacity-0', {
@@ -207,28 +207,28 @@ function UpdateProduct() {
                         </div>
                         {/* NAME  ENGLISH*/}
                         <div>
-                            <div className="flex items-center space-x-3">
-                                <label className="label" htmlFor="nameEN">
+                            <div className='flex items-center space-x-3'>
+                                <label className='label' htmlFor='nameEN'>
                                     Tên sản phẩm tiếng Anh *
                                 </label>
 
                                 <button
-                                    type="button"
-                                    className="font-semibold text-blue-600 hover:text-blue-700"
+                                    type='button'
+                                    className='font-semibold text-blue-600 hover:text-blue-700'
                                     onClick={() => translateName(form.values.name)}
                                 >
                                     Tự động dịch
                                 </button>
                             </div>
                             <input
-                                type="text"
-                                id="nameEN"
+                                type='text'
+                                id='nameEN'
                                 className={clsx('text-input', {
                                     invalid: form.errors.nameEN,
                                 })}
                                 onChange={form.handleChange}
                                 value={form.values.nameEN}
-                                name="nameEN"
+                                name='nameEN'
                             />
                             <span
                                 className={clsx('text-sm text-red-500 opacity-0', {
@@ -241,17 +241,17 @@ function UpdateProduct() {
 
                         {/* TYPE */}
                         <div>
-                            <label className="label" htmlFor="type">
+                            <label className='label' htmlFor='type'>
                                 Loại sản phẩm *
                             </label>
                             <ProductTypeInput
-                                id="type"
+                                id='type'
                                 className={clsx('text-input cursor-pointer', {
                                     invalid: form.errors.type,
                                 })}
                                 onChange={form.handleChange}
                                 value={form.values.type}
-                                name="type"
+                                name='type'
                             />
 
                             <span
@@ -265,29 +265,26 @@ function UpdateProduct() {
                     </div>
 
                     {/* IMAGE */}
-                    <div className="mb-2">
-                        <label className="label">Chọn ảnh</label>
-                        <ImagesInput
-                            images={form.values.images}
-                            onChange={(images) => form.setFieldValue('images', images)}
-                        />
+                    <div className='mb-2'>
+                        <label className='label'>Chọn ảnh</label>
+                        <ImagesInput images={form.values.images} onChange={(images) => form.setFieldValue('images', images)} />
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className='flex gap-2'>
                         {/* DESCRIPTION */}
                         <div>
-                            <label className="label" htmlFor="description">
+                            <label className='label' htmlFor='description'>
                                 Mô tả sản phẩm *
                             </label>
                             <textarea
-                                type="text"
-                                id="description"
+                                type='text'
+                                id='description'
                                 className={clsx('text-input !h-auto py-2', {
                                     invalid: form.errors.description,
                                 })}
                                 onChange={form.handleChange}
                                 value={form.values.description}
-                                name="description"
+                                name='description'
                                 rows={4}
                             ></textarea>
                             <span
@@ -300,25 +297,25 @@ function UpdateProduct() {
                         </div>
                         {/* DESCRIPTION ENG */}
                         <div>
-                            <label className="label mr-2" htmlFor="descriptionEN">
-                                Mô tả sản phẩm tiếng Anh*
+                            <label className='label mr-2' htmlFor='descriptionEN'>
+                                Mô tả tiếng Anh*
                             </label>
                             <button
-                                type="button"
-                                className="font-semibold text-blue-600 hover:text-blue-700"
+                                type='button'
+                                className='font-semibold text-blue-600 hover:text-blue-700'
                                 onClick={() => translateDescription(form.values.description)}
                             >
                                 Tự động dịch
                             </button>
                             <textarea
-                                type="text"
-                                id="descriptionEN"
+                                type='text'
+                                id='descriptionEN'
                                 className={clsx('text-input !h-auto py-2', {
                                     invalid: form.errors.descriptionEN,
                                 })}
                                 onChange={form.handleChange}
                                 value={form.values.descriptionEN}
-                                name="descriptionEN"
+                                name='descriptionEN'
                                 rows={4}
                             ></textarea>
                             <span
@@ -333,19 +330,19 @@ function UpdateProduct() {
 
                     {/* IMPORT PRICE, PRICE AND STATUS */}
                     <div>
-                        <div className="mb-1 flex space-x-8">
+                        <div className='mb-1 flex space-x-8'>
                             {/* IMPORT PRICE */}
-                            <div className="flex-1">
-                                <label className="label" htmlFor="importPrice">
+                            <div className='flex-1'>
+                                <label className='label' htmlFor='importPrice'>
                                     Giá nhập *
                                 </label>
                                 <PriceInput
-                                    id="importPrice"
+                                    id='importPrice'
                                     onChange={form.handleChange}
                                     value={form.values.importPrice}
                                     error={form.errors.importPrice}
-                                    name="importPrice"
-                                    placeholder="Giá nhập"
+                                    name='importPrice'
+                                    placeholder='Giá nhập'
                                 />
                                 <span
                                     className={clsx('text-sm text-red-500 opacity-0', {
@@ -356,17 +353,17 @@ function UpdateProduct() {
                                 </span>
                             </div>
                             {/* PRICE */}
-                            <div className="flex-1">
-                                <label className="label" htmlFor="price">
+                            <div className='flex-1'>
+                                <label className='label' htmlFor='price'>
                                     Giá bán *
                                 </label>
                                 <PriceInput
-                                    id="price"
+                                    id='price'
                                     onChange={form.handleChange}
                                     value={form.values.price}
                                     error={form.errors.price}
-                                    name="price"
-                                    placeholder="Giá bán"
+                                    name='price'
+                                    placeholder='Giá bán'
                                 />
                                 <span
                                     className={clsx('text-sm text-red-500 opacity-0', {
@@ -379,33 +376,33 @@ function UpdateProduct() {
                         </div>
                         {/* STATUS */}
                         <div>
-                            <label className="label !cursor-default">Trạng thái</label>
-                            <div className="flex items-center space-x-5">
-                                <div className="flex items-center">
+                            <label className='label !cursor-default'>Trạng thái</label>
+                            <div className='flex items-center space-x-5'>
+                                <div className='flex items-center'>
                                     <input
-                                        className="h-5 w-5 accent-blue-600"
-                                        type="radio"
-                                        id="status-active"
-                                        name="status"
-                                        value="active"
+                                        className='h-5 w-5 accent-blue-600'
+                                        type='radio'
+                                        id='status-active'
+                                        name='status'
+                                        value='active'
                                         onChange={form.handleChange}
                                         checked={form.values.status === 'active'}
                                     />
-                                    <label htmlFor="status-active" className="cursor-pointer pl-2">
+                                    <label htmlFor='status-active' className='cursor-pointer pl-2'>
                                         Đang bán
                                     </label>
                                 </div>
-                                <div className="flex items-center">
+                                <div className='flex items-center'>
                                     <input
-                                        className="h-5 w-5 accent-blue-600"
-                                        type="radio"
-                                        id="status-inactive"
-                                        name="status"
-                                        value="inactive"
+                                        className='h-5 w-5 accent-blue-600'
+                                        type='radio'
+                                        id='status-inactive'
+                                        name='status'
+                                        value='inactive'
                                         onChange={form.handleChange}
                                         checked={form.values.status === 'inactive'}
                                     />
-                                    <label htmlFor="status-inactive" className="cursor-pointer pl-2">
+                                    <label htmlFor='status-inactive' className='cursor-pointer pl-2'>
                                         Không bán
                                     </label>
                                 </div>
@@ -416,17 +413,17 @@ function UpdateProduct() {
                     <LoadingForm loading={loading} />
                 </div>
 
-                <div className="mt-6 flex items-center justify-end border-t pt-6">
-                    <div className="flex">
-                        <Link to={'/product'} className="btn btn-red btn-md">
-                            <span className="pr-2">
-                                <i className="fa-solid fa-circle-xmark"></i>
+                <div className='mt-6 flex items-center justify-end border-t pt-6'>
+                    <div className='flex'>
+                        <Link to={'/product'} className='btn btn-red btn-md'>
+                            <span className='pr-2'>
+                                <i className='fa-solid fa-circle-xmark'></i>
                             </span>
                             <span>Hủy</span>
                         </Link>
-                        <button type="submit" className="btn btn-blue btn-md" disabled={loading}>
-                            <span className="pr-2">
-                                <i className="fa-solid fa-circle-plus"></i>
+                        <button type='submit' className='btn btn-blue btn-md' disabled={loading}>
+                            <span className='pr-2'>
+                                <i className='fa-solid fa-circle-plus'></i>
                             </span>
                             <span>Cập nhật</span>
                         </button>
