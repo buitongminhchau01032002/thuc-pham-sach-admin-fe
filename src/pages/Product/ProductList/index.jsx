@@ -23,7 +23,7 @@ import ShowWithFunc from '../../../components/ShowWithFunc';
 
 function StatusCell({ getValue }) {
     return (
-        <div className="flex justify-center">
+        <div className='flex justify-center'>
             <div
                 className={clsx('rounded p-2 py-1 text-xs font-medium ', {
                     'bg-green-100 text-green-800': getValue() === 'active',
@@ -39,22 +39,19 @@ function StatusCell({ getValue }) {
 function NameAndImageCell({ row, getValue }) {
     const images = row.getValue('images');
     return (
-        <div className="flex items-center space-x-2">
-            <img
-                src={images?.[0] || '/placeholder.png'}
-                className="h-10 w-10 rounded-full border object-cover"
-            />
-            <p className="flex-1">{getValue()}</p>
+        <div className='flex items-center space-x-2'>
+            <img src={images?.[0] || '/placeholder.png'} className='h-10 w-10 rounded-full border object-cover' />
+            <p className='flex-1'>{getValue()}</p>
         </div>
     );
 }
 
 function ActionCell({ table, row }) {
     return (
-        <div className="flex justify-end">
-            <ShowWithFunc func="product/update">
+        <div className='flex justify-end'>
+            <ShowWithFunc func='product/update'>
                 <button
-                    className="btn btn-yellow px-3 py-1"
+                    className='btn btn-yellow px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onEditButtonClick(row);
@@ -63,9 +60,9 @@ function ActionCell({ table, row }) {
                     Sửa
                 </button>
             </ShowWithFunc>
-            <ShowWithFunc func="product/delete">
+            <ShowWithFunc func='product/delete'>
                 <button
-                    className="btn btn-red px-3 py-1"
+                    className='btn btn-red px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onDeleteButtonClick(row);
@@ -82,11 +79,11 @@ const columns = [
     {
         accessorKey: 'id',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Mã
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
         size: 80,
     },
     {
@@ -113,33 +110,33 @@ const columns = [
     {
         accessorKey: 'quantity',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 Kho
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-right">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-right'>{getValue()}</p>,
         size: 100,
         filterFn: rangeFilterFn,
     },
     {
         accessorKey: 'saledQuantity',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 Đã bán
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-right">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-right'>{getValue()}</p>,
         size: 120,
         filterFn: rangeFilterFn,
     },
     {
         accessorKey: 'price',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 Giá
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-right">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-right'>{getValue()}</p>,
         size: 120,
         filterFn: rangeFilterFn,
     },
@@ -147,7 +144,7 @@ const columns = [
     {
         accessorKey: 'status',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Trạng thái
             </HeaderCell>
         ),
@@ -285,10 +282,10 @@ function ProductList() {
     }
 
     return (
-        <div className="container space-y-4">
+        <div className='container space-y-4'>
             <TopBar filters={columnFilters} setFilters={setColumnFilters} />
             <div>
-                <Table table={table} notFoundMessage="Không có sản phẩm" />
+                <Table table={table} notFoundMessage='Không có sản phẩm' />
                 <Pagination table={table} />
             </div>
         </div>

@@ -5,29 +5,20 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Table from '../../../components/Table';
 import Pagination from '../../../components/Table/Pagination';
-import {
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from '@tanstack/react-table';
+import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { toast } from 'react-toastify';
 import clsx from 'clsx';
 import PriceFormat from '../../../components/PriceFormat';
 import ReactToPrint from 'react-to-print';
 import HeaderCell from '../../../components/Table/HeaderCell';
 import useIsHasPermission from '../../../hooks/useIsHasPermission';
-
+import emailjs from '@emailjs/browser';
 function NameAndImageCell({ row, getValue }) {
     const image = row.getValue('image');
     return (
-        <div className="flex items-center space-x-2">
-            <img
-                src={image || '/placeholder.png'}
-                className="h-10 w-10 rounded-full border object-cover"
-            />
-            <p className="flex-1">{getValue()}</p>
+        <div className='flex items-center space-x-2'>
+            <img src={image || '/placeholder.png'} className='h-10 w-10 rounded-full border object-cover' />
+            <p className='flex-1'>{getValue()}</p>
         </div>
     );
 }
@@ -36,11 +27,11 @@ const columns = [
     {
         accessorKey: 'id',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Mã
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
         size: 80,
     },
     {
@@ -53,12 +44,12 @@ const columns = [
     {
         accessorKey: 'price',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 Giá
             </HeaderCell>
         ),
         cell: ({ getValue }) => (
-            <p className="text-right">
+            <p className='text-right'>
                 <PriceFormat>{getValue()}</PriceFormat>
             </p>
         ),
@@ -67,11 +58,11 @@ const columns = [
     {
         accessorKey: 'quantity',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 SL
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-right">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-right'>{getValue()}</p>,
         size: 80,
     },
     {
@@ -137,6 +128,26 @@ function OrderDetail() {
                 if (resJson.success) {
                     toast.success('Cập nhật trạng thái thành công');
                     getOrder();
+                    const templateParams = {
+                        Subject: 'Đơn hàng cập nhật trạng thái',
+                        Title: 'Đã cập nhật trạng thái đơn hàng của bạn tại',
+                        Name: order?.customer?.name,
+                        Address: order?.address,
+                        Phone: order?.phone,
+                        TotalPrice: order.totalPrice || '0',
+                        DiscountPercent: order?.coupon || '0',
+                        IntoMoney: order?.intoMoney || '0',
+                        Link: 'http://localhost:5173/profile',
+                        reply_to: '20521154@gm.uit.edu.vn',
+                    };
+                    emailjs.send('service_3dwhkaf', 'template_m7a86er', templateParams, 'JcAqZIglb_PsOO35p').then(
+                        (response) => {
+                            console.log('SUCCESS!', response.status, response.text);
+                        },
+                        (err) => {
+                            console.log('FAILED...', err);
+                        }
+                    );
                 } else {
                     toast.error('Có lỗi xảy ra');
                 }
@@ -154,67 +165,57 @@ function OrderDetail() {
     }
 
     return (
-        <div className="container">
-            <div className="mt-5 flex space-x-6" ref={componentRef}>
+        <div className='container'>
+            <div className='mt-5 flex space-x-6' ref={componentRef}>
                 {/* PRODUCT */}
-                <div className="flex-1">
-                    <Table table={table} notFoundMessage="Không có sản phẩm" rowClickable={false} />
+                <div className='flex-1'>
+                    <Table table={table} notFoundMessage='Không có sản phẩm' rowClickable={false} />
                     <Pagination table={table} />
                 </div>
 
                 {/* INFOR */}
-                <div className="flex-1">
-                    <div className="space-y-2 border-b pb-2">
+                <div className='flex-1'>
+                    <div className='space-y-2 border-b pb-2'>
                         <div>
-                            <span className="text-gray-700">Số điện thoại: </span>
-                            <span className="text-lg font-semibold text-gray-900">
-                                {order?.phone || ''}
-                            </span>
+                            <span className='text-gray-700'>Số điện thoại: </span>
+                            <span className='text-lg font-semibold text-gray-900'>{order?.phone || ''}</span>
                         </div>
                         {order?.address && (
                             <div>
-                                <span className="text-gray-700">Địa chỉ: </span>
-                                <span className="text-lg font-semibold text-gray-900">
-                                    {order?.address || ''}
-                                </span>
+                                <span className='text-gray-700'>Địa chỉ: </span>
+                                <span className='text-lg font-semibold text-gray-900'>{order?.address || ''}</span>
                             </div>
                         )}
 
                         <div>
-                            <span className="text-gray-700">Ngày lập: </span>
-                            <span className="text-lg font-semibold text-gray-900">
+                            <span className='text-gray-700'>Ngày lập: </span>
+                            <span className='text-lg font-semibold text-gray-900'>
                                 {moment(order.createdAt).format('HH:mm DD/MM/YYYY ')}
                             </span>
                         </div>
 
                         {order?.customer && (
                             <div>
-                                <p className="text-gray-700">Tài khoản: </p>
-                                <div className="mt-2 flex items-center space-x-2">
+                                <p className='text-gray-700'>Tài khoản: </p>
+                                <div className='mt-2 flex items-center space-x-2'>
                                     <img
                                         src={order.customer?.avatar || '/placeholder.png'}
-                                        className="h-10 w-10 rounded-full border object-cover"
+                                        className='h-10 w-10 rounded-full border object-cover'
                                     />
-                                    <p className="flex-1 font-medium">{order.customer?.name}</p>
+                                    <p className='flex-1 font-medium'>{order.customer?.name}</p>
                                 </div>
                             </div>
                         )}
                         {order?.coupon && (
                             <div>
-                                <p className="text-gray-700">Mã giảm giá: </p>
-                                <div className="rounded border border-green-600 px-4 py-2">
-                                    <p className="font-medium text-gray-700">
-                                        {order.coupon.description}
-                                    </p>
-                                    <div className="flex space-x-6">
-                                        <p className="text-gray-600">
-                                            {'Mã: ' + order.coupon.name}
-                                        </p>
-                                        <div className="space-x-1">
-                                            <span className="text-gray-600">Giảm:</span>
-                                            <span className="font-bold text-green-600">
-                                                {order.coupon.discountPercent + '%'}
-                                            </span>
+                                <p className='text-gray-700'>Mã giảm giá: </p>
+                                <div className='rounded border border-green-600 px-4 py-2'>
+                                    <p className='font-medium text-gray-700'>{order.coupon.description}</p>
+                                    <div className='flex space-x-6'>
+                                        <p className='text-gray-600'>{'Mã: ' + order.coupon.name}</p>
+                                        <div className='space-x-1'>
+                                            <span className='text-gray-600'>Giảm:</span>
+                                            <span className='font-bold text-green-600'>{order.coupon.discountPercent + '%'}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -222,11 +223,11 @@ function OrderDetail() {
                         )}
                     </div>
 
-                    <div className="mt-3 flex space-x-6 border-b pb-3">
-                        <div className="space-y-3 ">
+                    <div className='mt-3 flex space-x-6 border-b pb-3'>
+                        <div className='space-y-3 '>
                             <div>
-                                <span className="text-gray-700">Tổng giá: </span>
-                                <span className="text-xl font-semibold text-blue-600">
+                                <span className='text-gray-700'>Tổng giá: </span>
+                                <span className='text-xl font-semibold text-blue-600'>
                                     <span>
                                         <PriceFormat>{order?.totalPrice}</PriceFormat>
                                     </span>
@@ -234,19 +235,17 @@ function OrderDetail() {
                                 </span>
                             </div>
                             <div>
-                                <span className="text-gray-700">Giảm giá: </span>
-                                <span className="text-xl font-bold text-green-600">
+                                <span className='text-gray-700'>Giảm giá: </span>
+                                <span className='text-xl font-bold text-green-600'>
                                     <span>
-                                        <PriceFormat>
-                                            {order?.totalPrice - order?.intoMoney}
-                                        </PriceFormat>
+                                        <PriceFormat>{order?.totalPrice - order?.intoMoney}</PriceFormat>
                                     </span>
                                     <span> VNĐ</span>
                                 </span>
                             </div>
                             <div>
-                                <span className="text-gray-700">Thành tiền: </span>
-                                <span className="text-xl font-bold text-blue-600">
+                                <span className='text-gray-700'>Thành tiền: </span>
+                                <span className='text-xl font-bold text-blue-600'>
                                     <span>
                                         <PriceFormat>{order?.intoMoney}</PriceFormat>
                                     </span>
@@ -254,20 +253,20 @@ function OrderDetail() {
                                 </span>
                             </div>
                         </div>
-                        <div className="border-l"></div>
-                        <div className="space-y-3">
+                        <div className='border-l'></div>
+                        <div className='space-y-3'>
                             <div>
-                                <span className="text-gray-700">Tiền nhận: </span>
-                                <span className="text-xl font-semibold text-orange-400">
+                                <span className='text-gray-700'>Tiền nhận: </span>
+                                <span className='text-xl font-semibold text-orange-400'>
                                     <span>
                                         <PriceFormat>{order?.receivedMoney}</PriceFormat>
                                     </span>
                                     <span> VNĐ</span>
                                 </span>
                             </div>
-                            <div className="">
-                                <span className="text-gray-700">Tiền thừa: </span>
-                                <span className="text-xl font-semibold text-blue-500">
+                            <div className=''>
+                                <span className='text-gray-700'>Tiền thừa: </span>
+                                <span className='text-xl font-semibold text-blue-500'>
                                     <span>
                                         <PriceFormat>{order?.exchangeMoney}</PriceFormat>
                                     </span>
@@ -282,55 +281,37 @@ function OrderDetail() {
                             'pointer-events-none': !isHasPermission('order/update'),
                         })}
                     >
-                        <div className="space-y-2">
-                            <p className="text-gray-700">Trạng thái giao hàng: </p>
-                            <div className="relative flex space-x-3">
-                                <div
-                                    className="inline-flex items-center"
-                                    onClick={() =>
-                                        handleUpdateStatus('deliveryStatus', 'delivered')
-                                    }
-                                >
+                        <div className='space-y-2'>
+                            <p className='text-gray-700'>Trạng thái giao hàng: </p>
+                            <div className='relative flex space-x-3'>
+                                <div className='inline-flex items-center' onClick={() => handleUpdateStatus('deliveryStatus', 'delivered')}>
                                     <input
-                                        className="h-5 w-5  accent-blue-600"
-                                        type="radio"
+                                        className='h-5 w-5  accent-blue-600'
+                                        type='radio'
                                         readOnly
                                         checked={order?.deliveryStatus === 'delivered'}
                                     />
-                                    <label className="cursor-pointer pl-2 font-semibold text-green-700">
-                                        Đã nhận
-                                    </label>
+                                    <label className='cursor-pointer pl-2 font-semibold text-green-700'>Đã nhận</label>
                                 </div>
-                                <div
-                                    className="inline-flex items-center"
-                                    onClick={() => handleUpdateStatus('deliveryStatus', 'pending')}
-                                >
+                                <div className='inline-flex items-center' onClick={() => handleUpdateStatus('deliveryStatus', 'pending')}>
                                     <input
-                                        className="h-5 w-5  accent-blue-600"
-                                        type="radio"
+                                        className='h-5 w-5  accent-blue-600'
+                                        type='radio'
                                         readOnly
                                         checked={order?.deliveryStatus === 'pending'}
                                     />
-                                    <label
-                                        htmlFor="de-2"
-                                        className="cursor-pointer pl-2 font-semibold text-orange-600"
-                                    >
+                                    <label htmlFor='de-2' className='cursor-pointer pl-2 font-semibold text-orange-600'>
                                         Đang chờ
                                     </label>
                                 </div>
-                                <div
-                                    className="inline-flex items-center"
-                                    onClick={() => handleUpdateStatus('deliveryStatus', 'aborted')}
-                                >
+                                <div className='inline-flex items-center' onClick={() => handleUpdateStatus('deliveryStatus', 'aborted')}>
                                     <input
-                                        className="h-5 w-5 accent-blue-600"
-                                        type="radio"
+                                        className='h-5 w-5 accent-blue-600'
+                                        type='radio'
                                         readOnly
                                         checked={order?.deliveryStatus === 'aborted'}
                                     />
-                                    <label className="cursor-pointer pl-2 font-semibold text-red-600">
-                                        Đã huỷ
-                                    </label>
+                                    <label className='cursor-pointer pl-2 font-semibold text-red-600'>Đã huỷ</label>
                                 </div>
                                 <div
                                     className={clsx('absolute inset-0 bg-white opacity-50', {
@@ -339,37 +320,26 @@ function OrderDetail() {
                                 ></div>
                             </div>
                         </div>
-                        <div className="space-y-2">
-                            <p className="text-gray-700">Trạng thái thanh toán: </p>
-                            <div className="relative flex space-x-3">
-                                <div
-                                    className="inline-flex items-center"
-                                    onClick={() => handleUpdateStatus('paymentStatus', 'paid')}
-                                >
+                        <div className='space-y-2'>
+                            <p className='text-gray-700'>Trạng thái thanh toán: </p>
+                            <div className='relative flex space-x-3'>
+                                <div className='inline-flex items-center' onClick={() => handleUpdateStatus('paymentStatus', 'paid')}>
                                     <input
-                                        className="h-5 w-5  accent-blue-600"
-                                        type="radio"
+                                        className='h-5 w-5  accent-blue-600'
+                                        type='radio'
                                         readOnly
                                         checked={order?.paymentStatus === 'paid'}
                                     />
-                                    <label className="cursor-pointer pl-2 font-semibold text-green-700">
-                                        Đã thanh toán
-                                    </label>
+                                    <label className='cursor-pointer pl-2 font-semibold text-green-700'>Đã thanh toán</label>
                                 </div>
-                                <div
-                                    className="inline-flex items-center"
-                                    onClick={() => handleUpdateStatus('paymentStatus', 'unpaid')}
-                                >
+                                <div className='inline-flex items-center' onClick={() => handleUpdateStatus('paymentStatus', 'unpaid')}>
                                     <input
-                                        className="h-5 w-5  accent-blue-600"
-                                        type="radio"
+                                        className='h-5 w-5  accent-blue-600'
+                                        type='radio'
                                         readOnly
                                         checked={order?.paymentStatus === 'unpaid'}
                                     />
-                                    <label
-                                        htmlFor="de-2"
-                                        className="cursor-pointer pl-2 font-semibold text-orange-600"
-                                    >
+                                    <label htmlFor='de-2' className='cursor-pointer pl-2 font-semibold text-orange-600'>
                                         Chưa thanh toán
                                     </label>
                                 </div>
@@ -383,12 +353,12 @@ function OrderDetail() {
                     </div>
                 </div>
             </div>
-            <div className=" flex justify-end">
-                <Link to="/order" className="btn btn-blue btn-md">
+            <div className=' flex justify-end'>
+                <Link to='/order' className='btn btn-blue btn-md'>
                     Quay lại
                 </Link>
                 <ReactToPrint
-                    trigger={() => <button className="btn btn-green btn-md">In hoá đơn</button>}
+                    trigger={() => <button className='btn btn-green btn-md'>In hoá đơn</button>}
                     content={() => componentRef.current}
                 />
             </div>

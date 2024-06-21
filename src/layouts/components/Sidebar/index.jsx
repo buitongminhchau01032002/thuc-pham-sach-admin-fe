@@ -13,7 +13,7 @@ const groupMenus = [
     {
         main: {
             iconClassname: 'fa-solid fa-clipboard',
-            text: 'Hoá đơn',
+            text: 'Đơn hàng',
             link: '/order',
         },
         children: [
@@ -117,13 +117,13 @@ const groupMenus = [
             },
         ],
     },
-    {
-        main: {
-            iconClassname: 'fa-solid fa-tag',
-            text: 'Chat',
-            link: '/chat',
-        },
-    },
+    // {
+    //     main: {
+    //         iconClassname: 'fa-solid fa-tag',
+    //         text: 'Chat',
+    //         link: '/chat',
+    //     },
+    // },
     {
         main: {
             iconClassname: 'fa-solid fa-users',
@@ -219,17 +219,8 @@ function Sidebar() {
             </header>
 
             <div className=''>
-                <Scrollbars
-                    autoHide
-                    autoHideTimeout={4000}
-                    autoHeight
-                    autoHideDuration={200}
-                    autoHeightMin={`calc(100vh - 80px)`}
-                >
-                    <ul
-                        className='flex h-full flex-col space-y-0.5 p-2'
-                        style={{ overflowY: 'overlay' }}
-                    >
+                <Scrollbars autoHide autoHideTimeout={4000} autoHeight autoHideDuration={200} autoHeightMin={`calc(100vh - 80px)`}>
+                    <ul className='flex h-full flex-col space-y-0.5 p-2' style={{ overflowY: 'overlay' }}>
                         {groupMenus.map((groupMenu, index) => (
                             <GroupMenu key={index} groupMenu={groupMenu} />
                         ))}
