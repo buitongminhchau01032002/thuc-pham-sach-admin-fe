@@ -131,6 +131,7 @@ function OrderDetail() {
                     const templateParams = {
                         Subject: 'Đơn hàng cập nhật trạng thái',
                         Title: 'Đã cập nhật trạng thái đơn hàng của bạn tại',
+                        Status: status == 'delivered' ? 'Đã xác nhận đơn hàng' : status == 'pending' ? 'Đang chờ xử lý' : 'Đã hủy đơn hàng',
                         Name: order?.customer?.name,
                         Address: order?.address,
                         Phone: order?.phone,
