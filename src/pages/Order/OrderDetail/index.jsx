@@ -136,7 +136,7 @@ function OrderDetail() {
                         Address: order?.address,
                         Phone: order?.phone,
                         TotalPrice: order.totalPrice || '0',
-                        DiscountPercent: order?.coupon || '0',
+                        DiscountPercent: order?.totalPrice - order?.intoMoney || '0',
                         IntoMoney: order?.intoMoney || '0',
                         Link: 'http://localhost:5173/profile',
                         reply_to: '20521154@gm.uit.edu.vn',
