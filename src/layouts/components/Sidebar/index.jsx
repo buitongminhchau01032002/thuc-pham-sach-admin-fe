@@ -100,27 +100,6 @@ const groupMenus = [
         main: {
             iconClassname: 'fa-solid fa-tag',
             text: 'Phiếu giảm giá',
-            link: '/coupon',
-        },
-        children: [
-            {
-                iconClassname: 'fa-solid fa-list',
-                text: 'Danh sách',
-                link: '/',
-                functionName: 'coupon/view',
-            },
-            {
-                iconClassname: 'fa-solid fa-circle-plus',
-                text: 'Thêm',
-                link: '/add',
-                functionName: 'coupon/add',
-            },
-        ],
-    },
-    {
-        main: {
-            iconClassname: 'fa-solid fa-tag',
-            text: 'Phiếu giảm giá',
             link: '/voucher',
         },
         children: [
@@ -135,6 +114,27 @@ const groupMenus = [
                 text: 'Thêm',
                 link: '/add',
                 functionName: 'voucher/add',
+            },
+        ],
+    },
+    {
+        main: {
+            iconClassname: 'fa-solid fa-tag',
+            text: 'Chương trình giảm',
+            link: '/promotion',
+        },
+        children: [
+            {
+                iconClassname: 'fa-solid fa-list',
+                text: 'Danh sách',
+                link: '/',
+                functionName: 'promotion/view',
+            },
+            {
+                iconClassname: 'fa-solid fa-circle-plus',
+                text: 'Thêm',
+                link: '/add',
+                functionName: 'promotion/add',
             },
         ],
     },
