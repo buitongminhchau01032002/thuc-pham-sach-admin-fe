@@ -120,6 +120,27 @@ const groupMenus = [
     {
         main: {
             iconClassname: 'fa-solid fa-tag',
+            text: 'Phiếu giảm giá',
+            link: '/voucher',
+        },
+        children: [
+            {
+                iconClassname: 'fa-solid fa-list',
+                text: 'Danh sách',
+                link: '/',
+                functionName: 'voucher/view',
+            },
+            {
+                iconClassname: 'fa-solid fa-circle-plus',
+                text: 'Thêm',
+                link: '/add',
+                functionName: 'voucher/add',
+            },
+        ],
+    },
+    {
+        main: {
+            iconClassname: 'fa-solid fa-tag',
             text: 'Chat',
             link: '/chat',
         },
@@ -212,13 +233,13 @@ const groupMenus = [
 
 function Sidebar() {
     return (
-        <div className='h-full min-w-[240px] bg-blue-500'>
-            <header className='flex h-20 w-full flex-col items-center justify-center border-b border-white/40 text-white'>
-                <div className='text-lg font-extrabold'>QUẢN LÝ</div>
-                <div className='font-bold'>CH THỰC PHẨM SẠCH</div>
+        <div className="h-full min-w-[240px] bg-blue-500">
+            <header className="flex h-20 w-full flex-col items-center justify-center border-b border-white/40 text-white">
+                <div className="text-lg font-extrabold">QUẢN LÝ</div>
+                <div className="font-bold">CH THỰC PHẨM SẠCH</div>
             </header>
 
-            <div className=''>
+            <div className="">
                 <Scrollbars
                     autoHide
                     autoHideTimeout={4000}
@@ -227,7 +248,7 @@ function Sidebar() {
                     autoHeightMin={`calc(100vh - 80px)`}
                 >
                     <ul
-                        className='flex h-full flex-col space-y-0.5 p-2'
+                        className="flex h-full flex-col space-y-0.5 p-2"
                         style={{ overflowY: 'overlay' }}
                     >
                         {groupMenus.map((groupMenu, index) => (

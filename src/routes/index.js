@@ -37,6 +37,9 @@ import AddCoupon from '../pages/Coupon/AddCoupon';
 import UpdateCoupon from '../pages/Coupon/UpdateCoupon';
 import CouponDetail from '../pages/Coupon/CouponDetail';
 import ConversationList from '../pages/Chat/ConversationList';
+import VoucherList from '../pages/Voucher/VoucherList';
+import AddVoucher from '../pages/Voucher/AddVoucher';
+import VoucherDetail from '../pages/Voucher/VoucherDetail';
 
 // Public routes
 const publicRoutes = [
@@ -298,6 +301,29 @@ const publicRoutes = [
     //         heading: 'Chi tiết phiếu giảm giá',
     //     },
     // },
+
+    // VOUCHER
+    {
+        path: '/voucher',
+        component: VoucherList,
+        props: {
+            heading: 'Danh sách phiếu giảm giá',
+        },
+    },
+    {
+        path: '/voucher/add',
+        component: AddVoucher,
+        props: {
+            heading: 'Thêm phiếu giảm giá',
+        },
+    },
+    {
+        path: '/voucher/detail/:id',
+        component: VoucherDetail,
+        props: {
+            heading: 'Chi tiết phiếu giảm giá',
+        },
+    },
 
     {
         path: '/login',
