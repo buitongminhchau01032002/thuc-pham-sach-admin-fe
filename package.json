@@ -9,6 +9,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@emailjs/browser": "^4.3.3",
         "@headlessui/react": "^1.7.4",
         "@reduxjs/toolkit": "^1.9.1",
         "@tanstack/react-table": "^8.10.7",

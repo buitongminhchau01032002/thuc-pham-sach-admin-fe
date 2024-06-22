@@ -13,7 +13,7 @@ const groupMenus = [
     {
         main: {
             iconClassname: 'fa-solid fa-clipboard',
-            text: 'Hoá đơn',
+            text: 'Đơn hàng',
             link: '/order',
         },
         children: [
@@ -145,6 +145,13 @@ const groupMenus = [
             link: '/chat',
         },
     },
+    // {
+    //     main: {
+    //         iconClassname: 'fa-solid fa-tag',
+    //         text: 'Chat',
+    //         link: '/chat',
+    //     },
+    // },
     {
         main: {
             iconClassname: 'fa-solid fa-users',
