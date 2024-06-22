@@ -40,6 +40,8 @@ import ConversationList from '../pages/Chat/ConversationList';
 import VoucherList from '../pages/Voucher/VoucherList';
 import AddVoucher from '../pages/Voucher/AddVoucher';
 import VoucherDetail from '../pages/Voucher/VoucherDetail';
+import AddPromotion from '../pages/Promotion/AddPromotion';
+import PromotionList from '../pages/Promotion/PromotionList';
 
 // Public routes
 const publicRoutes = [
@@ -322,6 +324,22 @@ const publicRoutes = [
         component: VoucherDetail,
         props: {
             heading: 'Chi tiết phiếu giảm giá',
+        },
+    },
+
+    // PROMOTION
+    {
+        path: '/promotion/add',
+        component: AddPromotion,
+        props: {
+            heading: 'Thêm chương trình giảm giá',
+        },
+    },
+    {
+        path: '/promotion',
+        component: PromotionList,
+        props: {
+            heading: 'Chương trình giảm giá',
         },
     },
 
