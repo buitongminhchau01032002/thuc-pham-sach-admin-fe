@@ -273,27 +273,27 @@ const publicRoutes = [
     },
 
     // Coupon
-    {
-        path: '/coupon',
-        component: CouponList,
-        props: {
-            heading: 'Danh sách phiếu giảm giá',
-        },
-    },
-    {
-        path: '/coupon/add',
-        component: AddCoupon,
-        props: {
-            heading: 'Thêm phiếu giảm giá',
-        },
-    },
-    {
-        path: '/coupon/update/:id',
-        component: UpdateCoupon,
-        props: {
-            heading: 'Chỉnh sửa phiếu giảm giá',
-        },
-    },
+    // {
+    //     path: '/coupon',
+    //     component: CouponList,
+    //     props: {
+    //         heading: 'Danh sách phiếu giảm giá',
+    //     },
+    // },
+    // {
+    //     path: '/coupon/add',
+    //     component: AddCoupon,
+    //     props: {
+    //         heading: 'Thêm phiếu giảm giá',
+    //     },
+    // },
+    // {
+    //     path: '/coupon/update/:id',
+    //     component: UpdateCoupon,
+    //     props: {
+    //         heading: 'Chỉnh sửa phiếu giảm giá',
+    //     },
+    // },
     // {
     //     path: '/coupon/detail/:id',
     //     component: CouponDetail,
