@@ -96,27 +96,27 @@ const groupMenus = [
             },
         ],
     },
-    {
-        main: {
-            iconClassname: 'fa-solid fa-tag',
-            text: 'Phiếu giảm giá',
-            link: '/coupon',
-        },
-        children: [
-            {
-                iconClassname: 'fa-solid fa-list',
-                text: 'Danh sách',
-                link: '/',
-                functionName: 'coupon/view',
-            },
-            {
-                iconClassname: 'fa-solid fa-circle-plus',
-                text: 'Thêm',
-                link: '/add',
-                functionName: 'coupon/add',
-            },
-        ],
-    },
+    // {
+    //     main: {
+    //         iconClassname: 'fa-solid fa-tag',
+    //         text: 'Phiếu giảm giá',
+    //         link: '/coupon',
+    //     },
+    //     children: [
+    //         {
+    //             iconClassname: 'fa-solid fa-list',
+    //             text: 'Danh sách',
+    //             link: '/',
+    //             functionName: 'coupon/view',
+    //         },
+    //         {
+    //             iconClassname: 'fa-solid fa-circle-plus',
+    //             text: 'Thêm',
+    //             link: '/add',
+    //             functionName: 'coupon/add',
+    //         },
+    //     ],
+    // },
     {
         main: {
             iconClassname: 'fa-solid fa-tag',
