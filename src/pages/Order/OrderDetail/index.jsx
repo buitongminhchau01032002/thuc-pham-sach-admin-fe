@@ -13,6 +13,9 @@ import ReactToPrint from 'react-to-print';
 import HeaderCell from '../../../components/Table/HeaderCell';
 import useIsHasPermission from '../../../hooks/useIsHasPermission';
 import emailjs from '@emailjs/browser';
+import ReactDOMServer from 'react-dom/server';
+import EmailTemplate from './template.jsx';
+// Trong hàm handleUpdateStatus hoặc bất kỳ đâu bạn cần gửi email
 function NameAndImageCell({ row, getValue }) {
     const image = row.getValue('image');
     return (
@@ -128,17 +131,41 @@ function OrderDetail() {
                 if (resJson.success) {
                     toast.success('Cập nhật trạng thái thành công');
                     getOrder();
+                    // const templateParams = {
+                    //     Subject: 'Đơn hàng cập nhật trạng thái',
+                    //     Title: 'Đã cập nhật trạng thái đơn hàng của bạn tại',
+                    //     Status: status == 'delivered' ? 'Đã xác nhận đơn hàng' : status == 'pending' ? 'Đang chờ xử lý' : 'Đã hủy đơn hàng',
+                    //     Name: order?.customer?.name,
+                    //     Address: order?.address,
+                    //     Phone: order?.phone,
+                    //     TotalPrice: order.totalPrice || '0',
+                    //     DiscountPercent: order?.totalPrice - order?.intoMoney || '0',
+                    //     IntoMoney: order?.intoMoney || '0',
+
+                    //     Link: 'http://localhost:5173/profile',
+                    //     reply_to: '20521154@gm.uit.edu.vn',
+                    // };
+                    const temOrder = {
+                        subject: 'Đơn hàng cập nhật trạng thái',
+                        title: 'Đã cập nhật trạng thái đơn hàng của bạn tại',
+                        status: status == 'delivered' ? 'Đã xác nhận đơn hàng' : status == 'pending' ? 'Đang chờ xử lý' : 'Đã hủy đơn hàng',
+                        name: order?.customer?.name,
+                        address: order?.address,
+                        phone: order?.phone,
+                        totalPrice: order.totalPrice || '0',
+                        discountPercent: order?.totalPrice - order?.intoMoney || '0',
+                        intoMoney: order?.intoMoney || '0',
+                        details: order?.details,
+                        receivedMoney: order?.receivedMoney || '0',
+                        exchangeMoney: order?.exchangeMoney || '0',
+                        link: 'http://localhost:5173/profile',
+                        reply_to: '20521154@gm.uit.edu.vn',
+                    };
+
+                    const templateHTML = ReactDOMServer.renderToStaticMarkup(<EmailTemplate order={temOrder} />);
                     const templateParams = {
                         Subject: 'Đơn hàng cập nhật trạng thái',
-                        Title: 'Đã cập nhật trạng thái đơn hàng của bạn tại',
-                        Status: status == 'delivered' ? 'Đã xác nhận đơn hàng' : status == 'pending' ? 'Đang chờ xử lý' : 'Đã hủy đơn hàng',
-                        Name: order?.customer?.name,
-                        Address: order?.address,
-                        Phone: order?.phone,
-                        TotalPrice: order.totalPrice || '0',
-                        DiscountPercent: order?.totalPrice - order?.intoMoney || '0',
-                        IntoMoney: order?.intoMoney || '0',
-                        Link: 'http://localhost:5173/profile',
+                        HTMLContent: templateHTML,
                         reply_to: '20521154@gm.uit.edu.vn',
                     };
                     emailjs.send('service_3dwhkaf', 'template_m7a86er', templateParams, 'JcAqZIglb_PsOO35p').then(
