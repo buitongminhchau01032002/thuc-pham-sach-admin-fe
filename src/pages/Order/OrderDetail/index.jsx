@@ -67,7 +67,7 @@ const columns = [
     },
     {
         id: 'image',
-        accessorFn: (item) => item?.images?.[0],
+        accessorFn: (item) => item?.product?.images?.[0],
     },
 ];
 
