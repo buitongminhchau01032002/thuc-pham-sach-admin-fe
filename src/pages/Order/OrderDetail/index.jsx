@@ -66,7 +66,7 @@ const columns = [
         size: 80,
     },
     {
-        id: 'image',
+        id: 'images',
         accessorFn: (item) => item?.images?.[0],
     },
 ];
