@@ -162,9 +162,9 @@ function PromotionList() {
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         meta: {
-            // onRowClick: (row) => {
-            //     navigate('/promotion/detail/' + row.getValue('id'));
-            // },
+            onRowClick: (row) => {
+                navigate('/promotion/detail/' + row.getValue('id'));
+            },
             onDeleteButtonClick: (row) => {
                 openDeleteDialog({ deleteId: row.getValue('id') });
             },
@@ -180,7 +180,7 @@ function PromotionList() {
                 <Table
                     table={table}
                     notFoundMessage="Không có phiếu giảm giá"
-                    rowClickable={false}
+                    rowClickable={true}
                 />
                 <Pagination table={table} />
             </div>

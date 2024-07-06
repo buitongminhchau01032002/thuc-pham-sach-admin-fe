@@ -19,8 +19,8 @@ export default function TopBar({ filters, setFilters }) {
                     }
                 />
 
-                <ShowWithFunc func="voucher/add">
-                    <Link to="/voucher/add" className="btn btn-md btn-blue">
+                <ShowWithFunc func="promotion/add">
+                    <Link to="/promotion/add" className="btn btn-md btn-blue">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"

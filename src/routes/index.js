@@ -42,6 +42,7 @@ import AddVoucher from '../pages/Voucher/AddVoucher';
 import VoucherDetail from '../pages/Voucher/VoucherDetail';
 import AddPromotion from '../pages/Promotion/AddPromotion';
 import PromotionList from '../pages/Promotion/PromotionList';
+import PromotionDetail from '../pages/Promotion/PromotionDetail';
 
 // Public routes
 const publicRoutes = [
@@ -340,6 +341,13 @@ const publicRoutes = [
         component: PromotionList,
         props: {
             heading: 'Chương trình giảm giá',
+        },
+    },
+    {
+        path: '/promotion/detail/:id',
+        component: PromotionDetail,
+        props: {
+            heading: 'Chi tiết chương trình',
         },
     },
 
