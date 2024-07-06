@@ -312,26 +312,6 @@ function PaymentGroup({
                 <div className="mt-4 flex space-x-6">
                     <div className="space-y-1">
                         <p className="">
-                            <span>Tổng giá: </span>
-                            <span className="text-xl font-semibold text-blue-600">
-                                <span>
-                                    <PriceFormat>{totalPrice}</PriceFormat>
-                                </span>
-                                <span> VNĐ</span>
-                            </span>
-                        </p>
-
-                        <p className="">
-                            <span>Giảm giá: </span>
-                            <span className="text-xl font-semibold text-green-600">
-                                <span>
-                                    <PriceFormat>{totalPrice - intoMoney}</PriceFormat>
-                                </span>
-                                <span> VNĐ</span>
-                            </span>
-                        </p>
-
-                        <p className="">
                             <span>Thành tiền: </span>
                             <span className="text-xl font-bold text-blue-600">
                                 <span>
@@ -377,65 +357,6 @@ function PaymentGroup({
     );
 }
 
-function CouponGroup({ infoValue, setValue, coupons }) {
-    const [couponName, setCouponName] = useState('');
-    useEffect(() => {
-        const coupon = coupons.find((c) => c.name === couponName);
-        setValue(coupon || null);
-    }, [couponName]);
-
-    useEffect(() => {
-        setCouponName('');
-    }, [infoValue?.customer]);
-
-    return (
-        infoValue?.customer && (
-            <div className="mb-4 flex space-x-3">
-                <div className="w-[200px]">
-                    <label className="label" htmlFor="coupon">
-                        Mã giảm giá
-                    </label>
-                    <input
-                        type="text"
-                        id="coupon"
-                        className={clsx('text-input')}
-                        value={couponName}
-                        onChange={(e) => setCouponName(e.target.value)}
-                    />
-                </div>
-                {infoValue.coupon && (
-                    <div
-                        className={clsx('flex-1 rounded border px-4 py-2', {
-                            'border-green-600': infoValue.coupon.canUse,
-                            'border-gray-300 bg-gray-100': !infoValue.coupon.canUse,
-                        })}
-                    >
-                        <p className="font-medium text-gray-700">{infoValue.coupon.description}</p>
-                        <div className="flex space-x-3">
-                            <div className="space-x-1">
-                                <span className="text-gray-600">Giảm:</span>
-                                <span className="font-bold text-green-600">
-                                    {infoValue.coupon.discountPercent + '%'}
-                                </span>
-                            </div>
-
-                            {infoValue.coupon.canUse ? (
-                                <div className="rounded bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
-                                    Có thể dùng
-                                </div>
-                            ) : (
-                                <div className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-800">
-                                    Hết lượt dùng
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                )}
-            </div>
-        )
-    );
-}
-
 function InfoGroup({ totalPrice, intoMoney, setValue, setIsValid, customers, coupons, infoValue }) {
     const [isValidPhone, setIsValidPhone] = useState(false);
     const [isDelivered, setIsDelivered] = useState(true);
@@ -471,16 +392,7 @@ function InfoGroup({ totalPrice, intoMoney, setValue, setIsValid, customers, cou
                 }
                 customers={customers}
             />
-            <CouponGroup
-                coupons={coupons}
-                infoValue={infoValue}
-                setValue={(coupon) =>
-                    setValue((prev) => ({
-                        ...prev,
-                        coupon,
-                    }))
-                }
-            />
+
             <DeliveryGroup
                 isDelivered={isDelivered}
                 setIsDelivered={setIsDelivered}
