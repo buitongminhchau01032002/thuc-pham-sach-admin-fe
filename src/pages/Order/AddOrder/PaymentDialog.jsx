@@ -1,13 +1,7 @@
 import clsx from 'clsx';
 import Table from '../../../components/Table';
 import Pagination from '../../../components/Table/Pagination';
-import {
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from '@tanstack/react-table';
+import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { toast } from 'react-toastify';
 import HeaderCell from '../../../components/Table/HeaderCell';
 import { useEffect, useMemo, useState } from 'react';
@@ -22,12 +16,9 @@ import LoadingForm from '../../../components/LoadingForm';
 function NameAndImageCell({ row, getValue }) {
     const image = row.getValue('image');
     return (
-        <div className="flex items-center space-x-2">
-            <img
-                src={image || '/placeholder.png'}
-                className="h-10 w-10 rounded-full border object-cover"
-            />
-            <p className="flex-1">{getValue()}</p>
+        <div className='flex items-center space-x-2'>
+            <img src={image || '/placeholder.png'} className='h-10 w-10 rounded-full border object-cover' />
+            <p className='flex-1'>{getValue()}</p>
         </div>
     );
 }
@@ -36,11 +27,11 @@ const columns = [
     {
         accessorKey: 'id',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Mã
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
         size: 80,
     },
     {
@@ -52,25 +43,59 @@ const columns = [
     {
         accessorKey: 'price',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 Giá
             </HeaderCell>
         ),
         cell: ({ getValue }) => (
-            <p className="text-right">
+            <p className='text-right'>
                 <PriceFormat>{getValue()}</PriceFormat>
             </p>
         ),
         size: 100,
     },
     {
+        accessorKey: 'discount',
+        header: (props) => (
+            <HeaderCell align='right' tableProps={props}>
+                Giảm
+            </HeaderCell>
+        ),
+        cell: ({ getValue }) => (
+            <p
+                className={clsx('text-right ', {
+                    'text-red-600': getValue()?.type === 'amount' || getValue()?.type === 'percent',
+                })}
+            >
+                {getValue()?.type === 'amount' && <PriceFormat>{getValue()?.value}</PriceFormat>}
+                {getValue()?.type === 'percent' && getValue()?.value + ' %'}
+                {getValue()?.type != 'amount' && getValue()?.type != 'percent' && 'Không'}
+            </p>
+        ),
+        size: 100,
+    },
+    {
+        accessorKey: 'priceDiscounted',
+        header: (props) => (
+            <HeaderCell align='right' tableProps={props}>
+                Giá bán
+            </HeaderCell>
+        ),
+        cell: ({ getValue }) => (
+            <p className='text-right'>
+                <PriceFormat>{getValue()}</PriceFormat>
+            </p>
+        ),
+        size: 110,
+    },
+    {
         accessorKey: 'orderQuantity',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 SL
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-right">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-right'>{getValue()}</p>,
         size: 80,
     },
     {
@@ -112,27 +137,24 @@ function PhoneGroup({ setIsValid, setValue, customers }) {
 
     return (
         <div>
-            <label className="label" htmlFor="phone">
+            <label className='label' htmlFor='phone'>
                 Số điện thoại *
             </label>
             <input
-                type="text"
-                id="phone"
+                type='text'
+                id='phone'
                 className={clsx('text-input', {
                     invalid: form.touched.phone && form.errors.phone,
                 })}
                 onChange={form.handleChange}
                 onBlur={form.handleBlur}
                 value={form.values.phone}
-                name="phone"
+                name='phone'
             />
             {customer && (
-                <div className="mt-2 flex items-center space-x-2">
-                    <img
-                        src={customer.avatar || '/placeholder.png'}
-                        className="h-10 w-10 rounded-full border object-cover"
-                    />
-                    <p className="flex-1">{customer.name}</p>
+                <div className='mt-2 flex items-center space-x-2'>
+                    <img src={customer.avatar || '/placeholder.png'} className='h-10 w-10 rounded-full border object-cover' />
+                    <p className='flex-1'>{customer.name}</p>
                 </div>
             )}
             <span
@@ -179,60 +201,58 @@ function DeliveryGroup({ isDelivered, setIsDelivered, setIsValid, setValue, info
 
     return (
         <div>
-            <div className="flex items-center space-x-5">
-                <div className="flex items-center">
+            <div className='flex items-center space-x-5'>
+                <div className='flex items-center'>
                     <input
-                        className="h-5 w-5 accent-blue-600"
-                        type="radio"
-                        id="de-1"
+                        className='h-5 w-5 accent-blue-600'
+                        type='radio'
+                        id='de-1'
                         onChange={(e) => setIsDelivered(e.target.checked)}
                         checked={isDelivered}
                     />
-                    <label htmlFor="de-1" className="cursor-pointer pl-2">
+                    <label htmlFor='de-1' className='cursor-pointer pl-2'>
                         Nhận hàng ngay
                     </label>
                 </div>
-                <div className="flex items-center">
+                <div className='flex items-center'>
                     <input
-                        className="h-5 w-5 accent-blue-600"
-                        type="radio"
-                        id="de-2"
+                        className='h-5 w-5 accent-blue-600'
+                        type='radio'
+                        id='de-2'
                         onChange={(e) => setIsDelivered(!e.target.checked)}
                         checked={!isDelivered}
                     />
-                    <label htmlFor="de-2" className="cursor-pointer pl-2">
+                    <label htmlFor='de-2' className='cursor-pointer pl-2'>
                         Giao hàng
                     </label>
                 </div>
             </div>
 
             {!isDelivered && (
-                <div className="mt-2">
-                    <div className="flex items-center space-x-3">
-                        <label className="label" htmlFor="address">
+                <div className='mt-2'>
+                    <div className='flex items-center space-x-3'>
+                        <label className='label' htmlFor='address'>
                             Địa chỉ giao hàng *
                         </label>
                         {infoValue?.customer && (
                             <button
-                                className="font-semibold text-blue-600 hover:text-blue-700"
-                                onClick={() =>
-                                    form.setFieldValue('address', infoValue.customer.address)
-                                }
+                                className='font-semibold text-blue-600 hover:text-blue-700'
+                                onClick={() => form.setFieldValue('address', infoValue.customer.address)}
                             >
                                 Mặc định
                             </button>
                         )}
                     </div>
                     <textarea
-                        type="text"
-                        id="address"
+                        type='text'
+                        id='address'
                         className={clsx('text-input !h-auto py-2', {
                             invalid: form.touched.address && form.errors.address,
                         })}
                         onChange={form.handleChange}
                         value={form.values.address}
                         onBlur={form.handleBlur}
-                        name="address"
+                        name='address'
                         rows={2}
                     ></textarea>
                     <span
@@ -248,15 +268,7 @@ function DeliveryGroup({ isDelivered, setIsDelivered, setIsValid, setValue, info
     );
 }
 
-function PaymentGroup({
-    isDelivered,
-    isPaid,
-    setIsPaid,
-    setIsValid,
-    totalPrice,
-    intoMoney,
-    setValue,
-}) {
+function PaymentGroup({ isDelivered, isPaid, setIsPaid, setIsValid, totalPrice, intoMoney, setValue, priceDiscounted }) {
     const [receivedMoney, setReceivedMoney] = useState(0);
     const exchangeMoney = receivedMoney - intoMoney;
 
@@ -276,17 +288,17 @@ function PaymentGroup({
         }
     }, [isDelivered]);
     return (
-        <div className="mt-3">
-            <div className="flex items-center space-x-5">
-                <div className="flex items-center">
+        <div className='mt-3'>
+            <div className='flex items-center space-x-5'>
+                <div className='flex items-center'>
                     <input
-                        className="h-5 w-5 accent-blue-600"
-                        type="radio"
-                        id="pa-1"
+                        className='h-5 w-5 accent-blue-600'
+                        type='radio'
+                        id='pa-1'
                         onChange={(e) => setIsPaid(e.target.checked)}
                         checked={isPaid}
                     />
-                    <label htmlFor="pa-1" className="cursor-pointer pl-2">
+                    <label htmlFor='pa-1' className='cursor-pointer pl-2'>
                         Thanh toán ngay
                     </label>
                 </div>
@@ -296,48 +308,76 @@ function PaymentGroup({
                     })}
                 >
                     <input
-                        className="h-5 w-5 accent-blue-600"
-                        type="radio"
-                        id="pa-2"
+                        className='h-5 w-5 accent-blue-600'
+                        type='radio'
+                        id='pa-2'
                         onChange={(e) => setIsPaid(!e.target.checked)}
                         checked={!isPaid}
                     />
-                    <label htmlFor="pa-2" className="cursor-pointer pl-2">
+                    <label htmlFor='pa-2' className='cursor-pointer pl-2'>
                         Thanh toán sau
                     </label>
                 </div>
             </div>
 
             {isPaid && (
-                <div className="mt-4 flex space-x-6">
-                    <div className="space-y-1">
-                        <p className="">
-                            <span>Thành tiền: </span>
-                            <span className="text-xl font-bold text-blue-600">
-                                <span>
-                                    <PriceFormat>{intoMoney}</PriceFormat>
+                <div className='mt-4 flex space-x-6'>
+                    <div className='flex flex-col content-between'>
+                        <div className='flex items-center'>
+                            <div className='flex w-full justify-between gap-2 font-semibold'>
+                                <span>Tổng giá: </span>
+                                <span
+                                    className={clsx('text-xl text-green-600', {
+                                        'text-green-400 line-through': priceDiscounted != 0,
+                                    })}
+                                >
+                                    <span>
+                                        <PriceFormat>{totalPrice}</PriceFormat>
+                                    </span>
+                                    <span> VNĐ</span>
                                 </span>
-                                <span> VNĐ</span>
-                            </span>
-                        </p>
+                            </div>
+                        </div>
+                        <div className='flex items-center'>
+                            <p className='flex w-full justify-between gap-2 font-semibold'>
+                                <span>Giảm giá: </span>
+                                <span className='text-right text-xl text-red-600'>
+                                    <span>
+                                        <PriceFormat>{priceDiscounted}</PriceFormat>
+                                    </span>
+                                    <span> VNĐ</span>
+                                </span>
+                            </p>
+                        </div>
+                        <div className='flex items-center'>
+                            <p className='flex w-full justify-between gap-2 font-semibold'>
+                                <span>Tổng thành tiền: </span>
+                                <span className='text-xl text-blue-600'>
+                                    <span>
+                                        <PriceFormat>{intoMoney}</PriceFormat>
+                                    </span>
+                                    <span> VNĐ</span>
+                                </span>
+                            </p>
+                        </div>
                     </div>
-                    <div className="border-l"></div>
+                    <div className='border-l'></div>
 
-                    <div className="space-y-1">
-                        <div className="flex items-center">
-                            <label className="mr-2" htmlFor="price">
+                    <div className='space-y-1'>
+                        <div className='flex items-center'>
+                            <label className='mr-2' htmlFor='price'>
                                 Tiền nhận:
                             </label>
                             <PriceInput
-                                id="order-payment-received-money"
+                                id='order-payment-received-money'
                                 value={receivedMoney}
                                 onChange={(e) => setReceivedMoney(e.target.value)}
-                                className="w-56"
-                                placeholder="Tiền nhận"
+                                className='w-56'
+                                placeholder='Tiền nhận'
                             />
                         </div>
 
-                        <div className="">
+                        <div className=''>
                             <span>Tiền thừa: </span>
                             <span
                                 className={clsx('text-xl font-semibold text-blue-600', {
@@ -357,7 +397,7 @@ function PaymentGroup({
     );
 }
 
-function InfoGroup({ totalPrice, intoMoney, setValue, setIsValid, customers, coupons, infoValue }) {
+function InfoGroup({ totalPrice, intoMoney, priceDiscounted, setValue, setIsValid, customers, coupons, infoValue }) {
     const [isValidPhone, setIsValidPhone] = useState(false);
     const [isDelivered, setIsDelivered] = useState(true);
     const [isValidDelivered, setIsValidDelivered] = useState(true);
@@ -412,6 +452,7 @@ function InfoGroup({ totalPrice, intoMoney, setValue, setIsValid, customers, cou
                 setIsValid={setIsPaidValid}
                 totalPrice={totalPrice}
                 intoMoney={intoMoney}
+                priceDiscounted={priceDiscounted}
                 setValue={(receivedMoney) =>
                     setValue((prev) => ({
                         ...prev,
@@ -480,12 +521,12 @@ export default function PaymentDialog({ close, meta }) {
 
     const intoMoney = useMemo(() => {
         if (!infoValue?.coupon) {
-            return order?.totalPrice;
+            return order?.intoMoney;
         }
         if (!infoValue.coupon?.canUse) {
-            return order?.totalPrice;
+            return order?.intoMoney;
         }
-        return order?.totalPrice - (order?.totalPrice * infoValue.coupon?.discountPercent) / 100;
+        return order?.intoMoney - (order?.intoMoney * infoValue.coupon?.discountPercent) / 100;
     }, [infoValue?.coupon]);
 
     const table = useReactTable({
@@ -507,6 +548,8 @@ export default function PaymentDialog({ close, meta }) {
             product: d.product._id,
             quantity: d.quantity,
             price: d.price,
+            discount: d.discount,
+            priceDiscounted: d.priceDiscounted,
         }));
         fetch('http://localhost:5000/api/order', {
             method: 'POST',
@@ -518,9 +561,7 @@ export default function PaymentDialog({ close, meta }) {
                 deliveryStatus: infoValue.isDelivered ? 'delivered' : 'pending',
                 paymentStatus: infoValue.isPaid ? 'paid' : 'unpaid',
                 details: details,
-                receivedMoney: infoValue.isPaid
-                    ? Number(infoValue.receivedMoney)
-                    : order.totalPrice,
+                receivedMoney: infoValue.isPaid ? Number(infoValue.receivedMoney) : order.totalPrice,
                 totalPrice: order.totalPrice,
                 intoMoney: intoMoney,
                 coupon: infoValue.coupon?._id,
@@ -548,42 +589,24 @@ export default function PaymentDialog({ close, meta }) {
             });
     }
     return (
-        <div
-            className={clsx(
-                'fixed inset-0 z-[99999] flex items-center justify-center bg-black/20 opacity-100 transition-opacity'
-            )}
-        >
-            <div className="min-h-[600px] w-full max-w-[1400px] rounded-lg bg-white p-6">
-                <div className=" text-center text-lg font-bold text-slate-900">
-                    Thanh toán hoá đơn
-                </div>
-                <div className="mt-5 flex space-x-6">
+        <div className={clsx('fixed inset-0 z-[99999] flex items-center justify-center bg-black/20 opacity-100 transition-opacity')}>
+            <div className='min-h-[600px] w-full max-w-[1400px] rounded-lg bg-white p-6'>
+                <div className=' text-center text-lg font-bold text-slate-900'>Thanh toán hoá đơn</div>
+                <div className='mt-5 flex space-x-6'>
                     {/* PRODUCT */}
-                    <div className="mt-3 flex-1">
-                        <Table
-                            table={table}
-                            notFoundMessage="Chưa có sản phẩm trong hoá đơn"
-                            rowClickable={false}
-                        />
+                    <div className='mt-3 flex-1'>
+                        <Table table={table} notFoundMessage='Chưa có sản phẩm trong hoá đơn' rowClickable={false} />
                         <Pagination table={table} />
-                        <p className="mt-5 text-right font-semibold">
-                            <span>Tổng tiền: </span>
-                            <span className="text-xl text-blue-600">
-                                <span>
-                                    <PriceFormat>{order?.totalPrice}</PriceFormat>
-                                </span>
-                                <span> VNĐ</span>
-                            </span>
-                        </p>
                     </div>
 
                     {/* INFOR */}
-                    <div className="flex-1">
+                    <div className='flex-1'>
                         {/* CUSTOMER FORM */}
-                        <div className="relative">
+                        <div className='relative'>
                             <InfoGroup
                                 totalPrice={order?.totalPrice}
                                 intoMoney={intoMoney}
+                                priceDiscounted={order?.priceDiscounted}
                                 setValue={setInfoValue}
                                 setIsValid={setIsValidInfo}
                                 customers={customers}
@@ -593,16 +616,12 @@ export default function PaymentDialog({ close, meta }) {
                             <LoadingForm loading={loading} />
                         </div>
 
-                        <div className="mt-4 flex justify-between">
-                            <div className="flex justify-end">
-                                <button className="btn btn-blue btn-md" onClick={() => close()}>
+                        <div className='mt-4 flex justify-between'>
+                            <div className='flex justify-end'>
+                                <button className='btn btn-blue btn-md' onClick={() => close()}>
                                     Quay lại
                                 </button>
-                                <button
-                                    className="btn btn-yellow btn-md"
-                                    disabled={!isValidInfo || loading}
-                                    onClick={() => createOrder()}
-                                >
+                                <button className='btn btn-yellow btn-md' disabled={!isValidInfo || loading} onClick={() => createOrder()}>
                                     Thanh toán hoá đơn
                                 </button>
                             </div>

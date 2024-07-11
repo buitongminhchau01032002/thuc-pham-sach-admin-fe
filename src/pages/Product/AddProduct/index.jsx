@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import clsx from 'clsx';
-
+import PriceFormat from '../../../components/PriceFormat';
 import 'react-toastify/dist/ReactToastify.css';
 import PriceInput from '../../../components/PriceInput';
 import ProductTypeInput from '../../../components/ProductTypeInput';
@@ -38,6 +38,9 @@ function AddProduct() {
             importPrice: '',
             status: 'active',
             images: [],
+            discountType: 'percent',
+            discountPercent: 0,
+            discountAmount: 0,
         },
         validationSchema,
         onSubmit: handleFormsubmit,
@@ -123,7 +126,29 @@ function AddProduct() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                ...values,
+                name: values.name,
+                nameEN: values.nameEN,
+                type: values.type,
+                description: values.description,
+                descriptionEN: values.descriptionEN,
+                price: values.price,
+                priceDiscounted:
+                    values.discountType === 'percent'
+                        ? (values.price * (100 - values.discountPercent)) / 100
+                        : values.discountType === 'amount'
+                        ? values.price - values.discountAmount
+                        : values.price,
+                importPrice: values.importPrice,
+                status: values.status,
+                discount: {
+                    type: values.discountType,
+                    value:
+                        values.discountType === 'percent'
+                            ? values.discountPercent
+                            : values.discountType === 'amount'
+                            ? values.discountAmount
+                            : 0,
+                },
                 images: imageUrls,
             }),
         });
@@ -293,84 +318,208 @@ function AddProduct() {
                     </div>
 
                     {/* IMPORT PRICE, PRICE AND SIZE */}
-                    <div>
-                        <div className='mb-1 flex space-x-8'>
-                            {/* IMPORT PRICE */}
-                            <div className='flex-1'>
-                                <label className='label' htmlFor='importPrice'>
-                                    Giá nhập *
-                                </label>
-                                <PriceInput
-                                    id='importPrice'
-                                    onChange={form.handleChange}
-                                    value={form.values.importPrice}
-                                    error={form.errors.importPrice}
-                                    name='importPrice'
-                                    placeholder='Giá nhập'
-                                />
-                                <span
-                                    className={clsx('text-sm text-red-500 opacity-0', {
-                                        'opacity-100': form.errors.importPrice,
-                                    })}
-                                >
-                                    {form.errors.importPrice || 'No message'}
-                                </span>
+                    <div className='flex h-full flex-col justify-between gap-2 '>
+                        <div className='flex flex-col gap-2'>
+                            {/* STATUS */}
+                            <div className='mb-1 flex flex-col space-x-8'>
+                                <label className='label !cursor-default'>Trạng thái</label>
+                                <div className='flex items-center space-x-8'>
+                                    <div className='flex items-center'>
+                                        <input
+                                            className='h-5 w-5 accent-blue-600'
+                                            type='radio'
+                                            id='status-active'
+                                            name='status'
+                                            value='active'
+                                            onChange={form.handleChange}
+                                            checked={form.values.status === 'active'}
+                                        />
+                                        <label htmlFor='status-active' className='cursor-pointer pl-2'>
+                                            Đang bán
+                                        </label>
+                                    </div>
+                                    <div className='flex items-center'>
+                                        <input
+                                            className='h-5 w-5 accent-blue-600'
+                                            type='radio'
+                                            id='status-inactive'
+                                            name='status'
+                                            value='inactive'
+                                            onChange={form.handleChange}
+                                            checked={form.values.status === 'inactive'}
+                                        />
+                                        <label htmlFor='status-inactive' className='cursor-pointer pl-2'>
+                                            Không bán
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            {/* PRICE */}
-                            <div className='flex-1'>
-                                <label className='label' htmlFor='price'>
-                                    Giá bán *
-                                </label>
-                                <PriceInput
-                                    id='price'
-                                    onChange={form.handleChange}
-                                    value={form.values.price}
-                                    error={form.errors.price}
-                                    name='price'
-                                    placeholder='Giá bán'
-                                />
-                                <span
-                                    className={clsx('text-sm text-red-500 opacity-0', {
-                                        'opacity-100': form.errors.price,
-                                    })}
-                                >
-                                    {form.errors.price || 'No message'}
-                                </span>
+                            <div className='mb-1 flex flex-col space-x-8'>
+                                <label className='label !cursor-default'>Giảm giá</label>
+                                <div className='flex items-center space-x-8'>
+                                    <div className='flex items-center'>
+                                        <input
+                                            className='h-5 w-5 accent-blue-600'
+                                            type='radio'
+                                            id='discount-type-percent'
+                                            name='discountType'
+                                            value='percent'
+                                            onChange={form.handleChange}
+                                            checked={form.values.discountType === 'percent'}
+                                        />
+                                        <label htmlFor='discount-type-percent' className='cursor-pointer pl-2'>
+                                            Phần trăm
+                                        </label>
+                                    </div>
+                                    <div className='flex items-center'>
+                                        <input
+                                            className='h-5 w-5 accent-blue-600'
+                                            type='radio'
+                                            id='discount-type-amount'
+                                            name='discountType'
+                                            value='amount'
+                                            onChange={form.handleChange}
+                                            checked={form.values.discountType === 'amount'}
+                                        />
+                                        <label htmlFor='discount-type-amount' className='cursor-pointer pl-2'>
+                                            Số tiền
+                                        </label>
+                                    </div>
+                                    <div className='flex items-center'>
+                                        <input
+                                            className='h-5 w-5 accent-blue-600'
+                                            type='radio'
+                                            id='discount-type-amount'
+                                            name='discountType'
+                                            value='noDiscount'
+                                            onChange={form.handleChange}
+                                            checked={form.values.discountType === 'noDiscount'}
+                                        />
+                                        <label htmlFor='discount-type-amount' className='cursor-pointer pl-2'>
+                                            Không giảm
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        {/* STATUS */}
-                        <div>
-                            <label className='label !cursor-default'>Trạng thái</label>
-                            <div className='flex items-center space-x-5'>
-                                <div className='flex items-center'>
-                                    <input
-                                        className='h-5 w-5 accent-blue-600'
-                                        type='radio'
-                                        id='status-active'
-                                        name='status'
-                                        value='active'
-                                        onChange={form.handleChange}
-                                        checked={form.values.status === 'active'}
-                                    />
-                                    <label htmlFor='status-active' className='cursor-pointer pl-2'>
-                                        Đang bán
+                        <div className='flex flex-col '>
+                            <div className='flex space-x-8'>
+                                {/* IMPORT PRICE */}
+                                <div className='flex-1'>
+                                    <label className='label' htmlFor='importPrice'>
+                                        Giá nhập *
                                     </label>
+                                    <PriceInput
+                                        id='importPrice'
+                                        onChange={form.handleChange}
+                                        value={form.values.importPrice}
+                                        error={form.errors.importPrice}
+                                        name='importPrice'
+                                        placeholder='Giá nhập'
+                                    />
+                                    <span
+                                        className={clsx('text-sm text-red-500 opacity-0', {
+                                            'opacity-100': form.errors.importPrice,
+                                        })}
+                                    >
+                                        {form.errors.importPrice || 'No message'}
+                                    </span>
                                 </div>
-                                <div className='flex items-center'>
-                                    <input
-                                        className='h-5 w-5 accent-blue-600'
-                                        type='radio'
-                                        id='status-inactive'
-                                        name='status'
-                                        value='inactive'
-                                        onChange={form.handleChange}
-                                        checked={form.values.status === 'inactive'}
-                                    />
-                                    <label htmlFor='status-inactive' className='cursor-pointer pl-2'>
-                                        Không bán
+                                {/* PRICE */}
+                                <div className='flex-1'>
+                                    <label className='label' htmlFor='price'>
+                                        Giá bán *
                                     </label>
+                                    <PriceInput
+                                        id='price'
+                                        onChange={form.handleChange}
+                                        value={form.values.price}
+                                        error={form.errors.price}
+                                        name='price'
+                                        placeholder='Giá bán'
+                                    />
+                                    <span
+                                        className={clsx('text-sm text-red-500 opacity-0', {
+                                            'opacity-100': form.errors.price,
+                                        })}
+                                    >
+                                        {form.errors.price || 'No message'}
+                                    </span>
                                 </div>
                             </div>
+                            {form.values.discountType === 'percent' && (
+                                <div className='flex space-x-8'>
+                                    <div className='flex flex-1 flex-col'>
+                                        <label className='label' htmlFor='discountPercent'>
+                                            Phần trăm giảm giá *
+                                        </label>
+                                        <div className='flex items-center space-x-2'>
+                                            <input
+                                                type='number'
+                                                id='discountPercent'
+                                                className={clsx('text-input py-[5px]', {
+                                                    invalid: form.errors.discountPercent,
+                                                })}
+                                                onChange={form.handleChange}
+                                                value={form.values.discountPercent}
+                                                name='discountPercent'
+                                                placeholder='Phần trăm'
+                                            />
+                                            <span className='text-lg font-medium text-gray-700'>%</span>
+                                        </div>
+                                        <span
+                                            className={clsx('text-sm text-red-500 opacity-0', {
+                                                'opacity-100': form.errors.discountPercent,
+                                            })}
+                                        >
+                                            {form.errors.discountPercent || 'No message'}
+                                        </span>
+                                    </div>
+                                    {/* PRICE */}
+                                    <div className='flex-1'>
+                                        <label className='label' htmlFor='price'>
+                                            Giá sau khi giảm
+                                        </label>
+                                        <p className='text-2xl font-semibold text-green-700'>
+                                            <PriceFormat>{(form.values.price * (100 - form.values.discountPercent)) / 100}</PriceFormat> VNĐ
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+                            {form.values.discountType === 'amount' && (
+                                <div className='flex space-x-8'>
+                                    <div className='flex flex-1 flex-col'>
+                                        <label className='label' htmlFor='discountAmount'>
+                                            Số tiền giảm giá *
+                                        </label>
+
+                                        <PriceInput
+                                            id='discountAmount'
+                                            onChange={form.handleChange}
+                                            value={form.values.discountAmount}
+                                            error={form.errors.discountAmount}
+                                            name='discountAmount'
+                                            placeholder='Số tiền'
+                                        />
+                                        <span
+                                            className={clsx('text-sm text-red-500 opacity-0', {
+                                                'opacity-100': form.errors.discountAmount,
+                                            })}
+                                        >
+                                            {form.errors.discountAmount || 'No message'}
+                                        </span>
+                                    </div>
+                                    {/* PRICE */}
+                                    <div className='flex-1'>
+                                        <label className='label' htmlFor='price'>
+                                            Giá sau khi giảm
+                                        </label>
+                                        <p className='text-2xl font-semibold text-green-700'>
+                                            <PriceFormat>{form.values.price - form.values.discountAmount}</PriceFormat> VNĐ
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 

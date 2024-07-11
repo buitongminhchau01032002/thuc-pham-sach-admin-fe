@@ -23,6 +23,8 @@ const reHydrateStore = () => {
                 },
                 details: [],
                 totalPrice: 0,
+                intoMoney: 0,
+                priceDiscounted: 0,
             },
             account: JSON.parse(localStorage.getItem('oop_account')),
         };
@@ -36,6 +38,8 @@ const reHydrateStore = () => {
                 },
                 details: [],
                 totalPrice: 0,
+                intoMoney: 0,
+                priceDiscounted: 0,
             },
             account: null,
         };

@@ -59,6 +59,40 @@ const columns = [
         size: 100,
     },
     {
+        accessorKey: 'discount',
+        header: (props) => (
+            <HeaderCell align='right' tableProps={props}>
+                Giảm
+            </HeaderCell>
+        ),
+        cell: ({ getValue }) => (
+            <p
+                className={clsx('text-right ', {
+                    'text-red-600': getValue()?.type === 'amount' || getValue()?.type === 'percent',
+                })}
+            >
+                {getValue()?.type === 'amount' && <PriceFormat>{getValue()?.value}</PriceFormat>}
+                {getValue()?.type === 'percent' && getValue()?.value + ' %'}
+                {getValue()?.type != 'amount' && getValue()?.type != 'percent' && 'Không'}
+            </p>
+        ),
+        size: 100,
+    },
+    {
+        accessorKey: 'priceDiscounted',
+        header: (props) => (
+            <HeaderCell align='right' tableProps={props}>
+                Giá bán
+            </HeaderCell>
+        ),
+        cell: ({ getValue }) => (
+            <p className='text-right'>
+                <PriceFormat>{getValue()}</PriceFormat>
+            </p>
+        ),
+        size: 110,
+    },
+    {
         accessorKey: 'quantity',
         header: (props) => (
             <HeaderCell align='right' tableProps={props}>
@@ -83,6 +117,7 @@ function OrderDetail() {
     const isHasPermission = useIsHasPermission();
     useEffect(() => {
         getOrder();
+        console.log(order);
     }, []);
 
     function getOrder() {
@@ -241,7 +276,11 @@ function OrderDetail() {
                         <div className='space-y-3 '>
                             <div>
                                 <span className='text-gray-700'>Tổng giá: </span>
-                                <span className='text-xl font-semibold text-blue-600'>
+                                <span
+                                    className={clsx('text-xl font-semibold text-green-600', {
+                                        'text-green-400 line-through': order.totalPrice != order.intoMoney,
+                                    })}
+                                >
                                     <span>
                                         <PriceFormat>{order?.totalPrice}</PriceFormat>
                                     </span>
@@ -249,8 +288,8 @@ function OrderDetail() {
                                 </span>
                             </div>
                             <div>
-                                <span className='text-gray-700'>Giảm giá: </span>
-                                <span className='text-xl font-bold text-green-600'>
+                                <span className='text-gray-700'>Giảm giá (voucher): </span>
+                                <span className='text-xl font-bold text-red-600'>
                                     <span>
                                         <PriceFormat>{order?.totalPrice - order?.intoMoney}</PriceFormat>
                                     </span>

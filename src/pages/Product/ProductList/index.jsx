@@ -20,6 +20,7 @@ import TopBar from './TopBar';
 import searchFilterFn from '../../../utils/searchFilterFn';
 import rangeFilterFn from '../../../utils/rangeFilterFn';
 import ShowWithFunc from '../../../components/ShowWithFunc';
+import PriceFormat from '../../../components/PriceFormat';
 
 function StatusCell({ getValue }) {
     return (
@@ -84,7 +85,7 @@ const columns = [
             </HeaderCell>
         ),
         cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
-        size: 80,
+        size: 60,
     },
     {
         accessorKey: 'name',
@@ -97,7 +98,7 @@ const columns = [
         id: 'type',
         accessorFn: (o) => o.type.name,
         header: (props) => <HeaderCell tableProps={props}>Danh mục</HeaderCell>,
-        size: 160,
+        size: 120,
         enableSorting: false,
         filterFn: (...param) => {
             const value = param[2];
@@ -115,7 +116,7 @@ const columns = [
             </HeaderCell>
         ),
         cell: ({ getValue }) => <p className='text-right'>{getValue()}</p>,
-        size: 100,
+        size: 80,
         filterFn: rangeFilterFn,
     },
     {
@@ -136,7 +137,47 @@ const columns = [
                 Giá
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className='text-right'>{getValue()}</p>,
+        cell: ({ getValue }) => (
+            <p className='text-right'>
+                <PriceFormat>{getValue()}</PriceFormat>
+            </p>
+        ),
+        size: 120,
+        filterFn: rangeFilterFn,
+    },
+    {
+        accessorKey: 'discount',
+        header: (props) => (
+            <HeaderCell align='right' tableProps={props}>
+                Giảm giá
+            </HeaderCell>
+        ),
+        cell: ({ getValue }) => (
+            <p
+                className={clsx('text-right ', {
+                    'text-red-600': getValue()?.type === 'amount' || getValue()?.type === 'percent',
+                })}
+            >
+                {getValue()?.type === 'amount' && <PriceFormat>{getValue()?.value}</PriceFormat>}
+                {getValue()?.type === 'percent' && getValue()?.value + ' %'}
+                {getValue()?.type != 'amount' && getValue()?.type != 'percent' && 'Không'}
+            </p>
+        ),
+        size: 120,
+        filterFn: rangeFilterFn,
+    },
+    {
+        accessorKey: 'priceDiscounted',
+        header: (props) => (
+            <HeaderCell align='right' tableProps={props}>
+                Giá bán
+            </HeaderCell>
+        ),
+        cell: ({ getValue }) => (
+            <p className='text-right'>
+                <PriceFormat>{getValue()}</PriceFormat>
+            </p>
+        ),
         size: 120,
         filterFn: rangeFilterFn,
     },
@@ -210,10 +251,18 @@ function ProductList() {
                 inactive: true,
             },
         },
+        {
+            id: 'discount',
+            value: {
+                active: true,
+                inactive: true,
+            },
+        },
     ]);
 
     useEffect(() => {
         getProducts();
+        console.log(products);
     }, []);
 
     const [openDeleteDialog, closeDeleteDialog] = useModal({

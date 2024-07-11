@@ -103,6 +103,40 @@ const columns = [
         size: 100,
     },
     {
+        accessorKey: 'discount',
+        header: (props) => (
+            <HeaderCell align='right' tableProps={props}>
+                Giảm
+            </HeaderCell>
+        ),
+        cell: ({ getValue }) => (
+            <p
+                className={clsx('text-right ', {
+                    'text-red-600': getValue()?.type === 'amount' || getValue()?.type === 'percent',
+                })}
+            >
+                {getValue()?.type === 'amount' && <PriceFormat>{getValue()?.value}</PriceFormat>}
+                {getValue()?.type === 'percent' && getValue()?.value + ' %'}
+                {getValue()?.type != 'amount' && getValue()?.type != 'percent' && 'Không'}
+            </p>
+        ),
+        size: 100,
+    },
+    {
+        accessorKey: 'priceDiscounted',
+        header: (props) => (
+            <HeaderCell align='right' tableProps={props}>
+                Giá bán
+            </HeaderCell>
+        ),
+        cell: ({ getValue }) => (
+            <p className='text-right'>
+                <PriceFormat>{getValue()}</PriceFormat>
+            </p>
+        ),
+        size: 110,
+    },
+    {
         accessorKey: 'orderQuantity',
         header: (props) => (
             <HeaderCell align='right' tableProps={props}>
@@ -110,7 +144,7 @@ const columns = [
             </HeaderCell>
         ),
         cell: QuantityCell,
-        size: 100,
+        size: 80,
     },
     {
         id: 'action',
@@ -194,10 +228,13 @@ function AddOrder() {
                     image: matchedProduct.images?.[0] || '/placeholder.png',
                     name: matchedProduct.name,
                     price: matchedProduct.price,
+                    discount: matchedProduct.discount,
+                    priceDiscounted: matchedProduct.priceDiscounted,
                     orderQuantity: detail.quantity,
                 };
             })
         );
+        console.log(order);
     }, [order, products]);
 
     const table = useReactTable({
@@ -259,6 +296,8 @@ function AddOrder() {
                                                     orderActions.add({
                                                         product,
                                                         price: product.price,
+                                                        discount: product.discount,
+                                                        priceDiscounted: product.priceDiscounted,
                                                     })
                                                 )
                                             }
@@ -279,20 +318,48 @@ function AddOrder() {
                             <Pagination table={table} />
                         </div>
 
-                        <div className='flex justify-between'>
-                            <div className='flex items-center'>
-                                <p className='font-semibold'>
-                                    <span>Tổng tiền: </span>
-                                    <span className='text-xl text-blue-600'>
-                                        <span>
-                                            <PriceFormat>{order.totalPrice}</PriceFormat>
+                        <div className='flex items-end justify-between'>
+                            <div className='flex flex-col content-between'>
+                                <div className='flex items-center'>
+                                    <div className='flex w-full justify-between gap-2 font-semibold'>
+                                        <span>Tổng giá: </span>
+                                        <span
+                                            className={clsx('text-xl text-green-600', {
+                                                'text-green-400 line-through': order.priceDiscounted != 0,
+                                            })}
+                                        >
+                                            <span>
+                                                <PriceFormat>{order.totalPrice}</PriceFormat>
+                                            </span>
+                                            <span> VNĐ</span>
                                         </span>
-                                        <span> VNĐ</span>
-                                    </span>
-                                </p>
+                                    </div>
+                                </div>
+                                <div className='flex items-center'>
+                                    <p className='flex w-full justify-between gap-2 font-semibold'>
+                                        <span>Giảm giá: </span>
+                                        <span className='text-right text-xl text-red-600'>
+                                            <span>
+                                                <PriceFormat>{order.priceDiscounted}</PriceFormat>
+                                            </span>
+                                            <span> VNĐ</span>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div className='flex items-center'>
+                                    <p className='flex w-full justify-between gap-2 font-semibold'>
+                                        <span>Tổng thành tiền: </span>
+                                        <span className='text-xl text-blue-600'>
+                                            <span>
+                                                <PriceFormat>{order.intoMoney}</PriceFormat>
+                                            </span>
+                                            <span> VNĐ</span>
+                                        </span>
+                                    </p>
+                                </div>
                             </div>
                             <button
-                                className={clsx('btn btn-blue btn-md')}
+                                className={clsx('btn btn-blue btn-md h-14')}
                                 disabled={!order.totalPrice}
                                 onClick={() => setIsOpenPaymentDialog(true)}
                             >
