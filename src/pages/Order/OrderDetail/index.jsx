@@ -16,6 +16,7 @@ import emailjs from '@emailjs/browser';
 import ReactDOMServer from 'react-dom/server';
 import EmailTemplate from './template.jsx';
 // Trong hàm handleUpdateStatus hoặc bất kỳ đâu bạn cần gửi email
+
 function NameAndImageCell({ row, getValue }) {
     const image = row.getValue('image');
     return (
@@ -23,6 +24,21 @@ function NameAndImageCell({ row, getValue }) {
             <img src={image || '/placeholder.png'} className='h-10 w-10 rounded-full border object-cover' />
             <p className='flex-1'>{getValue()}</p>
         </div>
+    );
+}
+
+function PriceDiscount({ row, getValue }) {
+    const discount = row.getValue('discount');
+    return (
+        <p
+            className={clsx('text-right ', {
+                'text-red-600': discount?.type === 'amount' || discount?.type === 'percent',
+            })}
+        >
+            {discount?.type == 'amount' && <PriceFormat>{discount?.value}</PriceFormat>}
+            {discount?.type == 'percent' && discount?.value + ' %'}
+            {discount?.type != 'amount' && discount?.type != 'percent' && 'Không'}
+        </p>
     );
 }
 
@@ -35,7 +51,7 @@ const columns = [
             </HeaderCell>
         ),
         cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
-        size: 80,
+        size: 60,
     },
     {
         id: 'product',
@@ -56,27 +72,19 @@ const columns = [
                 <PriceFormat>{getValue()}</PriceFormat>
             </p>
         ),
-        size: 100,
+        size: 80,
     },
     {
         accessorKey: 'discount',
+        accessorFn: (item) => item?.product?.discount,
+
         header: (props) => (
             <HeaderCell align='right' tableProps={props}>
                 Giảm
             </HeaderCell>
         ),
-        cell: ({ getValue }) => (
-            <p
-                className={clsx('text-right ', {
-                    'text-red-600': getValue()?.type === 'amount' || getValue()?.type === 'percent',
-                })}
-            >
-                {getValue()?.type === 'amount' && <PriceFormat>{getValue()?.value}</PriceFormat>}
-                {getValue()?.type === 'percent' && getValue()?.value + ' %'}
-                {getValue()?.type != 'amount' && getValue()?.type != 'percent' && 'Không'}
-            </p>
-        ),
-        size: 100,
+        cell: PriceDiscount,
+        size: 80,
     },
     {
         accessorKey: 'priceDiscounted',
@@ -232,7 +240,12 @@ function OrderDetail() {
                         {order?.address && (
                             <div>
                                 <span className='text-gray-700'>Địa chỉ: </span>
-                                <span className='text-lg font-semibold text-gray-900'>{order?.address || ''}</span>
+                                <span className='text-lg font-semibold text-gray-900'>
+                                    {order?.address}
+                                    {order?.commune?.Name && ', ' + order?.commune?.Name}
+                                    {order?.district?.Name && ', ' + order?.district?.Name}
+                                    {order?.province?.Name && ', ' + order?.province?.Name}
+                                </span>
                             </div>
                         )}
 
