@@ -9,13 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import moment from 'moment';
 
 import { useSelector } from 'react-redux';
-import {
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from '@tanstack/react-table';
+import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { accountSelector } from '../../../redux/selectors';
 import HeaderCell from '../../../components/Table/HeaderCell';
 import DeleteDialog from '../../../components/DeleteDialog';
@@ -25,13 +19,14 @@ import Pagination from '../../../components/Table/Pagination';
 import ShowWithFunc from '../../../components/ShowWithFunc';
 import TopBar from './TopBar';
 import searchFilterFn from '../../../utils/searchFilterFn';
+import apiConfig from '../../../configs/apiConfig';
 
 function ActionCell({ table, row }) {
     return (
-        <div className="flex justify-center">
-            <ShowWithFunc func="product-type/update">
+        <div className='flex justify-center'>
+            <ShowWithFunc func='product-type/update'>
                 <button
-                    className="btn btn-yellow px-3 py-1"
+                    className='btn btn-yellow px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onEditButtonClick(row);
@@ -40,9 +35,9 @@ function ActionCell({ table, row }) {
                     Sửa
                 </button>
             </ShowWithFunc>
-            <ShowWithFunc func="product-type/delete">
+            <ShowWithFunc func='product-type/delete'>
                 <button
-                    className="btn btn-red px-3 py-1"
+                    className='btn btn-red px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onDeleteButtonClick(row);
@@ -59,11 +54,11 @@ const columns = [
     {
         accessorKey: 'id',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Mã
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
         size: 100,
     },
     {
@@ -81,11 +76,11 @@ const columns = [
     {
         accessorKey: 'createdAt',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Ngày tạo
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{moment(getValue()).format('HH:mm:ss DD/MM/YYYY ')}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{moment(getValue()).format('HH:mm:ss DD/MM/YYYY ')}</p>,
         size: 300,
     },
     {
@@ -112,7 +107,7 @@ function ProductTypeList() {
     }, []);
 
     function getProductTypes() {
-        fetch('http://localhost:5000/api/product-type')
+        fetch(apiConfig.apiUrl + '/api/product-type')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -124,7 +119,7 @@ function ProductTypeList() {
     }
 
     function deleteProductType(id) {
-        fetch('http://localhost:5000/api/product-type/' + id, {
+        fetch(apiConfig.apiUrl + '/api/product-type/' + id, {
             method: 'DELETE',
         })
             .then((res) => res.json())
@@ -165,10 +160,10 @@ function ProductTypeList() {
     });
 
     return (
-        <div className="container max-w-[900px] space-y-4">
+        <div className='container max-w-[900px] space-y-4'>
             <TopBar filters={columnFilters} setFilters={setColumnFilters} />
             <div>
-                <Table table={table} notFoundMessage="Không có loại sản phẩm" rowClickable={false} />
+                <Table table={table} notFoundMessage='Không có loại sản phẩm' rowClickable={false} />
                 <Pagination table={table} />
             </div>
         </div>

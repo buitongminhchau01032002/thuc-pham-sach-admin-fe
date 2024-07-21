@@ -8,20 +8,15 @@ import TimeNow from '../../../components/TimeNow';
 import 'react-toastify/dist/ReactToastify.css';
 import AccountRoleInput from '../../../components/AccountRoleInput';
 import LoadingForm from '../../../components/LoadingForm';
-
+import apiConfig from '../../../configs/apiConfig';
 const validationSchema = Yup.object({
     role: Yup.string().required('Trường này bắt buộc'),
-    name: Yup.string()
-        .required('Trường này bắt buộc')
-        .min(2, 'Tên phải có độ dài hơn 2 kí tự')
-        .max(30, 'Tên dài tối đa 30 kí tự'),
+    name: Yup.string().required('Trường này bắt buộc').min(2, 'Tên phải có độ dài hơn 2 kí tự').max(30, 'Tên dài tối đa 30 kí tự'),
     email: Yup.string()
         .required('Trường này bắt buộc')
         .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, 'Email sai không đúng định dạng'),
     username: Yup.string().required('Vui lòng nhập tên tài tài khoản!'),
-    password: Yup.string()
-        .required('Vui lòng nhập nhập mật khẩu!')
-        .min(6, 'Mật khẩu quá ngắn! mật khẩu phải có ít nhất 6 kí tự'),
+    password: Yup.string().required('Vui lòng nhập nhập mật khẩu!').min(6, 'Mật khẩu quá ngắn! mật khẩu phải có ít nhất 6 kí tự'),
 });
 
 function AddAccount() {
@@ -46,7 +41,7 @@ function AddAccount() {
 
     function handleFormsubmit(values) {
         setLoading(true);
-        fetch('http://localhost:5000/api/account', {
+        fetch(apiConfig.apiUrl + '/api/account', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -72,28 +67,28 @@ function AddAccount() {
     }
 
     return (
-        <div className="container">
+        <div className='container'>
             <form
                 onSubmit={(e) => {
                     setValidateOnChange(true);
                     form.handleSubmit(e);
                 }}
-                className="mx-auto mt-5 max-w-[500px] rounded-xl border border-slate-300 p-5"
+                className='mx-auto mt-5 max-w-[500px] rounded-xl border border-slate-300 p-5'
             >
-                <div className="relative pt-10">
-                    <div className="flex flex-col">
-                        <label className="label" htmlFor="username">
+                <div className='relative pt-10'>
+                    <div className='flex flex-col'>
+                        <label className='label' htmlFor='username'>
                             Tên đăng nhập *
                         </label>
                         <input
-                            type="text"
-                            id="username"
+                            type='text'
+                            id='username'
                             className={clsx('text-input w-full py-[5px]', {
                                 invalid: form.errors.username,
                             })}
                             onChange={form.handleChange}
                             value={form.values.username}
-                            name="username"
+                            name='username'
                         />
                         <span
                             className={clsx('text-sm text-red-500 opacity-0', {
@@ -103,19 +98,19 @@ function AddAccount() {
                             {form.errors.username || 'No message'}
                         </span>
                     </div>
-                    <div className="flex flex-col">
-                        <label className="label" htmlFor="email">
+                    <div className='flex flex-col'>
+                        <label className='label' htmlFor='email'>
                             Email *
                         </label>
                         <input
-                            type="text"
-                            id="email"
+                            type='text'
+                            id='email'
                             className={clsx('text-input w-full py-[5px]', {
                                 invalid: form.errors.email,
                             })}
                             onChange={form.handleChange}
                             value={form.values.email}
-                            name="email"
+                            name='email'
                         />
                         <span
                             className={clsx('text-sm text-red-500 opacity-0', {
@@ -125,19 +120,19 @@ function AddAccount() {
                             {form.errors.email || 'No message'}
                         </span>
                     </div>
-                    <div className="flex flex-col">
-                        <label className="label" htmlFor="name">
+                    <div className='flex flex-col'>
+                        <label className='label' htmlFor='name'>
                             Họ tên *
                         </label>
                         <input
-                            type="text"
-                            id="name"
+                            type='text'
+                            id='name'
                             className={clsx('text-input w-full py-[5px]', {
                                 invalid: form.errors.name,
                             })}
                             onChange={form.handleChange}
                             value={form.values.name}
-                            name="name"
+                            name='name'
                         />
                         <span
                             className={clsx('text-sm text-red-500 opacity-0', {
@@ -147,20 +142,20 @@ function AddAccount() {
                             {form.errors.name || 'No message'}
                         </span>
                     </div>
-                    <div className="flex flex-col">
-                        <label className="label" htmlFor="password">
+                    <div className='flex flex-col'>
+                        <label className='label' htmlFor='password'>
                             Mật khẩu *
                         </label>
                         <input
-                            type="password"
-                            id="password"
+                            type='password'
+                            id='password'
                             className={clsx('text-input w-full py-[5px]', {
                                 invalid: form.errors.password,
                             })}
                             onChange={form.handleChange}
                             value={form.values.password}
-                            name="password"
-                            placeholder="********"
+                            name='password'
+                            placeholder='********'
                         />
                         <span
                             className={clsx('text-sm text-red-500 opacity-0', {
@@ -172,18 +167,18 @@ function AddAccount() {
                     </div>
 
                     <div>
-                        <label className="label" htmlFor="type">
+                        <label className='label' htmlFor='type'>
                             Chức vụ *
                         </label>
                         <AccountRoleInput
-                            id="role"
+                            id='role'
                             className={clsx('text-input cursor-pointer py-[5px]', {
                                 invalid: form.errors.role,
                             })}
                             onChange={form.handleChange}
                             onBlur={form.handleBlur}
                             value={form.values.role}
-                            name="role"
+                            name='role'
                         />
 
                         <span
@@ -197,16 +192,16 @@ function AddAccount() {
                     <LoadingForm loading={loading} />
                 </div>
 
-                <div className="mt-6 flex items-center justify-end border-t pt-6">
-                    <Link to={'/account'} className="btn btn-red btn-md">
-                        <span className="pr-2">
-                            <i className="fa-solid fa-circle-xmark"></i>
+                <div className='mt-6 flex items-center justify-end border-t pt-6'>
+                    <Link to={'/account'} className='btn btn-red btn-md'>
+                        <span className='pr-2'>
+                            <i className='fa-solid fa-circle-xmark'></i>
                         </span>
                         <span>Hủy</span>
                     </Link>
-                    <button type="submit" className="btn btn-blue btn-md" disabled={loading}>
-                        <span className="pr-2">
-                            <i className="fa-solid fa-circle-plus"></i>
+                    <button type='submit' className='btn btn-blue btn-md' disabled={loading}>
+                        <span className='pr-2'>
+                            <i className='fa-solid fa-circle-plus'></i>
                         </span>
                         <span>Thêm</span>
                     </button>

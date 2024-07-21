@@ -10,6 +10,7 @@ import PriceInput from '../../../components/PriceInput';
 import ProductTypeInput from '../../../components/ProductTypeInput';
 import ImagesInput from '../../../components/ImagesInput';
 import LoadingForm from '../../../components/LoadingForm';
+import apiConfig from '../../../configs/apiConfig';
 
 const validationSchema = Yup.object({
     name: Yup.string().required('Trường này bắt buộc'),
@@ -110,7 +111,7 @@ function AddProduct() {
             const uploadPromise = values.images.map(async (image) => {
                 let formdata = new FormData();
                 formdata.append('image', image.file);
-                const res = await fetch('http://localhost:5000/api/upload', {
+                const res = await fetch(apiConfig.apiUrl + '/api/upload', {
                     method: 'POST',
                     body: formdata,
                 });
@@ -120,7 +121,7 @@ function AddProduct() {
             });
             imageUrls = await Promise.all(uploadPromise);
         }
-        const res = await fetch('http://localhost:5000/api/product', {
+        const res = await fetch(apiConfig.apiUrl + '/api/product', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

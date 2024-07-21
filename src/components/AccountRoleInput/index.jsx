@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
-
+import apiConfig from '../../configs/apiConfig';
 function AccountRoleInput({ ...props }) {
     const [accountRoles, setAccountRoles] = useState([]);
     const selectElem = useRef(null);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/role')
+        fetch(apiConfig.apiUrl + '/api/role')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -22,7 +22,7 @@ function AccountRoleInput({ ...props }) {
 
     return (
         <select {...props} ref={selectElem}>
-            <option value="" disabled>
+            <option value='' disabled>
                 -- Chọn chức vụ --
             </option>
             {accountRoles.map((role) => (

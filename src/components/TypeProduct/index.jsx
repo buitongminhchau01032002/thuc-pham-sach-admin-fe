@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Listbox } from '@headlessui/react';
 import clsx from 'clsx';
+import apiConfig from '../../configs/apiConfig';
 function TypeProduct({ onChange, invalid = false }) {
     const [productTypes, setProductTypes] = useState([]);
 
@@ -10,7 +11,7 @@ function TypeProduct({ onChange, invalid = false }) {
     }, []);
 
     function callApiProductTypes() {
-        fetch('http://localhost:5000/api/product-type')
+        fetch(apiConfig.apiUrl + '/api/product-type')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -27,7 +28,7 @@ function TypeProduct({ onChange, invalid = false }) {
         <div>
             <Listbox value={selectedProductType} onChange={setSelectedProductType}>
                 <Listbox.Button
-                    as="div"
+                    as='div'
                     className={clsx('text-input flex min-h-[40px] cursor-pointer items-center', {
                         invalid,
                     })}
@@ -39,17 +40,13 @@ function TypeProduct({ onChange, invalid = false }) {
                     >
                         {selectedProductType.name || 'Vui lòng chọn loại cây'}{' '}
                     </div>
-                    <i className="fa-solid fa-chevron-down"></i>
+                    <i className='fa-solid fa-chevron-down'></i>
                 </Listbox.Button>
                 <Listbox.Options>
                     {productTypes.map((type) => (
-                        <Listbox.Option
-                            key={type._id}
-                            value={type}
-                            className="cursor-pointer hover:text-blue-500"
-                        >
+                        <Listbox.Option key={type._id} value={type} className='cursor-pointer hover:text-blue-500'>
                             {({ selected }) => (
-                                <div className="flex items-center">
+                                <div className='flex items-center'>
                                     <i
                                         className={clsx('fa-solid fa-check pr-2', {
                                             'opacity-0': !selected,

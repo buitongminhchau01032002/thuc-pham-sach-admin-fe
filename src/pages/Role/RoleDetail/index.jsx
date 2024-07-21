@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import clsx from 'clsx';
 import ShowWithFunc from '../../../components/ShowWithFunc';
+import apiConfig from '../../../configs/apiConfig';
 
 function FunctionGroup({ func, selectedFunctionIds }) {
     function isCheck(subFuncId) {
@@ -21,28 +22,16 @@ function FunctionGroup({ func, selectedFunctionIds }) {
     }
 
     return (
-        <div className="pointer-events-none flex flex-col border-b py-2">
-            <div className="inline-flex items-center">
-                <input
-                    className="!h-4 !w-4 accent-blue-600"
-                    type="checkbox"
-                    readOnly
-                    checked={isCheckAll()}
-                />
-                <label className="cursor-pointer pl-2 font-semibold text-gray-700">
-                    {func.name}
-                </label>
+        <div className='pointer-events-none flex flex-col border-b py-2'>
+            <div className='inline-flex items-center'>
+                <input className='!h-4 !w-4 accent-blue-600' type='checkbox' readOnly checked={isCheckAll()} />
+                <label className='cursor-pointer pl-2 font-semibold text-gray-700'>{func.name}</label>
             </div>
-            <div className="mt-3 flex items-center space-x-6 pl-6">
+            <div className='mt-3 flex items-center space-x-6 pl-6'>
                 {func.subFunctions.map((subFunc) => (
-                    <div key={subFunc.id} className="flex items-center">
-                        <input
-                            className="!h-4 !w-4 accent-blue-600"
-                            type="checkbox"
-                            readOnly
-                            checked={isCheck(subFunc.id)}
-                        />
-                        <label className="pl-2 text-gray-600">{subFunc.name}</label>
+                    <div key={subFunc.id} className='flex items-center'>
+                        <input className='!h-4 !w-4 accent-blue-600' type='checkbox' readOnly checked={isCheck(subFunc.id)} />
+                        <label className='pl-2 text-gray-600'>{subFunc.name}</label>
                     </div>
                 ))}
             </div>
@@ -59,7 +48,7 @@ function RoleDetail() {
     const [role, setRole] = useState({});
     useEffect(() => {
         // Get function
-        fetch('http://localhost:5000/api/function')
+        fetch(apiConfig.apiUrl + '/api/function')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -72,7 +61,7 @@ function RoleDetail() {
                 console.log(error);
             });
         // Get role
-        fetch('http://localhost:5000/api/role' + '/' + id)
+        fetch(apiConfig.apiUrl + '/api/role' + '/' + id)
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -88,53 +77,49 @@ function RoleDetail() {
     }, []);
 
     return (
-        <div className="container">
-            <div className="mx-auto max-w-[800px]">
-                <div className="mt-5 flex items-center space-x-4">
-                    <div className="flex w-[120px] flex-col">
-                        <label className="label cursor-auto">Mã chức vụ</label>
-                        <p className="text-xl font-medium">{role?.id}</p>
+        <div className='container'>
+            <div className='mx-auto max-w-[800px]'>
+                <div className='mt-5 flex items-center space-x-4'>
+                    <div className='flex w-[120px] flex-col'>
+                        <label className='label cursor-auto'>Mã chức vụ</label>
+                        <p className='text-xl font-medium'>{role?.id}</p>
                     </div>
-                    <div className="flex w-[300px] flex-col">
-                        <label className="label cursor-auto">Tên chức vụ</label>
-                        <p className="text-xl font-medium">{role?.name}</p>
+                    <div className='flex w-[300px] flex-col'>
+                        <label className='label cursor-auto'>Tên chức vụ</label>
+                        <p className='text-xl font-medium'>{role?.name}</p>
                     </div>
-                    <div className="flex flex-1 flex-col">
-                        <label className="label" htmlFor="description">
+                    <div className='flex flex-1 flex-col'>
+                        <label className='label' htmlFor='description'>
                             Mô tả chức vụ
                         </label>
                         <p>{role?.description}</p>
                     </div>
                 </div>
 
-                <div className="mt-3">
-                    <p className="mb-2 font-semibold text-gray-600">Chức năng</p>
-                    <div className="!h-[400px] w-full overflow-y-scroll rounded border border-gray-300 px-5 py-5">
+                <div className='mt-3'>
+                    <p className='mb-2 font-semibold text-gray-600'>Chức năng</p>
+                    <div className='!h-[400px] w-full overflow-y-scroll rounded border border-gray-300 px-5 py-5'>
                         {functions.map((func) => (
-                            <FunctionGroup
-                                key={func?.id}
-                                func={func}
-                                selectedFunctionIds={selectedFunctionIds}
-                            />
+                            <FunctionGroup key={func?.id} func={func} selectedFunctionIds={selectedFunctionIds} />
                         ))}
                     </div>
                 </div>
 
-                <div className="mt-5 flex items-center justify-end">
-                    <div className="flex">
-                        <Link to={'/role'} className="btn btn-red btn-md">
-                            <span className="pr-1">
-                                <i className="fa-solid fa-circle-xmark"></i>
+                <div className='mt-5 flex items-center justify-end'>
+                    <div className='flex'>
+                        <Link to={'/role'} className='btn btn-red btn-md'>
+                            <span className='pr-1'>
+                                <i className='fa-solid fa-circle-xmark'></i>
                             </span>
-                            <span className="">Hủy</span>
+                            <span className=''>Hủy</span>
                         </Link>
 
-                        <ShowWithFunc func="role/update">
-                            <Link to={'/role/update/' + id} className="btn btn-blue btn-md">
-                                <span className="pr-1">
-                                    <i className="fa-solid fa-circle-plus"></i>
+                        <ShowWithFunc func='role/update'>
+                            <Link to={'/role/update/' + id} className='btn btn-blue btn-md'>
+                                <span className='pr-1'>
+                                    <i className='fa-solid fa-circle-plus'></i>
                                 </span>
-                                <span className="">Chỉnh sửa</span>
+                                <span className=''>Chỉnh sửa</span>
                             </Link>
                         </ShowWithFunc>
                     </div>

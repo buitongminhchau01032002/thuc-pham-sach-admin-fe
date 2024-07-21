@@ -20,13 +20,13 @@ import Pagination from '../../../components/Table/Pagination';
 import ShowWithFunc from '../../../components/ShowWithFunc';
 import TopBar from './TopBar';
 import searchFilterFn from '../../../utils/searchFilterFn';
-
+import apiConfig from '../../../configs/apiConfig';
 function ActionCell({ table, row }) {
     return (
-        <div className="flex justify-center">
-            <ShowWithFunc func="account/update">
+        <div className='flex justify-center'>
+            <ShowWithFunc func='account/update'>
                 <button
-                    className="btn btn-yellow px-3 py-1"
+                    className='btn btn-yellow px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onEditButtonClick(row);
@@ -35,9 +35,9 @@ function ActionCell({ table, row }) {
                     Sửa
                 </button>
             </ShowWithFunc>
-            <ShowWithFunc func="account/delete">
+            <ShowWithFunc func='account/delete'>
                 <button
-                    className="btn btn-red px-3 py-1"
+                    className='btn btn-red px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onDeleteButtonClick(row);
@@ -54,11 +54,11 @@ const columns = [
     {
         accessorKey: 'id',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Mã
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
         size: 100,
     },
     {
@@ -124,7 +124,7 @@ function AccountList() {
     }, []);
 
     function getAccounts() {
-        fetch('http://localhost:5000/api/account')
+        fetch(apiConfig.apiUrl + '/api/account')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -136,7 +136,7 @@ function AccountList() {
     }
 
     function deleteAccount(id) {
-        fetch('http://localhost:5000/api/account/' + id, {
+        fetch(apiConfig.apiUrl + '/api/account/' + id, {
             method: 'DELETE',
         })
             .then((res) => res.json())
@@ -180,12 +180,12 @@ function AccountList() {
     });
 
     return (
-        <div className="container space-y-4">
+        <div className='container space-y-4'>
             <TopBar filters={columnFilters} setFilters={setColumnFilters} />
 
             {/* LIST */}
             <div>
-                <Table table={table} notFoundMessage="Không có tài khoản" />
+                <Table table={table} notFoundMessage='Không có tài khoản' />
                 <Pagination table={table} />
             </div>
         </div>

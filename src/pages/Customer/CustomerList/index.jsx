@@ -20,26 +20,23 @@ import Pagination from '../../../components/Table/Pagination';
 import ShowWithFunc from '../../../components/ShowWithFunc';
 import searchFilterFn from '../../../utils/searchFilterFn';
 import TopBar from './TopBar';
-
+import apiConfig from '../../../configs/apiConfig';
 function NameAndImageCell({ row, getValue }) {
     const avatar = row.getValue('avatar');
     return (
-        <div className="flex items-center space-x-2">
-            <img
-                src={avatar || '/placeholder.png'}
-                className="h-10 w-10 rounded-full border object-cover"
-            />
-            <p className="flex-1">{getValue()}</p>
+        <div className='flex items-center space-x-2'>
+            <img src={avatar || '/placeholder.png'} className='h-10 w-10 rounded-full border object-cover' />
+            <p className='flex-1'>{getValue()}</p>
         </div>
     );
 }
 
 function ActionCell({ table, row }) {
     return (
-        <div className="flex justify-end">
-            <ShowWithFunc func="customer/update">
+        <div className='flex justify-end'>
+            <ShowWithFunc func='customer/update'>
                 <button
-                    className="btn btn-yellow px-3 py-1"
+                    className='btn btn-yellow px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onEditButtonClick(row);
@@ -48,9 +45,9 @@ function ActionCell({ table, row }) {
                     Sửa
                 </button>
             </ShowWithFunc>
-            <ShowWithFunc func="customer/delete">
+            <ShowWithFunc func='customer/delete'>
                 <button
-                    className="btn btn-red px-3 py-1"
+                    className='btn btn-red px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onDeleteButtonClick(row);
@@ -67,11 +64,11 @@ const columns = [
     {
         accessorKey: 'id',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Mã
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
         size: 100,
     },
     {
@@ -84,11 +81,11 @@ const columns = [
     {
         accessorKey: 'phone',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Số điện thoại
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
         size: 300,
         filterFn: filterFns.includesString,
     },
@@ -118,7 +115,7 @@ function CustomerList() {
     }, []);
 
     function getCustomers() {
-        fetch('http://localhost:5000/api/customer')
+        fetch(apiConfig.apiUrl + '/api/customer')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -134,7 +131,7 @@ function CustomerList() {
     }
 
     function deleteCustomer(id) {
-        fetch('http://localhost:5000/api/customer/' + id, {
+        fetch(apiConfig.apiUrl + '/api/customer/' + id, {
             method: 'DELETE',
         })
             .then((res) => res.json())
@@ -185,10 +182,10 @@ function CustomerList() {
         },
     });
     return (
-        <div className="container space-y-4">
+        <div className='container space-y-4'>
             <TopBar filters={columnFilters} setFilters={setColumnFilters} />
             <div>
-                <Table table={table} notFoundMessage="Không có khách hàng" />
+                <Table table={table} notFoundMessage='Không có khách hàng' />
                 <Pagination table={table} />
             </div>
         </div>

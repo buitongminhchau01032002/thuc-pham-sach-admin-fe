@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import PriceInput from '../../../components/PriceInput';
 import { orderActions } from '../../../redux/slices/orderSlice';
 import LoadingForm from '../../../components/LoadingForm';
-
+import apiConfig from '../../../configs/apiConfig';
 function NameAndImageCell({ row, getValue }) {
     const image = row.getValue('image');
     return (
@@ -477,7 +477,7 @@ export default function PaymentDialog({ close, meta }) {
     const [loading, setLoading] = useState(false);
     const [coupons, setCounpons] = useState([]);
     useEffect(() => {
-        fetch('http://localhost:5000/api/customer')
+        fetch(apiConfig.apiUrl + '/api/customer')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -505,7 +505,7 @@ export default function PaymentDialog({ close, meta }) {
 
     useEffect(() => {
         if (infoValue?.customer) {
-            fetch('http://localhost:5000/api/coupon/get-by-customer/' + infoValue.customer?._id)
+            fetch(apiConfig.apiUrl + '/api/coupon/get-by-customer/' + infoValue.customer?._id)
                 .then((res) => res.json())
                 .then((resJson) => {
                     if (resJson.success) {
@@ -557,7 +557,7 @@ export default function PaymentDialog({ close, meta }) {
             discount: d.discount,
             priceDiscounted: d.priceDiscounted,
         }));
-        fetch('http://localhost:5000/api/order', {
+        fetch(apiConfig.apiUrl + '/api/order', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

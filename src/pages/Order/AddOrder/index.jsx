@@ -20,7 +20,7 @@ import Table from '../../../components/Table';
 import Pagination from '../../../components/Table/Pagination';
 import HeaderCell from '../../../components/Table/HeaderCell';
 import PaymentDialog from './PaymentDialog';
-
+import apiConfig from '../../../configs/apiConfig';
 function NameAndImageCell({ row, getValue }) {
     const image = row.getValue('image');
     return (
@@ -174,7 +174,7 @@ function AddOrder() {
     const [isOpenPaymentDialog, setIsOpenPaymentDialog] = useState(false);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/product')
+        fetch(apiConfig.apiUrl + '/api/product')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {

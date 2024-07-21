@@ -21,7 +21,7 @@ import searchFilterFn from '../../../utils/searchFilterFn';
 import rangeFilterFn from '../../../utils/rangeFilterFn';
 import ShowWithFunc from '../../../components/ShowWithFunc';
 import PriceFormat from '../../../components/PriceFormat';
-
+import apiConfig from '../../../configs/apiConfig';
 function StatusCell({ getValue }) {
     return (
         <div className='flex justify-center'>
@@ -297,7 +297,7 @@ function ProductList() {
     });
 
     function getProducts() {
-        fetch('http://localhost:5000/api/product')
+        fetch(apiConfig.apiUrl + '/api/product')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -310,7 +310,7 @@ function ProductList() {
     }
 
     function deleteProduct(id) {
-        fetch('http://localhost:5000/api/product/' + id, {
+        fetch(apiConfig.apiUrl + '/api/product/' + id, {
             method: 'DELETE',
         })
             .then((res) => res.json())

@@ -4,13 +4,7 @@ import { Popover } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { toast } from 'react-toastify';
-import {
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from '@tanstack/react-table';
+import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import DeleteDialog from '../../../components/DeleteDialog';
 import HeaderCell from '../../../components/Table/HeaderCell';
 import useModal from '../../../hooks/useModal';
@@ -19,13 +13,14 @@ import Pagination from '../../../components/Table/Pagination';
 import ShowWithFunc from '../../../components/ShowWithFunc';
 import searchFilterFn from '../../../utils/searchFilterFn';
 import TopBar from './TopBar';
+import apiConfig from '../../../configs/apiConfig';
 
 function ActionCell({ table, row }) {
     return (
-        <div className="flex justify-center">
-            <ShowWithFunc func="role/update">
+        <div className='flex justify-center'>
+            <ShowWithFunc func='role/update'>
                 <button
-                    className="btn btn-yellow px-3 py-1"
+                    className='btn btn-yellow px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onEditButtonClick(row);
@@ -34,9 +29,9 @@ function ActionCell({ table, row }) {
                     Sửa
                 </button>
             </ShowWithFunc>
-            <ShowWithFunc func="role/delete">
+            <ShowWithFunc func='role/delete'>
                 <button
-                    className="btn btn-red px-3 py-1"
+                    className='btn btn-red px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onDeleteButtonClick(row);
@@ -53,11 +48,11 @@ const columns = [
     {
         accessorKey: 'id',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Mã
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
         size: 100,
     },
     {
@@ -100,7 +95,7 @@ function RoleList() {
     }, []);
 
     function getRoles() {
-        fetch('http://localhost:5000/api/role')
+        fetch(apiConfig.apiUrl + '/api/role')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -112,7 +107,7 @@ function RoleList() {
     }
 
     function deleteRole(id) {
-        fetch('http://localhost:5000/api/role/' + id, {
+        fetch(apiConfig.apiUrl + '/api/role/' + id, {
             method: 'DELETE',
         })
             .then((res) => res.json())
@@ -156,10 +151,10 @@ function RoleList() {
     });
 
     return (
-        <div className="container space-y-4">
+        <div className='container space-y-4'>
             <TopBar filters={columnFilters} setFilters={setColumnFilters} />
             <div>
-                <Table table={table} notFoundMessage="Không có chức vụ" />
+                <Table table={table} notFoundMessage='Không có chức vụ' />
                 <Pagination table={table} />
             </div>
         </div>

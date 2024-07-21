@@ -8,13 +8,10 @@ import TimeNow from '../../../components/TimeNow';
 import 'react-toastify/dist/ReactToastify.css';
 import AccountRoleInput from '../../../components/AccountRoleInput';
 import LoadingForm from '../../../components/LoadingForm';
-
+import apiConfig from '../../../configs/apiConfig';
 const validationSchema = Yup.object({
     role: Yup.string().required('Trường này bắt buộc'),
-    name: Yup.string()
-        .required('Trường này bắt buộc')
-        .min(2, 'Tên phải có độ dài hơn 2 kí tự')
-        .max(30, 'Tên dài tối đa 30 kí tự'),
+    name: Yup.string().required('Trường này bắt buộc').min(2, 'Tên phải có độ dài hơn 2 kí tự').max(30, 'Tên dài tối đa 30 kí tự'),
     email: Yup.string()
         .required('Trường này bắt buộc')
         .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, 'Email sai không đúng định dạng'),
@@ -33,7 +30,7 @@ function UpdateAccount() {
     }, []);
 
     function getAccount() {
-        fetch('http://localhost:5000/api/account/' + id)
+        fetch(apiConfig.apiUrl + '/api/account/' + id)
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -60,7 +57,7 @@ function UpdateAccount() {
 
     function handleFormsubmit(values) {
         setLoading(true);
-        fetch('http://localhost:5000/api/account/' + id, {
+        fetch(apiConfig.apiUrl + '/api/account/' + id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,27 +81,27 @@ function UpdateAccount() {
     }
 
     return (
-        <div className="container">
-            <div className="mb-6 mt-2 flex items-center justify-center space-x-3 rounded bg-blue-50 py-4">
-                <span className="text-lg font-medium text-gray-700">Mã tài khoản:</span>
-                <span className="text-lg font-bold text-blue-600">{account.id}</span>
+        <div className='container'>
+            <div className='mb-6 mt-2 flex items-center justify-center space-x-3 rounded bg-blue-50 py-4'>
+                <span className='text-lg font-medium text-gray-700'>Mã tài khoản:</span>
+                <span className='text-lg font-bold text-blue-600'>{account.id}</span>
             </div>
             <form
                 onSubmit={(e) => {
                     setValidateOnChange(true);
                     form.handleSubmit(e);
                 }}
-                className="mx-auto mt-5 max-w-[500px] rounded-xl border border-slate-300 p-5"
+                className='mx-auto mt-5 max-w-[500px] rounded-xl border border-slate-300 p-5'
             >
-                <div className="relative pt-10">
-                    <div className="flex flex-col">
-                        <label className="label cursor-default">Tên đăng nhập *</label>
+                <div className='relative pt-10'>
+                    <div className='flex flex-col'>
+                        <label className='label cursor-default'>Tên đăng nhập *</label>
                         <input
-                            type="text"
-                            id="username"
+                            type='text'
+                            id='username'
                             className={clsx('text-input w-full py-[5px]')}
                             value={form.values.username}
-                            name="username"
+                            name='username'
                             disabled
                         />
                         <span
@@ -115,19 +112,19 @@ function UpdateAccount() {
                             {form.errors.username || 'No message'}
                         </span>
                     </div>
-                    <div className="flex flex-col">
-                        <label className="label" htmlFor="email">
+                    <div className='flex flex-col'>
+                        <label className='label' htmlFor='email'>
                             Email *
                         </label>
                         <input
-                            type="text"
-                            id="email"
+                            type='text'
+                            id='email'
                             className={clsx('text-input w-full py-[5px]', {
                                 invalid: form.errors.email,
                             })}
                             onChange={form.handleChange}
                             value={form.values.email}
-                            name="email"
+                            name='email'
                         />
                         <span
                             className={clsx('text-sm text-red-500 opacity-0', {
@@ -137,19 +134,19 @@ function UpdateAccount() {
                             {form.errors.email || 'No message'}
                         </span>
                     </div>
-                    <div className="flex flex-col">
-                        <label className="label" htmlFor="name">
+                    <div className='flex flex-col'>
+                        <label className='label' htmlFor='name'>
                             Họ tên *
                         </label>
                         <input
-                            type="text"
-                            id="name"
+                            type='text'
+                            id='name'
                             className={clsx('text-input w-full py-[5px]', {
                                 invalid: form.errors.name,
                             })}
                             onChange={form.handleChange}
                             value={form.values.name}
-                            name="name"
+                            name='name'
                         />
                         <span
                             className={clsx('text-sm text-red-500 opacity-0', {
@@ -161,18 +158,18 @@ function UpdateAccount() {
                     </div>
 
                     <div>
-                        <label className="label" htmlFor="type">
+                        <label className='label' htmlFor='type'>
                             Chức vụ *
                         </label>
                         <AccountRoleInput
-                            id="role"
+                            id='role'
                             className={clsx('text-input cursor-pointer py-[5px]', {
                                 invalid: form.errors.role,
                             })}
                             onChange={form.handleChange}
                             onBlur={form.handleBlur}
                             value={form.values.role}
-                            name="role"
+                            name='role'
                         />
 
                         <span
@@ -186,16 +183,16 @@ function UpdateAccount() {
                     <LoadingForm loading={loading} />
                 </div>
 
-                <div className="mt-6 flex items-center justify-end border-t pt-6">
-                    <Link to={'/account'} className="btn btn-red btn-md">
-                        <span className="pr-2">
-                            <i className="fa-solid fa-circle-xmark"></i>
+                <div className='mt-6 flex items-center justify-end border-t pt-6'>
+                    <Link to={'/account'} className='btn btn-red btn-md'>
+                        <span className='pr-2'>
+                            <i className='fa-solid fa-circle-xmark'></i>
                         </span>
                         <span>Hủy</span>
                     </Link>
-                    <button type="submit" className="btn btn-blue btn-md" disabled={loading}>
-                        <span className="pr-2">
-                            <i className="fa-solid fa-circle-plus"></i>
+                    <button type='submit' className='btn btn-blue btn-md' disabled={loading}>
+                        <span className='pr-2'>
+                            <i className='fa-solid fa-circle-plus'></i>
                         </span>
                         <span>Cập nhật</span>
                     </button>

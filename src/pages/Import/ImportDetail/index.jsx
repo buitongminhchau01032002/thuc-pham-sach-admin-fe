@@ -5,28 +5,19 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Table from '../../../components/Table';
 import Pagination from '../../../components/Table/Pagination';
-import {
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from '@tanstack/react-table';
+import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { toast } from 'react-toastify';
 import clsx from 'clsx';
 import PriceFormat from '../../../components/PriceFormat';
 import ReactToPrint from 'react-to-print';
 import HeaderCell from '../../../components/Table/HeaderCell';
-
+import apiConfig from '../../../configs/apiConfig';
 function NameAndImageCell({ row, getValue }) {
     const image = row.getValue('image');
     return (
-        <div className="flex items-center space-x-2">
-            <img
-                src={image || '/placeholder.png'}
-                className="bimport h-10 w-10 rounded-full object-cover"
-            />
-            <p className="flex-1">{getValue()}</p>
+        <div className='flex items-center space-x-2'>
+            <img src={image || '/placeholder.png'} className='bimport h-10 w-10 rounded-full object-cover' />
+            <p className='flex-1'>{getValue()}</p>
         </div>
     );
 }
@@ -35,11 +26,11 @@ const columns = [
     {
         accessorKey: 'id',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Mã
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
         size: 80,
     },
     {
@@ -52,12 +43,12 @@ const columns = [
     {
         accessorKey: 'importPrice',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 Giá nhập
             </HeaderCell>
         ),
         cell: ({ getValue }) => (
-            <p className="text-right">
+            <p className='text-right'>
                 <PriceFormat>{getValue()}</PriceFormat>
             </p>
         ),
@@ -66,11 +57,11 @@ const columns = [
     {
         accessorKey: 'quantity',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 SL
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-right">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-right'>{getValue()}</p>,
         size: 80,
     },
     {
@@ -88,7 +79,7 @@ function ImportDetail() {
     }, []);
 
     function getImport() {
-        fetch('http://localhost:5000/api/import/' + id)
+        fetch(apiConfig.apiUrl + '/api/import/' + id)
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -116,38 +107,36 @@ function ImportDetail() {
     });
 
     return (
-        <div className="container">
-            <div className="mt-5 flex space-x-6" ref={componentRef}>
+        <div className='container'>
+            <div className='mt-5 flex space-x-6' ref={componentRef}>
                 {/* PRODUCT */}
-                <div className="min-w-[700px] flex-1">
-                    <Table table={table} notFoundMessage="Không có sản phẩm" rowClickable={false} />
+                <div className='min-w-[700px] flex-1'>
+                    <Table table={table} notFoundMessage='Không có sản phẩm' rowClickable={false} />
                     <Pagination table={table} />
                 </div>
 
                 {/* INFOR */}
-                <div className="flex-1">
-                    <div className="bimport-b space-y-2 pb-2">
+                <div className='flex-1'>
+                    <div className='bimport-b space-y-2 pb-2'>
                         <div>
-                            <span className="text-gray-700">Ngày lập: </span>
-                            <span className="text-lg font-semibold text-gray-900">
+                            <span className='text-gray-700'>Ngày lập: </span>
+                            <span className='text-lg font-semibold text-gray-900'>
                                 {moment(_import.createdAt).format('HH:mm DD/MM/YYYY ')}
                             </span>
                         </div>
 
                         {_import?.note && (
                             <div>
-                                <p className="text-gray-700">Ghi chú: </p>
-                                <span className="text-lg font-semibold text-gray-900">
-                                    {_import.note}
-                                </span>
+                                <p className='text-gray-700'>Ghi chú: </p>
+                                <span className='text-lg font-semibold text-gray-900'>{_import.note}</span>
                             </div>
                         )}
                     </div>
 
-                    <div className="bimport-b mt-3 space-y-3 pb-3">
+                    <div className='bimport-b mt-3 space-y-3 pb-3'>
                         <div>
-                            <span className="text-gray-700">Tổng tiền: </span>
-                            <span className="text-xl font-semibold text-blue-600">
+                            <span className='text-gray-700'>Tổng tiền: </span>
+                            <span className='text-xl font-semibold text-blue-600'>
                                 <span>
                                     <PriceFormat>{_import?.totalPrice}</PriceFormat>
                                 </span>
@@ -157,12 +146,12 @@ function ImportDetail() {
                     </div>
                 </div>
             </div>
-            <div className=" flex justify-end">
-                <Link to="/import" className="btn btn-blue btn-md">
+            <div className=' flex justify-end'>
+                <Link to='/import' className='btn btn-blue btn-md'>
                     Quay lại
                 </Link>
                 <ReactToPrint
-                    trigger={() => <button className="btn btn-green btn-md">In phiếu nhập</button>}
+                    trigger={() => <button className='btn btn-green btn-md'>In phiếu nhập</button>}
                     content={() => componentRef.current}
                 />
             </div>

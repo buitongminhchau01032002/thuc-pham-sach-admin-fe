@@ -15,6 +15,7 @@ import useIsHasPermission from '../../../hooks/useIsHasPermission';
 import emailjs from '@emailjs/browser';
 import ReactDOMServer from 'react-dom/server';
 import EmailTemplate from './template.jsx';
+import apiConfig from '../../../configs/apiConfig/index.js';
 // Trong hàm handleUpdateStatus hoặc bất kỳ đâu bạn cần gửi email
 
 function NameAndImageCell({ row, getValue }) {
@@ -129,7 +130,7 @@ function OrderDetail() {
     }, []);
 
     function getOrder() {
-        fetch('http://localhost:5000/api/order/' + id)
+        fetch(apiConfig.apiUrl + '/api/order/' + id)
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -162,7 +163,7 @@ function OrderDetail() {
         } else {
             setLoadingPaymentStatus(true);
         }
-        fetch('http://localhost:5000/api/order/' + id, {
+        fetch(apiConfig.apiUrl + '/api/order/' + id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

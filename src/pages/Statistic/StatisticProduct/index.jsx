@@ -7,6 +7,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 import Datepicker from 'react-tailwindcss-datepicker';
 import { date } from 'yup/lib/locale';
+import apiConfig from '../../../configs/apiConfig';
 
 const COLORS = ['#dc2626', '#059669', '#d97706', '#0891b2', '#4f46e5', '#c026d3', '#475569'];
 
@@ -19,14 +20,14 @@ export default function StatisticProduct() {
     });
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/detail-order')
+        fetch(apiConfig.apiUrl + '/api/detail-order')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
                     setOrderDetails(resJson.detailOrders);
                 }
             });
-        fetch('http://localhost:5000/api/detail-import')
+        fetch(apiConfig.apiUrl + '/api/detail-import')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -76,10 +77,7 @@ export default function StatisticProduct() {
         if (productImports.length > 7) {
             const orderProduct = {
                 name: 'Sản phẩm khác',
-                quantity: productImports.reduce(
-                    (prev, curr, index) => (index >= 6 ? prev + curr.quantity : prev),
-                    0
-                ),
+                quantity: productImports.reduce((prev, curr, index) => (index >= 6 ? prev + curr.quantity : prev), 0),
             };
             productImports = productImports.slice(0, 6);
             productImports.push(orderProduct);
@@ -140,10 +138,7 @@ export default function StatisticProduct() {
         if (productOrders.length > 7) {
             const orderProduct = {
                 name: 'Sản phẩm khác',
-                quantity: productOrders.reduce(
-                    (prev, curr, index) => (index >= 6 ? prev + curr.quantity : prev),
-                    0
-                ),
+                quantity: productOrders.reduce((prev, curr, index) => (index >= 6 ? prev + curr.quantity : prev), 0),
             };
             productOrders = productOrders.slice(0, 6);
             productOrders.push(orderProduct);
@@ -164,7 +159,7 @@ export default function StatisticProduct() {
     }, [orderDetails, rangeDateValue.startDate, rangeDateValue.endDate]);
 
     return (
-        <div className="container">
+        <div className='container'>
             <Datepicker
                 value={rangeDateValue}
                 i18n={'en'}
@@ -177,21 +172,21 @@ export default function StatisticProduct() {
                         pastMonth: 'Tháng trước',
                     },
                 }}
-                inputClassName="border-2 border-gray-500 outline-none w-full text-base !py-1.5 hover:border-blue-500"
+                inputClassName='border-2 border-gray-500 outline-none w-full text-base !py-1.5 hover:border-blue-500'
                 displayFormat={'DD/MM/YYYY'}
                 separator={'đến'}
                 onChange={(newValue) => setRangeDateValue(newValue)}
                 showShortcuts={true}
             />
-            <div className="mt-3 flex">
-                <div className="flex-1 pr-4">
-                    <p className="text-center font-medium text-gray-700">Sản phẩm được nhập hàng</p>
+            <div className='mt-3 flex'>
+                <div className='flex-1 pr-4'>
+                    <p className='text-center font-medium text-gray-700'>Sản phẩm được nhập hàng</p>
                     <div>
                         <div>{dataImport.datasets.length > 0 && <Pie data={dataImport} />}</div>
                     </div>
                 </div>
-                <div className="flex-1 pl-4">
-                    <p className="text-center font-medium text-gray-700">Sản phẩm được bán</p>
+                <div className='flex-1 pl-4'>
+                    <p className='text-center font-medium text-gray-700'>Sản phẩm được bán</p>
                     <div>{dataOrder.datasets.length > 0 && <Pie data={dataOrder} />}</div>
                 </div>
             </div>

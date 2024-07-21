@@ -21,13 +21,13 @@ import ShowWithFunc from '../../../components/ShowWithFunc';
 import TopBar from './TopBar';
 import searchFilterFn from '../../../utils/searchFilterFn';
 import rangeFilterFn from '../../../utils/rangeFilterFn';
-
+import apiConfig from '../../../configs/apiConfig';
 function ActionCell({ table, row }) {
     return (
-        <div className="flex justify-center">
-            <ShowWithFunc func="coupon/update">
+        <div className='flex justify-center'>
+            <ShowWithFunc func='coupon/update'>
                 <button
-                    className="btn btn-yellow px-3 py-1"
+                    className='btn btn-yellow px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onEditButtonClick(row);
@@ -36,9 +36,9 @@ function ActionCell({ table, row }) {
                     Sửa
                 </button>
             </ShowWithFunc>
-            <ShowWithFunc func="coupon/delete">
+            <ShowWithFunc func='coupon/delete'>
                 <button
-                    className="btn btn-red px-3 py-1"
+                    className='btn btn-red px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onDeleteButtonClick(row);
@@ -53,15 +53,15 @@ function ActionCell({ table, row }) {
 
 function IsOneTimeCell({ getValue }) {
     return !getValue() ? (
-        <div className="text-center text-sm font-semibold text-green-600">Dùng nhiều lần</div>
+        <div className='text-center text-sm font-semibold text-green-600'>Dùng nhiều lần</div>
     ) : (
-        <div className="text-center text-sm font-semibold text-orange-600">Dùng 1 lần</div>
+        <div className='text-center text-sm font-semibold text-orange-600'>Dùng 1 lần</div>
     );
 }
 
 function IsActiveCell({ getValue }) {
     return (
-        <div className="flex justify-center">
+        <div className='flex justify-center'>
             <div
                 className={clsx('rounded p-2 py-1 text-xs font-medium ', {
                     'bg-green-100 text-green-800': getValue(),
@@ -84,11 +84,11 @@ const columns = [
     {
         accessorKey: 'discountPercent',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 Giảm giá
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-right">{getValue() + '%'}</p>,
+        cell: ({ getValue }) => <p className='text-right'>{getValue() + '%'}</p>,
         size: 150,
         filterFn: rangeFilterFn,
     },
@@ -101,7 +101,7 @@ const columns = [
     {
         accessorKey: 'isOneTime',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Giới hạn
             </HeaderCell>
         ),
@@ -122,7 +122,7 @@ const columns = [
     {
         accessorKey: 'isActive',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Trạng thái
             </HeaderCell>
         ),
@@ -197,7 +197,7 @@ function CouponList() {
     }, []);
 
     function getCoupons() {
-        fetch('http://localhost:5000/api/coupon')
+        fetch(apiConfig.apiUrl + '/api/coupon')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -209,7 +209,7 @@ function CouponList() {
     }
 
     function deleteCoupon(id) {
-        fetch('http://localhost:5000/api/coupon/' + id, {
+        fetch(apiConfig.apiUrl + '/api/coupon/' + id, {
             method: 'DELETE',
         })
             .then((res) => res.json())
@@ -251,16 +251,12 @@ function CouponList() {
     });
 
     return (
-        <div className="container space-y-4">
+        <div className='container space-y-4'>
             <TopBar filters={columnFilters} setFilters={setColumnFilters} />
 
             {/* LIST */}
             <div>
-                <Table
-                    table={table}
-                    notFoundMessage="Không có phiếu giảm giá"
-                    rowClickable={false}
-                />
+                <Table table={table} notFoundMessage='Không có phiếu giảm giá' rowClickable={false} />
                 <Pagination table={table} />
             </div>
         </div>

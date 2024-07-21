@@ -8,13 +8,7 @@ import PriceFormat from '../../../components/PriceFormat';
 import { toast, ToastContainer } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { accountSelector } from '../../../redux/selectors';
-import {
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from '@tanstack/react-table';
+import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import Table from '../../../components/Table';
 import Pagination from '../../../components/Table/Pagination';
 import HeaderCell from '../../../components/Table/HeaderCell';
@@ -23,13 +17,13 @@ import DeleteDialog from '../../../components/DeleteDialog';
 import ShowWithFunc from '../../../components/ShowWithFunc';
 import TopBar from './TopBar';
 import rangeFilterFn from '../../../utils/rangeFilterFn';
-
+import apiConfig from '../../../configs/apiConfig';
 function ActionCell({ table, row }) {
     return (
-        <div className="flex justify-end">
-            <ShowWithFunc func="import/delete">
+        <div className='flex justify-end'>
+            <ShowWithFunc func='import/delete'>
                 <button
-                    className="btn btn-red px-3 py-1"
+                    className='btn btn-red px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onDeleteButtonClick(row);
@@ -46,32 +40,27 @@ const columns = [
     {
         accessorKey: 'id',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Mã
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
         size: 100,
     },
     {
         accessorKey: 'createdAt',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Ngày lập
             </HeaderCell>
         ),
-        cell: ({ getValue }) => (
-            <p className="text-center">{moment(getValue()).format('HH:MM DD/MM/YYYY')}</p>
-        ),
+        cell: ({ getValue }) => <p className='text-center'>{moment(getValue()).format('HH:MM DD/MM/YYYY')}</p>,
         size: 300,
         filterFn: (row, columnId, filterValue) => {
             if (!filterValue.startDate || !filterValue.endDate) {
                 return true;
             }
-            const createdAt = moment(
-                moment(new Date(row.getValue(columnId))).format('DD/MM/YYYY'),
-                'DD/MM/YYYY'
-            );
+            const createdAt = moment(moment(new Date(row.getValue(columnId))).format('DD/MM/YYYY'), 'DD/MM/YYYY');
             console.log(row.getValue(columnId), createdAt.format('DD/MM/YYYY'));
             if (moment(filterValue.startDate).isAfter(createdAt)) {
                 return false;
@@ -85,12 +74,12 @@ const columns = [
     {
         accessorKey: 'totalPrice',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 Tổng tiền
             </HeaderCell>
         ),
         cell: ({ getValue }) => (
-            <p className="text-right">
+            <p className='text-right'>
                 <PriceFormat>{getValue()}</PriceFormat>
             </p>
         ),
@@ -138,7 +127,7 @@ function ImportList() {
     });
 
     function getImports() {
-        fetch('http://localhost:5000/api/import')
+        fetch(apiConfig.apiUrl + '/api/import')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -154,7 +143,7 @@ function ImportList() {
     }
 
     function deleteImport(id) {
-        fetch('http://localhost:5000/api/import/' + id, {
+        fetch(apiConfig.apiUrl + '/api/import/' + id, {
             method: 'DELETE',
         })
             .then((res) => res.json())
@@ -200,10 +189,10 @@ function ImportList() {
     });
 
     return (
-        <div className="container max-w-[900px] space-y-4">
+        <div className='container max-w-[900px] space-y-4'>
             <TopBar filters={columnFilters} setFilters={setColumnFilters} />
             <div>
-                <Table table={table} notFoundMessage="Không có phiếu nhập" />
+                <Table table={table} notFoundMessage='Không có phiếu nhập' />
                 <Pagination table={table} />
             </div>
         </div>

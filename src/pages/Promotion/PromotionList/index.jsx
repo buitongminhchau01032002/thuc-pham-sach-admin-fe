@@ -22,10 +22,11 @@ import TopBar from './TopBar';
 import searchFilterFn from '../../../utils/searchFilterFn';
 import rangeFilterFn from '../../../utils/rangeFilterFn';
 import moment from 'moment';
+import apiConfig from '../../../configs/apiConfig';
 
 function ActionCell({ table, row }) {
     return (
-        <div className="flex justify-center">
+        <div className='flex justify-center'>
             {/* <ShowWithFunc func="promotion/update">
                 <button
                     className="btn btn-yellow px-3 py-1"
@@ -37,9 +38,9 @@ function ActionCell({ table, row }) {
                     Sửa
                 </button>
             </ShowWithFunc> */}
-            <ShowWithFunc func="promotion/delete">
+            <ShowWithFunc func='promotion/delete'>
                 <button
-                    className="btn btn-red px-3 py-1"
+                    className='btn btn-red px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onDeleteButtonClick(row);
@@ -62,26 +63,22 @@ const columns = [
     {
         accessorKey: 'start',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Từ ngày
             </HeaderCell>
         ),
-        cell: ({ getValue }) => (
-            <p className="text-center">{moment(getValue()).format('DD/MM/YYYY')}</p>
-        ),
+        cell: ({ getValue }) => <p className='text-center'>{moment(getValue()).format('DD/MM/YYYY')}</p>,
         size: 200,
         enableSorting: true,
     },
     {
         accessorKey: 'end',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Đến ngày
             </HeaderCell>
         ),
-        cell: ({ getValue }) => (
-            <p className="text-center">{moment(getValue()).format('DD/MM/YYYY')}</p>
-        ),
+        cell: ({ getValue }) => <p className='text-center'>{moment(getValue()).format('DD/MM/YYYY')}</p>,
         size: 200,
         enableSorting: true,
     },
@@ -117,7 +114,7 @@ function PromotionList() {
     }, []);
 
     function getPromotions() {
-        fetch('http://localhost:5000/api/promotion-program')
+        fetch(apiConfig.apiUrl + '/api/promotion-program')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -130,7 +127,7 @@ function PromotionList() {
     }
 
     function deletePromotion(id) {
-        fetch('http://localhost:5000/api/promotion-program/' + id, {
+        fetch(apiConfig.apiUrl + '/api/promotion-program/' + id, {
             method: 'DELETE',
         })
             .then((res) => res.json())
@@ -172,16 +169,12 @@ function PromotionList() {
     });
 
     return (
-        <div className="container space-y-4">
+        <div className='container space-y-4'>
             <TopBar filters={columnFilters} setFilters={setColumnFilters} />
 
             {/* LIST */}
             <div>
-                <Table
-                    table={table}
-                    notFoundMessage="Không có phiếu giảm giá"
-                    rowClickable={true}
-                />
+                <Table table={table} notFoundMessage='Không có phiếu giảm giá' rowClickable={true} />
                 <Pagination table={table} />
             </div>
         </div>

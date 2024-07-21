@@ -7,12 +7,9 @@ import clsx from 'clsx';
 import TimeNow from '../../../components/TimeNow';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingForm from '../../../components/LoadingForm';
-
+import apiConfig from '../../../configs/apiConfig';
 const validationSchema = Yup.object({
-    name: Yup.string()
-        .required('Trường này bắt buộc')
-        .min(2, 'Tên phải có độ dài hơn 2 kí tự')
-        .max(30, 'Tên dài tối đa 30 kí tự'),
+    name: Yup.string().required('Trường này bắt buộc').min(2, 'Tên phải có độ dài hơn 2 kí tự').max(30, 'Tên dài tối đa 30 kí tự'),
     address: Yup.string().required('Trường này bắt buộc'),
     phone: Yup.string()
         .required('Trường này bắt buộc')
@@ -48,7 +45,7 @@ function AddCustomer() {
             if (image) {
                 let formdata = new FormData();
                 formdata.append('image', image.file);
-                const res = await fetch('http://localhost:5000/api/upload', {
+                const res = await fetch(apiConfig.apiUrl + '/api/upload', {
                     method: 'POST',
                     body: formdata,
                 });
@@ -57,7 +54,7 @@ function AddCustomer() {
                 imageUrl = data.image.url;
             }
 
-            const res = await fetch('http://localhost:5000/api/customer', {
+            const res = await fetch(apiConfig.apiUrl + '/api/customer', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -89,68 +86,59 @@ function AddCustomer() {
     }
 
     return (
-        <div className="container">
+        <div className='container'>
             <form
                 onSubmit={(e) => {
                     setValidateOnChange(true);
                     form.handleSubmit(e);
                 }}
-                className="mx-auto mt-5 max-w-[700px] rounded-xl border border-slate-300 p-5"
+                className='mx-auto mt-5 max-w-[700px] rounded-xl border border-slate-300 p-5'
             >
-                <div className="relative flex pt-10">
-                    <div className="relative h-[150px] w-[150px] rounded-full border">
+                <div className='relative flex pt-10'>
+                    <div className='relative h-[150px] w-[150px] rounded-full border'>
                         <img
-                            className="absolute inset-0 block h-full w-full rounded-full object-cover"
+                            className='absolute inset-0 block h-full w-full rounded-full object-cover'
                             src={image?.url || '/placeholder.png'}
                         />
                         <label
-                            className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full"
-                            htmlFor="image-input"
+                            className='absolute inset-0 flex cursor-pointer items-center justify-center rounded-full'
+                            htmlFor='image-input'
                         ></label>
-                        <input
-                            id="image-input"
-                            type="file"
-                            className="hidden"
-                            onChange={onImageInputChange}
-                        />
+                        <input id='image-input' type='file' className='hidden' onChange={onImageInputChange} />
                         {image && (
                             <button
-                                className="absolute top-1 right-1 rounded-full border bg-white px-2 py-2 text-red-600 hover:text-red-400"
+                                className='absolute top-1 right-1 rounded-full border bg-white px-2 py-2 text-red-600 hover:text-red-400'
                                 onClick={() => setImage(null)}
                             >
                                 <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    fill='none'
+                                    viewBox='0 0 24 24'
                                     strokeWidth={1.5}
-                                    stroke="currentColor"
-                                    className="h-6 w-6"
+                                    stroke='currentColor'
+                                    className='h-6 w-6'
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
+                                    <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
                                 </svg>
                             </button>
                         )}
                     </div>
 
-                    <div className="ml-8 flex-1">
-                        <div className="flex flex-col">
-                            <label className="label" htmlFor="phone">
+                    <div className='ml-8 flex-1'>
+                        <div className='flex flex-col'>
+                            <label className='label' htmlFor='phone'>
                                 Số điện thoại *
                             </label>
                             <input
-                                type="text"
-                                id="phone"
+                                type='text'
+                                id='phone'
                                 className={clsx('text-input w-full py-[5px]', {
                                     invalid: form.errors.phone,
                                 })}
                                 onChange={form.handleChange}
                                 value={form.values.phone}
-                                name="phone"
-                                placeholder="0123456789"
+                                name='phone'
+                                placeholder='0123456789'
                             />
                             <span
                                 className={clsx('text-sm text-red-500 opacity-0', {
@@ -161,20 +149,20 @@ function AddCustomer() {
                             </span>
                         </div>
 
-                        <div className="flex flex-col">
-                            <label className="label" htmlFor="password">
+                        <div className='flex flex-col'>
+                            <label className='label' htmlFor='password'>
                                 Mật khẩu *
                             </label>
                             <input
-                                type="password"
-                                id="password"
+                                type='password'
+                                id='password'
                                 className={clsx('text-input w-full py-[5px]', {
                                     invalid: form.errors.password,
                                 })}
                                 onChange={form.handleChange}
                                 value={form.values.password}
-                                name="password"
-                                placeholder="********"
+                                name='password'
+                                placeholder='********'
                             />
                             <span
                                 className={clsx('text-sm text-red-500 opacity-0', {
@@ -185,20 +173,20 @@ function AddCustomer() {
                             </span>
                         </div>
 
-                        <div className="flex flex-col">
-                            <label className="label" htmlFor="name">
+                        <div className='flex flex-col'>
+                            <label className='label' htmlFor='name'>
                                 Tên khách hàng *
                             </label>
                             <input
-                                type="text"
-                                id="name"
+                                type='text'
+                                id='name'
                                 className={clsx('text-input w-full py-[5px]', {
                                     invalid: form.errors.name,
                                 })}
                                 onChange={form.handleChange}
                                 value={form.values.name}
-                                name="name"
-                                placeholder="Nguyễn Văn A"
+                                name='name'
+                                placeholder='Nguyễn Văn A'
                             />
                             <span
                                 className={clsx('text-sm text-red-500 opacity-0', {
@@ -209,18 +197,18 @@ function AddCustomer() {
                             </span>
                         </div>
 
-                        <div className="flex flex-col">
-                            <label className="label" htmlFor="address">
+                        <div className='flex flex-col'>
+                            <label className='label' htmlFor='address'>
                                 Địa chỉ *
                             </label>
                             <textarea
-                                id="address"
+                                id='address'
                                 className={clsx('text-input !h-auto py-2', {
                                     invalid: form.errors.address,
                                 })}
                                 onChange={form.handleChange}
                                 value={form.values.address}
-                                name="address"
+                                name='address'
                                 rows={3}
                             ></textarea>
                             <span
@@ -235,16 +223,16 @@ function AddCustomer() {
                     <LoadingForm loading={loading} />
                 </div>
 
-                <div className="mt-6 flex items-center justify-end border-t pt-6">
-                    <Link to={'/customer'} className="btn btn-red btn-md">
-                        <span className="pr-2">
-                            <i className="fa-solid fa-circle-xmark"></i>
+                <div className='mt-6 flex items-center justify-end border-t pt-6'>
+                    <Link to={'/customer'} className='btn btn-red btn-md'>
+                        <span className='pr-2'>
+                            <i className='fa-solid fa-circle-xmark'></i>
                         </span>
                         <span>Hủy</span>
                     </Link>
-                    <button type="submit" className="btn btn-blue btn-md" disabled={loading}>
-                        <span className="pr-2">
-                            <i className="fa-solid fa-circle-plus"></i>
+                    <button type='submit' className='btn btn-blue btn-md' disabled={loading}>
+                        <span className='pr-2'>
+                            <i className='fa-solid fa-circle-plus'></i>
                         </span>
                         <span>Thêm khách hàng</span>
                     </button>

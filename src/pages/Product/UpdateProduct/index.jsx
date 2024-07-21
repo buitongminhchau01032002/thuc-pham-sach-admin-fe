@@ -12,6 +12,7 @@ import PriceInput from '../../../components/PriceInput';
 import ImagesInput from '../../../components/ImagesInput';
 import LoadingForm from '../../../components/LoadingForm';
 import PriceFormat from '../../../components/PriceFormat';
+import apiConfig from '../../../configs/apiConfig';
 const validationSchema = Yup.object({
     name: Yup.string().required('Trường này bắt buộc'),
     description: Yup.string().required('Trường này bắt buộc'),
@@ -35,7 +36,7 @@ function UpdateProduct() {
 
     const [product, setProduct] = useState({});
     function getProduct() {
-        fetch('http://localhost:5000/api/product' + '/' + id)
+        fetch(apiConfig.apiUrl + '/api/product' + '/' + id)
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -141,7 +142,7 @@ function UpdateProduct() {
 
                 let formdata = new FormData();
                 formdata.append('image', image.file);
-                const res = await fetch('http://localhost:5000/api/upload', {
+                const res = await fetch(apiConfig.apiUrl + '/api/upload', {
                     method: 'POST',
                     body: formdata,
                 });
@@ -151,7 +152,7 @@ function UpdateProduct() {
             });
             imageUrls = await Promise.all(uploadPromise);
         }
-        const res = await fetch('http://localhost:5000/api/product' + '/' + id, {
+        const res = await fetch(apiConfig.apiUrl + '/api/product' + '/' + id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

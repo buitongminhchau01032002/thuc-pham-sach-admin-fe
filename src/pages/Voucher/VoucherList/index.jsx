@@ -22,10 +22,11 @@ import TopBar from './TopBar';
 import searchFilterFn from '../../../utils/searchFilterFn';
 import rangeFilterFn from '../../../utils/rangeFilterFn';
 import moment from 'moment';
+import apiConfig from '../../../configs/apiConfig';
 
 function ActionCell({ table, row }) {
     return (
-        <div className="flex justify-center">
+        <div className='flex justify-center'>
             {/* <ShowWithFunc func="voucher/update">
                 <button
                     className="btn btn-yellow px-3 py-1"
@@ -37,9 +38,9 @@ function ActionCell({ table, row }) {
                     Sửa
                 </button>
             </ShowWithFunc> */}
-            <ShowWithFunc func="voucher/delete">
+            <ShowWithFunc func='voucher/delete'>
                 <button
-                    className="btn btn-red px-3 py-1"
+                    className='btn btn-red px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onDeleteButtonClick(row);
@@ -62,46 +63,40 @@ const columns = [
     {
         accessorKey: 'discount.type',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Giảm theo
             </HeaderCell>
         ),
-        cell: ({ getValue }) => (
-            <p className="text-center">
-                {getValue() === 'percent' ? 'Phần trăm (%)' : 'Giá tiền (VNĐ)'}
-            </p>
-        ),
+        cell: ({ getValue }) => <p className='text-center'>{getValue() === 'percent' ? 'Phần trăm (%)' : 'Giá tiền (VNĐ)'}</p>,
     },
     {
         accessorKey: 'discount.value',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 Giảm
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-right">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-right'>{getValue()}</p>,
         size: 150,
     },
     {
         accessorKey: 'limit',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 Tối đa (VNĐ)
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-right">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-right'>{getValue()}</p>,
         size: 150,
     },
     {
         accessorKey: 'end',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Hết hạn
             </HeaderCell>
         ),
-        cell: ({ getValue }) => (
-            <p className="text-center">{moment(getValue()).format('DD/MM/YYYY')}</p>
-        ),
+        cell: ({ getValue }) => <p className='text-center'>{moment(getValue()).format('DD/MM/YYYY')}</p>,
         enableSorting: true,
     },
     {
@@ -136,7 +131,7 @@ function VoucherList() {
     }, []);
 
     function getVouchers() {
-        fetch('http://localhost:5000/api/voucher')
+        fetch(apiConfig.apiUrl + '/api/voucher')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -149,7 +144,7 @@ function VoucherList() {
     }
 
     function deleteVoucher(id) {
-        fetch('http://localhost:5000/api/voucher/' + id, {
+        fetch(apiConfig.apiUrl + '/api/voucher/' + id, {
             method: 'DELETE',
         })
             .then((res) => res.json())
@@ -191,16 +186,12 @@ function VoucherList() {
     });
 
     return (
-        <div className="container space-y-4">
+        <div className='container space-y-4'>
             <TopBar filters={columnFilters} setFilters={setColumnFilters} />
 
             {/* LIST */}
             <div>
-                <Table
-                    table={table}
-                    notFoundMessage="Không có phiếu giảm giá"
-                    rowClickable={false}
-                />
+                <Table table={table} notFoundMessage='Không có phiếu giảm giá' rowClickable={false} />
                 <Pagination table={table} />
             </div>
         </div>

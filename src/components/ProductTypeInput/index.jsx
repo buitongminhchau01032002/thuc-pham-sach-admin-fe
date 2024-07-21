@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
-
+import apiConfig from '../../configs/apiConfig';
 function ProductTypeInput({ ...props }) {
     const [productTypes, setProductTypes] = useState([]);
     const selectElem = useRef(null);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/product-type')
+        fetch(apiConfig.apiUrl + '/api/product-type')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -22,7 +22,7 @@ function ProductTypeInput({ ...props }) {
 
     return (
         <select {...props} ref={selectElem}>
-            <option value="" disabled>
+            <option value='' disabled>
                 -- Chọn loại sản phẩm --
             </option>
             {productTypes.map((productType) => (

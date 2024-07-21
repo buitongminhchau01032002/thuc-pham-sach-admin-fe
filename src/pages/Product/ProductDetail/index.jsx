@@ -16,6 +16,7 @@ import useModal from '../../../hooks/useModal';
 import DeleteDialog from '../../../components/DeleteDialog';
 import ShowWithFunc from '../../../components/ShowWithFunc';
 import PriceFormat from '../../../components/PriceFormat';
+import apiConfig from '../../../configs/apiConfig';
 function ProductDetail() {
     // const account = useSelector(accountSelector);
     // function isHiddenItem(functionName) {
@@ -40,7 +41,7 @@ function ProductDetail() {
 
     const [product, setProduct] = useState({});
     function getProduct() {
-        fetch('http://localhost:5000/api/product' + '/' + id)
+        fetch(apiConfig.apiUrl + '/api/product' + '/' + id)
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {

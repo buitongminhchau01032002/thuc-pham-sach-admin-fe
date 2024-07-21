@@ -24,10 +24,11 @@ import DeleteDialog from '../../../components/DeleteDialog';
 import ShowWithFunc from '../../../components/ShowWithFunc';
 import TopBar from './TopBar';
 import rangeFilterFn from '../../../utils/rangeFilterFn';
+import apiConfig from '../../../configs/apiConfig';
 
 function DeliveryStatusCell({ getValue }) {
     return (
-        <div className="flex justify-center">
+        <div className='flex justify-center'>
             <div
                 className={clsx('rounded p-2 py-1 text-xs font-medium ', {
                     'bg-green-100 text-green-800': getValue() === 'delivered',
@@ -43,7 +44,7 @@ function DeliveryStatusCell({ getValue }) {
 
 function PaymentStatusCell({ getValue }) {
     return (
-        <div className="flex justify-center">
+        <div className='flex justify-center'>
             <div
                 className={clsx('rounded p-2 py-1 text-xs font-medium ', {
                     'bg-green-100 text-green-800': getValue() === 'paid',
@@ -58,10 +59,10 @@ function PaymentStatusCell({ getValue }) {
 
 function ActionCell({ table, row }) {
     return (
-        <div className="flex justify-end">
-            <ShowWithFunc func="order/delete">
+        <div className='flex justify-end'>
+            <ShowWithFunc func='order/delete'>
                 <button
-                    className="btn btn-red px-3 py-1"
+                    className='btn btn-red px-3 py-1'
                     onClick={(e) => {
                         e.stopPropagation();
                         table.options.meta?.onDeleteButtonClick(row);
@@ -78,21 +79,21 @@ const columns = [
     {
         accessorKey: 'id',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Mã
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
         size: 80,
     },
     {
         accessorKey: 'createdAt',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Ngày lập
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{moment(getValue()).format('HH:mm DD/MM/YYYY')}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{moment(getValue()).format('HH:mm DD/MM/YYYY')}</p>,
         filterFn: (row, columnId, filterValue) => {
             if (!filterValue.startDate || !filterValue.endDate) {
                 return true;
@@ -112,23 +113,23 @@ const columns = [
     {
         accessorKey: 'phone',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Số điện thoại
             </HeaderCell>
         ),
-        cell: ({ getValue }) => <p className="text-center">{getValue()}</p>,
+        cell: ({ getValue }) => <p className='text-center'>{getValue()}</p>,
         filterFn: filterFns.includesString,
         size: 'full',
     },
     {
         accessorKey: 'totalPrice',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 Giá
             </HeaderCell>
         ),
         cell: ({ getValue }) => (
-            <p className="text-right">
+            <p className='text-right'>
                 <PriceFormat>{getValue()}</PriceFormat>
             </p>
         ),
@@ -139,12 +140,12 @@ const columns = [
     {
         accessorKey: 'intoMoney',
         header: (props) => (
-            <HeaderCell align="right" tableProps={props}>
+            <HeaderCell align='right' tableProps={props}>
                 Thành tiền
             </HeaderCell>
         ),
         cell: ({ getValue }) => (
-            <p className="text-right">
+            <p className='text-right'>
                 <PriceFormat>{getValue()}</PriceFormat>
             </p>
         ),
@@ -155,7 +156,7 @@ const columns = [
     {
         accessorKey: 'deliveryStatus',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Trạng thái
             </HeaderCell>
         ),
@@ -170,7 +171,7 @@ const columns = [
     {
         accessorKey: 'paymentStatus',
         header: (props) => (
-            <HeaderCell align="center" tableProps={props}>
+            <HeaderCell align='center' tableProps={props}>
                 Thanh toán
             </HeaderCell>
         ),
@@ -249,7 +250,7 @@ function OrderList() {
     });
 
     function getOrders() {
-        fetch('http://localhost:5000/api/order')
+        fetch(apiConfig.apiUrl + '/api/order')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -265,7 +266,7 @@ function OrderList() {
     }
 
     function deleteOrder(id) {
-        fetch('http://localhost:5000/api/order/' + id, {
+        fetch(apiConfig.apiUrl + '/api/order/' + id, {
             method: 'DELETE',
         })
             .then((res) => res.json())
@@ -310,10 +311,10 @@ function OrderList() {
     });
 
     return (
-        <div className="container space-y-4">
+        <div className='container space-y-4'>
             <TopBar filters={columnFilters} setFilters={setColumnFilters} />
             <div>
-                <Table table={table} notFoundMessage="Không có hoá đơn" />
+                <Table table={table} notFoundMessage='Không có hoá đơn' />
                 <Pagination table={table} />
             </div>
         </div>

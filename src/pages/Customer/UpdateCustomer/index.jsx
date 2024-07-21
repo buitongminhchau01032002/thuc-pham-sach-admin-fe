@@ -9,12 +9,9 @@ import TimeNow from '../../../components/TimeNow';
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'react-router-dom';
 import LoadingForm from '../../../components/LoadingForm';
-
+import apiConfig from '../../../configs/apiConfig';
 const validationSchema = Yup.object({
-    name: Yup.string()
-        .required('Trường này bắt buộc')
-        .min(2, 'Tên phải có độ dài hơn 2 kí tự')
-        .max(30, 'Tên dài tối đa 30 kí tự'),
+    name: Yup.string().required('Trường này bắt buộc').min(2, 'Tên phải có độ dài hơn 2 kí tự').max(30, 'Tên dài tối đa 30 kí tự'),
     address: Yup.string().required('Trường này bắt buộc'),
 });
 
@@ -32,7 +29,7 @@ function UpdateCustomer() {
     }, []);
 
     function callApi() {
-        fetch('http://localhost:5000/api/customer' + '/' + id)
+        fetch(apiConfig.apiUrl + '/api/customer' + '/' + id)
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -70,7 +67,7 @@ function UpdateCustomer() {
             if (image?.file) {
                 let formdata = new FormData();
                 formdata.append('image', image.file);
-                const res = await fetch('http://localhost:5000/api/upload', {
+                const res = await fetch(apiConfig.apiUrl + '/api/upload', {
                     method: 'POST',
                     body: formdata,
                 });
@@ -83,7 +80,7 @@ function UpdateCustomer() {
 
             reqValue.avatar = imageUrl;
 
-            const res = await fetch('http://localhost:5000/api/customer/' + id, {
+            const res = await fetch(apiConfig.apiUrl + '/api/customer/' + id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -111,83 +108,69 @@ function UpdateCustomer() {
     }
 
     return (
-        <div className="container">
-            <div className="mb-6 mt-2 flex items-center justify-center space-x-3 rounded bg-blue-50 py-4">
-                <span className="text-lg font-medium text-gray-700">Mã khách hàng:</span>
-                <span className="text-lg font-bold text-blue-600">{customer.id}</span>
+        <div className='container'>
+            <div className='mb-6 mt-2 flex items-center justify-center space-x-3 rounded bg-blue-50 py-4'>
+                <span className='text-lg font-medium text-gray-700'>Mã khách hàng:</span>
+                <span className='text-lg font-bold text-blue-600'>{customer.id}</span>
             </div>
             <form
                 onSubmit={(e) => {
                     setValidateOnChange(true);
                     form.handleSubmit(e);
                 }}
-                className="mx-auto mt-5 max-w-[700px] rounded-xl border border-slate-300 p-5"
+                className='mx-auto mt-5 max-w-[700px] rounded-xl border border-slate-300 p-5'
             >
-                <div className="relative flex pt-10">
-                    <div className="relative h-[150px] w-[150px] rounded-full border">
+                <div className='relative flex pt-10'>
+                    <div className='relative h-[150px] w-[150px] rounded-full border'>
                         <img
-                            className="absolute inset-0 block h-full w-full rounded-full object-cover"
+                            className='absolute inset-0 block h-full w-full rounded-full object-cover'
                             src={image?.url || '/placeholder.png'}
                         />
                         <label
-                            className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full"
-                            htmlFor="image-input"
+                            className='absolute inset-0 flex cursor-pointer items-center justify-center rounded-full'
+                            htmlFor='image-input'
                         ></label>
-                        <input
-                            id="image-input"
-                            type="file"
-                            className="hidden"
-                            onChange={onImageInputChange}
-                        />
+                        <input id='image-input' type='file' className='hidden' onChange={onImageInputChange} />
                         {image?.url && (
                             <button
-                                className="absolute top-1 right-1 rounded-full border bg-white px-2 py-2 text-red-600 hover:text-red-400"
+                                className='absolute top-1 right-1 rounded-full border bg-white px-2 py-2 text-red-600 hover:text-red-400'
                                 onClick={() => setImage(null)}
                             >
                                 <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    fill='none'
+                                    viewBox='0 0 24 24'
                                     strokeWidth={1.5}
-                                    stroke="currentColor"
-                                    className="h-6 w-6"
+                                    stroke='currentColor'
+                                    className='h-6 w-6'
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
+                                    <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
                                 </svg>
                             </button>
                         )}
                     </div>
-                    <div className="ml-8 flex-1">
-                        <div className="mb-4 flex flex-col">
-                            <label className="label pointer-events-none" htmlFor="phone">
+                    <div className='ml-8 flex-1'>
+                        <div className='mb-4 flex flex-col'>
+                            <label className='label pointer-events-none' htmlFor='phone'>
                                 Số điện thoại:
                             </label>
-                            <input
-                                type="text"
-                                className={clsx('text-input w-full py-[5px]')}
-                                value={customer.phone}
-                                disabled
-                            />
+                            <input type='text' className={clsx('text-input w-full py-[5px]')} value={customer.phone} disabled />
                         </div>
 
-                        <div className="flex flex-col">
-                            <label className="label" htmlFor="name">
+                        <div className='flex flex-col'>
+                            <label className='label' htmlFor='name'>
                                 Tên khách hàng *
                             </label>
                             <input
-                                type="text"
-                                id="name"
+                                type='text'
+                                id='name'
                                 className={clsx('text-input w-full py-[5px]', {
                                     invalid: form.errors.name,
                                 })}
                                 onChange={form.handleChange}
                                 value={form.values.name}
-                                name="name"
-                                placeholder="Nguyễn Văn A"
+                                name='name'
+                                placeholder='Nguyễn Văn A'
                             />
                             <span
                                 className={clsx('text-sm text-red-500 opacity-0', {
@@ -198,18 +181,18 @@ function UpdateCustomer() {
                             </span>
                         </div>
 
-                        <div className="flex flex-col">
-                            <label className="label" htmlFor="address">
+                        <div className='flex flex-col'>
+                            <label className='label' htmlFor='address'>
                                 Địa chỉ *
                             </label>
                             <textarea
-                                id="address"
+                                id='address'
                                 className={clsx('text-input !h-auto py-2', {
                                     invalid: form.errors.address,
                                 })}
                                 onChange={form.handleChange}
                                 value={form.values.address}
-                                name="address"
+                                name='address'
                                 rows={3}
                             ></textarea>
                             <span
@@ -224,16 +207,16 @@ function UpdateCustomer() {
                     <LoadingForm loading={loading} />
                 </div>
 
-                <div className="mt-6 flex items-center justify-end border-t pt-6">
-                    <Link to={'/customer'} className="btn btn-red btn-md">
-                        <span className="pr-2">
-                            <i className="fa-solid fa-circle-xmark"></i>
+                <div className='mt-6 flex items-center justify-end border-t pt-6'>
+                    <Link to={'/customer'} className='btn btn-red btn-md'>
+                        <span className='pr-2'>
+                            <i className='fa-solid fa-circle-xmark'></i>
                         </span>
                         <span>Hủy</span>
                     </Link>
-                    <button type="submit" className="btn btn-blue btn-md" disabled={loading}>
-                        <span className="pr-2">
-                            <i className="fa-solid fa-circle-plus"></i>
+                    <button type='submit' className='btn btn-blue btn-md' disabled={loading}>
+                        <span className='pr-2'>
+                            <i className='fa-solid fa-circle-plus'></i>
                         </span>
                         <span>Cập nhật</span>
                     </button>

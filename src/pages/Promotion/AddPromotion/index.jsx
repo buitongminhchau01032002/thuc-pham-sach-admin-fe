@@ -12,6 +12,7 @@ import LoadingForm from '../../../components/LoadingForm';
 import PriceInput from '../../../components/PriceInput';
 import moment from 'moment';
 import removeVietnameseTones from '../../../utils/removeVietnameseTones';
+import apiConfig from '../../../configs/apiConfig';
 
 const validationSchema = Yup.object({
     name: Yup.string().required('Vui lòng mã giảm giá!'),
@@ -63,23 +64,17 @@ function AddPromotion() {
             orderCondition:
                 values.trigger === 'buy'
                     ? {
-                          targets:
-                              conditionTarget === 'order'
-                                  ? null
-                                  : conditionProducts.map((conditionTarget) => conditionTarget.id),
+                          targets: conditionTarget === 'order' ? null : conditionProducts.map((conditionTarget) => conditionTarget.id),
                           condition: {
                               type: values.conditionType,
-                              value:
-                                  values.conditionType === 'amount'
-                                      ? values.conditionAmount
-                                      : values.conditionQuantity,
+                              value: values.conditionType === 'amount' ? values.conditionAmount : values.conditionQuantity,
                           },
                       }
                     : null,
         };
         console.log(body);
 
-        fetch('http://localhost:5000/api/promotion-program', {
+        fetch(apiConfig.apiUrl + '/api/promotion-program', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -110,7 +105,7 @@ function AddPromotion() {
     }, []);
 
     function getProducts() {
-        fetch('http://localhost:5000/api/product')
+        fetch(apiConfig.apiUrl + '/api/product')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -123,7 +118,7 @@ function AddPromotion() {
     }
 
     function getVouchers() {
-        fetch('http://localhost:5000/api/voucher')
+        fetch(apiConfig.apiUrl + '/api/voucher')
             .then((res) => res.json())
             .then((resJson) => {
                 if (resJson.success) {
@@ -147,9 +142,7 @@ function AddPromotion() {
         if (searchConditionTarget === '') {
             return product;
         } else {
-            return removeVietnameseTones(product.name.toLowerCase()).includes(
-                removeVietnameseTones(searchConditionTarget.toLowerCase())
-            );
+            return removeVietnameseTones(product.name.toLowerCase()).includes(removeVietnameseTones(searchConditionTarget.toLowerCase()));
         }
     }
 
@@ -165,37 +158,35 @@ function AddPromotion() {
         if (searchVoucher === '') {
             return voucher;
         } else {
-            return removeVietnameseTones(voucher.description.toLowerCase()).includes(
-                removeVietnameseTones(searchVoucher.toLowerCase())
-            );
+            return removeVietnameseTones(voucher.description.toLowerCase()).includes(removeVietnameseTones(searchVoucher.toLowerCase()));
         }
     }
 
     return (
-        <div className="container">
+        <div className='container'>
             <form
                 onSubmit={(e) => {
                     setValidateOnChange(true);
                     form.handleSubmit(e);
                 }}
-                className="mx-auto mt-5 rounded-xl border border-slate-300 p-5"
+                className='mx-auto mt-5 rounded-xl border border-slate-300 p-5'
             >
-                <div className="relative flex space-x-8">
+                <div className='relative flex space-x-8'>
                     {/* LEFT */}
-                    <div className="flex-1">
-                        <div className="flex flex-col">
-                            <label className="label" htmlFor="name">
+                    <div className='flex-1'>
+                        <div className='flex flex-col'>
+                            <label className='label' htmlFor='name'>
                                 Mô tả *
                             </label>
                             <textarea
-                                type="text"
-                                id="description"
+                                type='text'
+                                id='description'
                                 className={clsx('text-input !h-auto py-2', {
                                     invalid: form.errors.description,
                                 })}
                                 onChange={form.handleChange}
                                 value={form.values.description}
-                                name="description"
+                                name='description'
                                 rows={2}
                             ></textarea>
                             <span
@@ -207,10 +198,8 @@ function AddPromotion() {
                             </span>
                         </div>
 
-                        <div className="relative z-50 flex-1">
-                            <label className="label !mb-0 cursor-default text-sm">
-                                Thời gian áp dụng *
-                            </label>
+                        <div className='relative z-50 flex-1'>
+                            <label className='label !mb-0 cursor-default text-sm'>Thời gian áp dụng *</label>
                             <Datepicker
                                 value={form.values.timeRange}
                                 i18n={'en'}
@@ -223,7 +212,7 @@ function AddPromotion() {
                                         pastMonth: 'Tháng trước',
                                     },
                                 }}
-                                inputClassName="border-2 border-slate-300 outline-none rounded w-full text-base !py-1.5 hover:border-blue-500"
+                                inputClassName='border-2 border-slate-300 outline-none rounded w-full text-base !py-1.5 hover:border-blue-500'
                                 displayFormat={'DD/MM/YYYY'}
                                 separator={'đến'}
                                 onChange={(newValue) => form.setFieldValue('timeRange', newValue)}
@@ -231,34 +220,28 @@ function AddPromotion() {
                             />
                         </div>
 
-                        <div className="mt-3">
-                            <label className="label !cursor-default">Phiếu giảm giá</label>
+                        <div className='mt-3'>
+                            <label className='label !cursor-default'>Phiếu giảm giá</label>
                             <div>
-                                <div className="group relative mt-2">
+                                <div className='group relative mt-2'>
                                     <input
-                                        type="text"
-                                        className="text-input flex-1 py-1"
+                                        type='text'
+                                        className='text-input flex-1 py-1'
                                         value={searchVoucher}
                                         onChange={(e) => {
                                             setSearchVoucher(e.target.value);
                                         }}
-                                        placeholder="Tìm kiếm phiếu giảm giá"
+                                        placeholder='Tìm kiếm phiếu giảm giá'
                                     />
 
-                                    <div className="absolute top-full right-0 left-0 z-50 hidden h-[300px] overflow-auto rounded border bg-white shadow group-focus-within:block">
+                                    <div className='absolute top-full right-0 left-0 z-50 hidden h-[300px] overflow-auto rounded border bg-white shadow group-focus-within:block'>
                                         {vouchers.filter(voucherFilter).map((voucher) => (
                                             <button
                                                 key={voucher.id}
-                                                type="button"
-                                                className={clsx(
-                                                    'flex w-full items-center space-x-3 border-b p-2',
-                                                    {
-                                                        'bg-green-100':
-                                                            conditionProducts.findIndex(
-                                                                (p) => p.id === voucher.id
-                                                            ) !== -1,
-                                                    }
-                                                )}
+                                                type='button'
+                                                className={clsx('flex w-full items-center space-x-3 border-b p-2', {
+                                                    'bg-green-100': conditionProducts.findIndex((p) => p.id === voucher.id) !== -1,
+                                                })}
                                                 onClick={() => handleClickInVoucher(voucher)}
                                             >
                                                 <p>{voucher.description}</p>
@@ -268,15 +251,9 @@ function AddPromotion() {
                                 </div>
                                 <div>
                                     {selectVouchers.map((voucher) => (
-                                        <div
-                                            key={voucher.id}
-                                            className="flex items-center space-x-3 border-b p-2"
-                                        >
-                                            <p className="flex-1">{voucher.description}</p>
-                                            <div
-                                                className="w-8 cursor-pointer"
-                                                onClick={() => handleClickInVoucher(voucher)}
-                                            >
+                                        <div key={voucher.id} className='flex items-center space-x-3 border-b p-2'>
+                                            <p className='flex-1'>{voucher.description}</p>
+                                            <div className='w-8 cursor-pointer' onClick={() => handleClickInVoucher(voucher)}>
                                                 X
                                             </div>
                                         </div>
@@ -287,38 +264,35 @@ function AddPromotion() {
                     </div>
 
                     {/* RIGHT */}
-                    <div className="flex-1">
-                        <div className="mt-3">
-                            <label className="label !cursor-default">Thực hiện khi</label>
-                            <div className="flex items-center space-x-5">
-                                <div className="flex items-center">
+                    <div className='flex-1'>
+                        <div className='mt-3'>
+                            <label className='label !cursor-default'>Thực hiện khi</label>
+                            <div className='flex items-center space-x-5'>
+                                <div className='flex items-center'>
                                     <input
-                                        className="h-5 w-5 accent-blue-600"
-                                        type="radio"
-                                        id="trigger-buy"
-                                        name="trigger"
-                                        value="buy"
+                                        className='h-5 w-5 accent-blue-600'
+                                        type='radio'
+                                        id='trigger-buy'
+                                        name='trigger'
+                                        value='buy'
                                         onChange={form.handleChange}
                                         checked={form.values.trigger === 'buy'}
                                     />
-                                    <label htmlFor="trigger-buy" className="cursor-pointer pl-2">
+                                    <label htmlFor='trigger-buy' className='cursor-pointer pl-2'>
                                         Mua hoá đơn
                                     </label>
                                 </div>
-                                <div className="flex items-center">
+                                <div className='flex items-center'>
                                     <input
-                                        className="h-5 w-5 accent-blue-600"
-                                        type="radio"
-                                        id="trigger-register"
-                                        name="trigger"
-                                        value="register"
+                                        className='h-5 w-5 accent-blue-600'
+                                        type='radio'
+                                        id='trigger-register'
+                                        name='trigger'
+                                        value='register'
                                         onChange={form.handleChange}
                                         checked={form.values.trigger === 'register'}
                                     />
-                                    <label
-                                        htmlFor="trigger-register"
-                                        className="cursor-pointer pl-2"
-                                    >
+                                    <label htmlFor='trigger-register' className='cursor-pointer pl-2'>
                                         Đăng ký tài khoản
                                     </label>
                                 </div>
@@ -327,107 +301,73 @@ function AddPromotion() {
 
                         {/* CONDITION TARGET */}
                         {form.values.trigger === 'buy' && (
-                            <div className="mt-4">
-                                <label className="label">Đối tượng điều kiện</label>
-                                <div className="flex items-center space-x-5">
-                                    <div className="flex items-center">
+                            <div className='mt-4'>
+                                <label className='label'>Đối tượng điều kiện</label>
+                                <div className='flex items-center space-x-5'>
+                                    <div className='flex items-center'>
                                         <input
-                                            className="h-5 w-5 accent-blue-600"
-                                            type="radio"
-                                            id="condition-target-order"
-                                            name="conditionTarget"
-                                            onChange={(e) =>
-                                                e.target.checked && setConditionTarget('order')
-                                            }
+                                            className='h-5 w-5 accent-blue-600'
+                                            type='radio'
+                                            id='condition-target-order'
+                                            name='conditionTarget'
+                                            onChange={(e) => e.target.checked && setConditionTarget('order')}
                                             checked={conditionTarget === 'order'}
                                         />
-                                        <label
-                                            htmlFor="condition-target-order"
-                                            className="cursor-pointer pl-2"
-                                        >
+                                        <label htmlFor='condition-target-order' className='cursor-pointer pl-2'>
                                             Hoá đơn
                                         </label>
                                     </div>
-                                    <div className="flex items-center">
+                                    <div className='flex items-center'>
                                         <input
-                                            className="h-5 w-5 accent-blue-600"
-                                            type="radio"
-                                            id="condition-target-product"
-                                            name="conditionTarget"
-                                            onChange={(e) =>
-                                                e.target.checked && setConditionTarget('product')
-                                            }
+                                            className='h-5 w-5 accent-blue-600'
+                                            type='radio'
+                                            id='condition-target-product'
+                                            name='conditionTarget'
+                                            onChange={(e) => e.target.checked && setConditionTarget('product')}
                                             checked={conditionTarget === 'product'}
                                         />
-                                        <label
-                                            htmlFor="condition-target-product"
-                                            className="cursor-pointer pl-2"
-                                        >
+                                        <label htmlFor='condition-target-product' className='cursor-pointer pl-2'>
                                             Tuỳ chọn sản phẩm
                                         </label>
                                     </div>
                                 </div>
                                 {conditionTarget === 'product' && (
                                     <div>
-                                        <div className="group relative mt-2">
+                                        <div className='group relative mt-2'>
                                             <input
-                                                type="text"
-                                                className="text-input flex-1 py-1"
+                                                type='text'
+                                                className='text-input flex-1 py-1'
                                                 value={searchConditionTarget}
                                                 onChange={(e) => {
                                                     setSearchConditionTarget(e.target.value);
                                                 }}
-                                                placeholder="Tìm kiếm sản phẩm"
+                                                placeholder='Tìm kiếm sản phẩm'
                                             />
 
-                                            <div className="absolute top-full right-0 left-0 z-50 hidden h-[300px] overflow-auto rounded border bg-white shadow group-focus-within:block">
-                                                {products
-                                                    .filter(productConditionFilter)
-                                                    .map((product) => (
-                                                        <button
-                                                            key={product.id}
-                                                            type="button"
-                                                            className={clsx(
-                                                                'flex w-full items-center space-x-3 border-b p-2',
-                                                                {
-                                                                    'bg-green-100':
-                                                                        conditionProducts.findIndex(
-                                                                            (p) =>
-                                                                                p.id === product.id
-                                                                        ) !== -1,
-                                                                }
-                                                            )}
-                                                            onClick={() =>
-                                                                handleClickInConditionProduct(
-                                                                    product
-                                                                )
-                                                            }
-                                                        >
-                                                            <img
-                                                                className="h-10 w-10 rounded"
-                                                                src={product.images?.[0]}
-                                                            />
-                                                            <p>{product.name}</p>
-                                                        </button>
-                                                    ))}
+                                            <div className='absolute top-full right-0 left-0 z-50 hidden h-[300px] overflow-auto rounded border bg-white shadow group-focus-within:block'>
+                                                {products.filter(productConditionFilter).map((product) => (
+                                                    <button
+                                                        key={product.id}
+                                                        type='button'
+                                                        className={clsx('flex w-full items-center space-x-3 border-b p-2', {
+                                                            'bg-green-100': conditionProducts.findIndex((p) => p.id === product.id) !== -1,
+                                                        })}
+                                                        onClick={() => handleClickInConditionProduct(product)}
+                                                    >
+                                                        <img className='h-10 w-10 rounded' src={product.images?.[0]} />
+                                                        <p>{product.name}</p>
+                                                    </button>
+                                                ))}
                                             </div>
                                         </div>
                                         <div>
                                             {conditionProducts.map((product) => (
-                                                <div
-                                                    key={product.id}
-                                                    className="flex items-center space-x-3 border-b p-2"
-                                                >
-                                                    <img
-                                                        className="h-10 w-10 rounded"
-                                                        src={product.images?.[0]}
-                                                    />
-                                                    <p className="flex-1">{product.name}</p>
+                                                <div key={product.id} className='flex items-center space-x-3 border-b p-2'>
+                                                    <img className='h-10 w-10 rounded' src={product.images?.[0]} />
+                                                    <p className='flex-1'>{product.name}</p>
                                                     <div
-                                                        className="w-8 cursor-pointer"
-                                                        onClick={() =>
-                                                            handleClickInConditionProduct(product)
-                                                        }
+                                                        className='w-8 cursor-pointer'
+                                                        onClick={() => handleClickInConditionProduct(product)}
                                                     >
                                                         X
                                                     </div>
@@ -442,40 +382,34 @@ function AddPromotion() {
                         {/* CONDITION */}
 
                         {form.values.trigger === 'buy' && (
-                            <div className="mt-3">
-                                <label className="label !cursor-default">Điều kiện theo</label>
-                                <div className="flex items-center space-x-5">
-                                    <div className="flex items-center">
+                            <div className='mt-3'>
+                                <label className='label !cursor-default'>Điều kiện theo</label>
+                                <div className='flex items-center space-x-5'>
+                                    <div className='flex items-center'>
                                         <input
-                                            className="h-5 w-5 accent-blue-600"
-                                            type="radio"
-                                            id="condition-type-amount"
-                                            name="conditionType"
-                                            value="amount"
+                                            className='h-5 w-5 accent-blue-600'
+                                            type='radio'
+                                            id='condition-type-amount'
+                                            name='conditionType'
+                                            value='amount'
                                             onChange={form.handleChange}
                                             checked={form.values.conditionType === 'amount'}
                                         />
-                                        <label
-                                            htmlFor="condition-type-amount"
-                                            className="cursor-pointer pl-2"
-                                        >
+                                        <label htmlFor='condition-type-amount' className='cursor-pointer pl-2'>
                                             Số tiền
                                         </label>
                                     </div>
-                                    <div className="flex items-center">
+                                    <div className='flex items-center'>
                                         <input
-                                            className="h-5 w-5 accent-blue-600"
-                                            type="radio"
-                                            id="condition-type-quantity"
-                                            name="conditionType"
-                                            value="quantity"
+                                            className='h-5 w-5 accent-blue-600'
+                                            type='radio'
+                                            id='condition-type-quantity'
+                                            name='conditionType'
+                                            value='quantity'
                                             onChange={form.handleChange}
                                             checked={form.values.conditionType === 'quantity'}
                                         />
-                                        <label
-                                            htmlFor="condition-type-quantity"
-                                            className="cursor-pointer pl-2"
-                                        >
+                                        <label htmlFor='condition-type-quantity' className='cursor-pointer pl-2'>
                                             Số lượng
                                         </label>
                                     </div>
@@ -483,75 +417,66 @@ function AddPromotion() {
                             </div>
                         )}
 
-                        {form.values.trigger === 'buy' &&
-                            form.values.conditionType === 'amount' && (
-                                <div className="mt-3 flex flex-col">
-                                    <label className="label" htmlFor="conditionAmount">
-                                        Từ số tiền *
-                                    </label>
-                                    <PriceInput
-                                        id="conditionAmount"
-                                        onChange={form.handleChange}
-                                        value={form.values.conditionAmount}
-                                        error={form.errors.conditionAmount}
-                                        name="conditionAmount"
-                                        placeholder=""
-                                    />
-                                    <span
-                                        className={clsx('text-sm text-red-500 opacity-0', {
-                                            'opacity-100': form.errors.conditionAmount,
-                                        })}
-                                    >
-                                        {form.errors.conditionAmount || 'No message'}
-                                    </span>
-                                </div>
-                            )}
+                        {form.values.trigger === 'buy' && form.values.conditionType === 'amount' && (
+                            <div className='mt-3 flex flex-col'>
+                                <label className='label' htmlFor='conditionAmount'>
+                                    Từ số tiền *
+                                </label>
+                                <PriceInput
+                                    id='conditionAmount'
+                                    onChange={form.handleChange}
+                                    value={form.values.conditionAmount}
+                                    error={form.errors.conditionAmount}
+                                    name='conditionAmount'
+                                    placeholder=''
+                                />
+                                <span
+                                    className={clsx('text-sm text-red-500 opacity-0', {
+                                        'opacity-100': form.errors.conditionAmount,
+                                    })}
+                                >
+                                    {form.errors.conditionAmount || 'No message'}
+                                </span>
+                            </div>
+                        )}
 
-                        {form.values.trigger === 'buy' &&
-                            form.values.conditionType === 'quantity' && (
-                                <div className="mt-3 flex flex-col">
-                                    <label className="label" htmlFor="conditionQuantity">
-                                        Từ số lượng sản phẩm *
-                                    </label>
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        name="conditionQuantity"
-                                        value={form.values.conditionQuantity}
-                                        onChange={form.handleChange}
-                                        className={clsx(
-                                            'text-input w-32 py-1 text-right text-base'
-                                        )}
-                                    />
-                                    <span
-                                        className={clsx('text-sm text-red-500 opacity-0', {
-                                            'opacity-100': form.errors.conditionQuantity,
-                                        })}
-                                    >
-                                        {form.errors.conditionQuantity || 'No message'}
-                                    </span>
-                                </div>
-                            )}
+                        {form.values.trigger === 'buy' && form.values.conditionType === 'quantity' && (
+                            <div className='mt-3 flex flex-col'>
+                                <label className='label' htmlFor='conditionQuantity'>
+                                    Từ số lượng sản phẩm *
+                                </label>
+                                <input
+                                    type='number'
+                                    min='1'
+                                    name='conditionQuantity'
+                                    value={form.values.conditionQuantity}
+                                    onChange={form.handleChange}
+                                    className={clsx('text-input w-32 py-1 text-right text-base')}
+                                />
+                                <span
+                                    className={clsx('text-sm text-red-500 opacity-0', {
+                                        'opacity-100': form.errors.conditionQuantity,
+                                    })}
+                                >
+                                    {form.errors.conditionQuantity || 'No message'}
+                                </span>
+                            </div>
+                        )}
                     </div>
 
                     <LoadingForm loading={loading} />
                 </div>
 
-                <div className="mt-6 flex items-center justify-end border-t pt-6">
-                    <Link to={'/promotion'} className="btn btn-red btn-md">
-                        <span className="pr-2">
-                            <i className="fa-solid fa-circle-xmark"></i>
+                <div className='mt-6 flex items-center justify-end border-t pt-6'>
+                    <Link to={'/promotion'} className='btn btn-red btn-md'>
+                        <span className='pr-2'>
+                            <i className='fa-solid fa-circle-xmark'></i>
                         </span>
                         <span>Hủy</span>
                     </Link>
-                    <button
-                        type="button"
-                        onClick={() => handleFormsubmit(form.values)}
-                        className="btn btn-blue btn-md"
-                        disabled={loading}
-                    >
-                        <span className="pr-2">
-                            <i className="fa-solid fa-circle-plus"></i>
+                    <button type='button' onClick={() => handleFormsubmit(form.values)} className='btn btn-blue btn-md' disabled={loading}>
+                        <span className='pr-2'>
+                            <i className='fa-solid fa-circle-plus'></i>
                         </span>
                         <span>Thêm</span>
                     </button>
