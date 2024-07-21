@@ -188,6 +188,12 @@ function DeliveryGroup({ isDelivered, setIsDelivered, setIsValid, setValue, info
     }, [form.values.address]);
 
     useEffect(() => {
+        if (infoValue.customer) {
+            form.setFieldValue('address', infoValue.customer.address);
+        }
+    }, [infoValue.customer]);
+
+    useEffect(() => {
         if (isDelivered) {
             setIsValid(true);
         } else {
