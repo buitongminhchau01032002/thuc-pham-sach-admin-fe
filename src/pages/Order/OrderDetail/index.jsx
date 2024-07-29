@@ -302,7 +302,7 @@ function OrderDetail() {
                                 </span>
                             </div>
                             <div>
-                                <span className='text-gray-700'>Giảm giá (voucher): </span>
+                                <span className='text-gray-700'>Giảm giá: </span>
                                 <span className='text-xl font-bold text-red-600'>
                                     <span>
                                         <PriceFormat>{order?.totalPrice - order?.intoMoney}</PriceFormat>

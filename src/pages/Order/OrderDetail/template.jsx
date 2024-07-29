@@ -1,4 +1,3 @@
-// EmailTemplate.jsx
 import React from 'react';
 import PriceFormat from '../../../components/PriceFormat';
 
@@ -91,7 +90,7 @@ const EmailTemplate = ({ template }) => {
               text-align: left;
             }
             .invoice-info img {
-              max-width: 50px;
+              max-width: 60px;
               height: auto;
               display: block;
             }
@@ -109,7 +108,7 @@ const EmailTemplate = ({ template }) => {
             .invoice-info .highlight {
               background-color: #e6f7ff;
             }
-            .invoice-info .totalPrice{
+           .invoice-info .totalPrice{
                     text-align: right;
                     color: #2563EB;
                     font-weight: 600;
@@ -148,6 +147,34 @@ const EmailTemplate = ({ template }) => {
             .boldText {
               font-weight: 700;
             }
+            .priceDiscounted {
+                font-size: 10px;
+                font-weight: 500;
+                color: #FB5757;
+            }
+
+            .font-semibold {
+                font-weight: 600;
+            }   
+
+            .line-through {
+                text-decoration: line-through;
+            }
+                .mt-2 {
+                margin-top: 0.5rem; /* 8px */
+            }
+
+            .flex {
+                display: flex;
+            }
+
+            .items-center {
+                align-items: center;
+            }
+
+            .gap-2 {
+                gap: 0.5rem; /* 8px */
+            }
           `}
                 </style>
             </head>
@@ -176,9 +203,18 @@ const EmailTemplate = ({ template }) => {
                     <div className='thanks'>Dưới đây là thông tin về hóa đơn của bạn</div>
                     <div className='content'>
                         <h2>Thông tin khách hàng</h2>
-                        <p>Tên khách hàng: {template?.order?.customer?.name}</p>
-                        <p>Số điện thoại: {template?.order?.customer?.phone}</p>
-                        <p>Địa chỉ giao hàng: {template?.order?.customer?.address}</p>
+                        <p>Tên khách hàng: {template?.order?.name}</p>
+                        <p>Số điện thoại: {template?.order?.phone}</p>
+                        <p>
+                            Địa chỉ giao hàng:{' '}
+                            {template?.order?.address +
+                                ', ' +
+                                template?.order?.commune?.Name +
+                                ', ' +
+                                template?.order?.district?.Name +
+                                ', ' +
+                                template?.order?.province?.Name}
+                        </p>
 
                         <div className='invoice-info'>
                             <h2>Thông tin hóa đơn</h2>
@@ -200,7 +236,14 @@ const EmailTemplate = ({ template }) => {
                                             </td>
                                             <td>{product?.quantity}</td>
                                             <td className='price-cell'>
-                                                <PriceFormat>{product?.product.price}</PriceFormat> VND
+                                                {product?.product?.discount?.type != 'noDiscount' && (
+                                                    <span className='priceDiscounted line-through'>
+                                                        <PriceFormat>{product?.product?.price}</PriceFormat> VNĐ
+                                                    </span>
+                                                )}
+                                                <p className='price-cell'>
+                                                    <PriceFormat>{product?.product?.priceDiscounted}</PriceFormat> VNĐ
+                                                </p>
                                             </td>
                                         </tr>
                                     ))}
@@ -240,8 +283,8 @@ const EmailTemplate = ({ template }) => {
                     </div>
                     <div className='footer'>
                         <p>
-                            Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi tại
-                            <a href='mailto:support@sadam01664@gmail.com'>sadam01664@gmail.com</a>.
+                            Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi tại email
+                            <a href='mailto:sadam01664@gmail.com'> sadam01664@gmail.com</a>.
                         </p>
                     </div>
                 </div>
